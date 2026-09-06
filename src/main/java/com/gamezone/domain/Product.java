@@ -3,13 +3,13 @@ public abstract class Product{
     private String identifier;
     private String title;
     private double price;
-    private int availableQuantify;
+    private int availableQuantity;
 
-    public Product(String identifier, String title, double price, int availableQuantify){
+    public Product(String identifier, String title, double price, int availableQuantity){
         this.identifier=identifier;
         this.title=title;
         this.price=price;
-        this.availableQuantify=availableQuantify;
+        this.availableQuantity = availableQuantity;
     }
 
     public String getIdentifier(){
@@ -37,11 +37,11 @@ public abstract class Product{
     }
 
 
-    public int getavailableQuantify(){
-        return availableQuantify;
+    public int getAvailableQuantity() {
+        return availableQuantity;
     }
-    public void setAvailableQuantify(int availableQuantify){
-        this.availableQuantify=availableQuantify;
+    public void setAvailableQuantity(int availableQuantity) {
+        this.availableQuantity = availableQuantity;
     }
 
     public abstract String getDescription();

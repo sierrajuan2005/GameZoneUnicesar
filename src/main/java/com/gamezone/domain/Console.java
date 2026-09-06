@@ -20,7 +20,7 @@ public class Console extends Product{
     }
 
 
-    public String getmodel(){
+    public String getModel(){
         return model;
     }
     public void setModel(String model){
