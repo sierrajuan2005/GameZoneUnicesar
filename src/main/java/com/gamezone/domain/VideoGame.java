@@ -4,6 +4,13 @@ public class VideoGame extends Product{
     private String genre;
     private String ageRating;
 
+    public VideoGame(String identifier, String title, double price, int availableQuantity, String platform, String genre, String ageRating) {
+        super(identifier, title, price, availableQuantity);
+        this.platform = platform;
+        this.genre = genre;
+        this.ageRating = ageRating;
+    }
+
 
     public String getPlatform(){
         return platform;

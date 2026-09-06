@@ -4,6 +4,13 @@ public class Console extends Product{
     private String model;
     private String generation;
 
+    public Console(String identifier, String title, double price, int availableQuantity, String brand, String model, String generation) {
+        super(identifier, title, price, availableQuantity);
+        this.brand = brand;
+        this.model = model;
+        this.generation = generation;
+    }
+
 
     public String getBrand(){
         return brand;

@@ -5,6 +5,12 @@ public abstract class Product{
     private double price;
     private int availableQuantify;
 
+    public Product(String identifier, String title, double price, int availableQuantify){
+        this.identifier=identifier;
+        this.title=title;
+        this.price=price;
+        this.availableQuantify=availableQuantify;
+    }
 
     public String getIdentifier(){
         return identifier;
