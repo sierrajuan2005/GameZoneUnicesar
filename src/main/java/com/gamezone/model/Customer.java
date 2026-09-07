@@ -29,4 +29,9 @@ public class Customer extends Person {
     public void addToPurchaseHistory(Sale sale) {
         this.purchaseHistory.add(sale);
     }
+
+    @Override
+    public String getRol() {
+        return "Customer";
+    }
 }
