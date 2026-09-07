@@ -15,8 +15,9 @@ public class Customer extends Person {
     }
 
     public Customer(String name, String identification) {
-        super();
+        super(name, identification);
     }
+
 
     public String getEmail() {
         return email;
