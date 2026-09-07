@@ -12,4 +12,9 @@ public class PersonRepository {
     public PersonRepository() {
         this.people = new ArrayList<>();
     }
+
+    public void addPerson(Person person){
+
+        people.add(person);
+    }
 }
