@@ -22,4 +22,14 @@ public class PersonRepository {
 
         return people;
     }
+
+    public Person findByIdentification(String identification){
+
+        for (Person p : people){
+            if (p.getIdentification().equals(identification)){
+                return p;
+            }
+        }
+        return null;
+    }
 }
