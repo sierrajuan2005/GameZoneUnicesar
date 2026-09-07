@@ -13,6 +13,8 @@ public abstract class Person {
     }
 
     public Person(String name, String identification) {
+        this.name = name;
+        this.identification = identification;
     }
 
 
