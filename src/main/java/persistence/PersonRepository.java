@@ -32,4 +32,9 @@ public class PersonRepository {
         }
         return null;
     }
+
+    public void removePerson(Person person){
+
+        people.remove(person);
+    }
 }
