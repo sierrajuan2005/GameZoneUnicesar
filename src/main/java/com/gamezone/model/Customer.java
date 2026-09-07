@@ -1,5 +1,6 @@
 package com.gamezone.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Customer extends Person {
@@ -7,4 +8,9 @@ public class Customer extends Person {
     private String email;
     private List<Sale> purchaseHistory;
 
+    public Customer(String name, String identification, String phone, String email) {
+        super(name, identification, phone);
+        this.email = email;
+        this.purchaseHistory = new ArrayList<>();
+    }
 }
