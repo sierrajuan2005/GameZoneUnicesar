@@ -22,4 +22,10 @@ public class PersonService {
 
         return personRepository.getPeople();
     }
+
+    public Person findPersonByIdentification(String identification){
+
+        return personRepository.findByIdentification(identification);
+    }
+
 }
