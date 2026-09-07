@@ -26,4 +26,9 @@ public class Seller extends Person{
     public void setWorkShift(String workShift) {
         this.workShift = workShift;
     }
+
+    @Override
+    public String getRol() {
+        return "Seller";
+    }
 }
