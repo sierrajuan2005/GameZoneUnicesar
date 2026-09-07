@@ -11,6 +11,10 @@ public class Seller extends Person{
         this.workShift = workShift;
     }
 
+    public Seller(String name, String identification) {
+        super();
+    }
+
     public String getEmployeeCode() {
         return employeeCode;
     }
