@@ -48,7 +48,7 @@ public class ConsoleUI {
                     listPeople();
                     break;
                 case 4:
-                    //findPerson();
+                    findPerson();
                     break;
                 case 5:
                     //removePerson();
@@ -82,6 +82,19 @@ public class ConsoleUI {
 
         for (Person p : personService.getAllPeople()){
             System.out.println(p);
+        }
+    }
+
+    public void findPerson(){
+
+        System.out.print("Identification to search: ");
+        String identification = scanner.nextLine();
+        Person p = personService.findPersonByIdentification(identification);
+        if (p != null){
+
+            System.out.println("Found:" + p);
+        }else {
+            System.out.println("Person not found.");
         }
     }
 
