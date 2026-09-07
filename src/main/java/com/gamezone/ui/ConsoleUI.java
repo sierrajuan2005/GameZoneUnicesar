@@ -1,5 +1,6 @@
 package com.gamezone.ui;
 
+import com.gamezone.model.Customer;
 import com.gamezone.service.PersonService;
 
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class ConsoleUI {
             switch (option){
 
                 case 1:
-                    //registerCustomer();
+                    registerCustomer();
                     break;
                 case 2:
                     //registerSeller();
@@ -52,5 +53,15 @@ public class ConsoleUI {
                     break;
             }
         }while (option != 0);
+    }
+    private void registerCustomer(){
+
+        System.out.print("Name: ");
+        String name = scanner.nextLine();
+        System.out.print("Identification: ");
+        String identification = scanner.nextLine();
+        Customer customer = new Customer(name,identification);
+        personService.addPerson(customer);
+        System.out.println("Customer registered successfully!");
     }
 }
