@@ -13,4 +13,20 @@ public class Customer extends Person {
         this.email = email;
         this.purchaseHistory = new ArrayList<>();
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public List<Sale> getPurchaseHistory() {
+        return purchaseHistory;
+    }
+
+    public void addToPurchaseHistory(Sale sale) {
+        this.purchaseHistory.add(sale);
+    }
 }
