@@ -51,7 +51,7 @@ public class ConsoleUI {
                     findPerson();
                     break;
                 case 5:
-                    //removePerson();
+                    removePerson();
                     break;
             }
         }while (option != 0);
@@ -98,4 +98,17 @@ public class ConsoleUI {
         }
     }
 
+    public void removePerson(){
+
+        System.out.println("Identification to remove: ");
+        String identification = scanner.nextLine();
+        Person p = personService.findPersonByIdentification(identification);
+        if (p != null){
+
+            personService.removePerson(p);
+            System.out.println("Person removed successfully!");
+        }else {
+            System.out.println("Person not found.");
+        }
+    }
 }
