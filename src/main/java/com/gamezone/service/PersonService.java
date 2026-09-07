@@ -28,4 +28,9 @@ public class PersonService {
         return personRepository.findByIdentification(identification);
     }
 
+    public void removePerson(Person person){
+
+        personRepository.removePerson(person);
+    }
+
 }
