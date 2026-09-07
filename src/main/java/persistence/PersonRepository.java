@@ -17,4 +17,9 @@ public class PersonRepository {
 
         people.add(person);
     }
+
+    public List<Person> getPeople(){
+
+        return people;
+    }
 }
