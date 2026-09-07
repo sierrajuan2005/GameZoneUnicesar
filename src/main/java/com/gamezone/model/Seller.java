@@ -12,7 +12,7 @@ public class Seller extends Person{
     }
 
     public Seller(String name, String identification) {
-        super();
+        super(name, identification);
     }
 
     public String getEmployeeCode() {
