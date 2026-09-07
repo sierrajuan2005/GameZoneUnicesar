@@ -14,6 +14,10 @@ public class Customer extends Person {
         this.purchaseHistory = new ArrayList<>();
     }
 
+    public Customer(String name, String identification) {
+        super();
+    }
+
     public String getEmail() {
         return email;
     }
