@@ -10,5 +10,7 @@ public class Main {
 
         ConsoleUI ui = new ConsoleUI(service);
 
+        ui.start();
+
     }
 }
