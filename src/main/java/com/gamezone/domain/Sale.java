@@ -17,6 +17,38 @@ public class Sale {
         this.products = products;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public List<product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<product> products) {
+        this.products = products;
+    }
+
 
 }
 
