@@ -49,6 +49,14 @@ public class Sale {
         this.products = products;
     }
 
+    public void addProduct(Product product){
+        this.products.add(product);
+    }
+
+
+
+
+
 
 }
 
