@@ -10,5 +10,13 @@ public class Sale {
     private Seller seller;
     private List<product> products;
 
+    public Sale(LocalDate date, Customer customer, Seller seller, List<product> products) {
+        this.date = date;
+        this.customer = customer;
+        this.seller = seller;
+        this.products = products;
+    }
+
+
 }
 
