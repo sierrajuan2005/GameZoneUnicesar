@@ -43,4 +43,6 @@ public abstract class Person {
     }
 
     public abstract String getRol();
+
+    public abstract String toString();
 }
