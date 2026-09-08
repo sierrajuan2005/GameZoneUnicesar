@@ -13,6 +13,10 @@ public class PersonService {
         this.personRepository = personRepository;
     }
 
+    public PersonService() {
+
+    }
+
     public void addPerson(Person person){
 
         personRepository.addPerson(person);
