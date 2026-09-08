@@ -35,6 +35,7 @@ public class ProductRepository{
             for(Product product : products){
                 lines.add(convertToCsv(product));
             }
+            Files.write(path, lines);
         } catch (IOException e){
             throw new RuntimeException("Error saving products.", e);
         }
