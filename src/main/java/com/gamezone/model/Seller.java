@@ -35,4 +35,11 @@ public class Seller extends Person{
     public String getRol() {
         return "Seller";
     }
+
+    @Override
+    public String toString() {
+        return "Seller{name='" + getName() + "',identification='" + getIdentification() +
+                "', phone='" + getPhone() + "', employeeCode='" + getEmployeeCode() +
+                "', workShift='" + getWorkShift() + "'}";
+    }
 }
