@@ -10,22 +10,37 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+Handles product persistence using a CSV file.
+ */
+
 public class ProductRepository{
 
     private static final String FILE_PATH = "data/products.csv";
 
-
+    /*
+    Saves a product to the CSV file.
+    @param product product to save
+     */
     public void save(Product product){
         List<Product> products = loadAll();
         products.add(product);
         saveAll(products);
     }
 
-
+    /*
+    Loads all stored products.
+    @return list of products
+     */
     public List<Product> load(){
         return loadAll();
     }
 
+
+    /*
+    Saves all products to the CSV file.
+    @param products list of products to save
+     */
     public void saveAll(List<Product> products){
         Path path = Paths.get(FILE_PATH);
         try{
@@ -41,6 +56,10 @@ public class ProductRepository{
         }
     }
 
+    /*
+    Loads all products from the CSV file.
+    @return list of stored products
+     */
     public List<Product> loadAll(){
         Path path = Paths.get(FILE_PATH);
         List<Product> products = new ArrayList<>();
@@ -64,7 +83,10 @@ public class ProductRepository{
         return products;
     }
 
-
+    /*Converts a product into CSV format.
+    @param product product to convert
+    @return CSV representation of the product
+     */
     private String convertToCsv(Product product) {
 
         if (product instanceof VideoGame videoGame) {
@@ -92,6 +114,11 @@ public class ProductRepository{
         throw new IllegalArgumentException("Unsupported product type.");
     }
 
+    /*
+    Converts a CSV line into a product object.
+    @param line CSV line representing a product
+    @return converted product
+     */
     private Product convertFromCsv(String line) {
 
         String[] data = line.split(";");

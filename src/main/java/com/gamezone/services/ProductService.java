@@ -4,13 +4,25 @@ import com.gamezone.persistence.ProductRepository;
 
 import java.util.List;
 
+/*
+Provides services for managing GameZone products.
+ */
 public class ProductService{
     private final ProductRepository productRepository;
 
+     /*
+    Creates a product service.
+    @param productRepository repository used to manage products
+     */
     public ProductService(ProductRepository productRepository){
         this.productRepository=productRepository;
     }
 
+
+    /*Registers a new product.
+    @param product product to register
+    @throws IllegalArgumentException if the product identifier already exists
+     */
     public void registerProduct(Product product) {
 
         List<Product> products = productRepository.loadAll();
@@ -27,10 +39,21 @@ public class ProductService{
         productRepository.saveAll(products);
     }
 
+    /*
+    Lists all registered products.
+    @return list of registered products
+     */
     public List<Product> listProducts(){
         return productRepository.loadAll();
     }
 
+
+     /*
+    Updates the stock quantity of a product
+    @param product product whose stock will be updated
+    @param quantity new stock quantity
+    @throws IllegalArgumentException if the quantity is negative or the product does not exist
+     */
     public void updateStock(Product product, int quantity) {
 
         if (quantity < 0) {
