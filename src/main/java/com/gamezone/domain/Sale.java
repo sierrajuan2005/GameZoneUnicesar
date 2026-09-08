@@ -53,6 +53,18 @@ public class Sale {
         this.products.add(product);
     }
 
+    public double calculateTotal(){
+        double total = 0.0;
+        for (Product product : products){
+            total += product.getPrice();
+        }
+        return total;
+    }
+
+
+
+
+
 
 
 
