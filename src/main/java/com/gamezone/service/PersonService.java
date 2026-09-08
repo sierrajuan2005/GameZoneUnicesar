@@ -1,7 +1,7 @@
 package com.gamezone.service;
 
 import com.gamezone.model.Person;
-import persistence.PersonRepository;
+import com.gamezone.persistence.PersonRepository;
 
 import java.util.List;
 
