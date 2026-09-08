@@ -61,14 +61,15 @@ public class Sale {
         return total;
     }
 
-
-
-
-
-
-
-
-
+    @Override
+    public String toString() {
+        return "Sale{" +
+                "date=" + date +
+                ", customer=" + customer +
+                ", seller=" + seller +
+                ", products=" + products +
+                '}';
+    }
 
 }
 
