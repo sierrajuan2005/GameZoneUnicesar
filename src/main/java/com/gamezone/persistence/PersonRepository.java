@@ -1,4 +1,4 @@
-package persistence;
+package com.gamezone.persistence;
 
 import com.gamezone.model.Person;
 
