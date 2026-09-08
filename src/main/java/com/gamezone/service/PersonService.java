@@ -14,7 +14,7 @@ public class PersonService {
     }
 
     public PersonService() {
-
+        this.personRepository = new PersonRepository();
     }
 
     public void addPerson(Person person){
