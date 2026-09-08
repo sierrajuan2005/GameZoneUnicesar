@@ -39,4 +39,11 @@ public class Customer extends Person {
     public String getRol() {
         return "Customer";
     }
+
+    @Override
+    public String toString() {
+        return "Customer{name='" + getName() + "',identification='" + getIdentification() +
+                "', phone='" + getPhone() + "', email='" + getEmail()
+                + "', purchaseHistory=" + getPurchaseHistory() + "}";
+    }
 }
