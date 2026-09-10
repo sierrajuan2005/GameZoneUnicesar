@@ -1,8 +1,7 @@
 package com.gamezone.ui;
-
-import com.gamezone.domain.Customer;
-import com.gamezone.domain.Person;
-import com.gamezone.domain.Seller;
+import com.gamezone.model.Customer;
+import com.gamezone.model.Person;
+import com.gamezone.model.Seller;
 import com.gamezone.services.PersonService;
 
 import java.util.Scanner;
@@ -15,7 +14,7 @@ public class ConsoleUI {
     public ConsoleUI(PersonService personService) {
 
         this.personService = personService;
-        this.scanner = new scanner(System.in);
+        this.scanner = new Scanner(System.in);
     }
 
     public void start(){

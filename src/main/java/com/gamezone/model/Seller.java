@@ -1,4 +1,4 @@
-package com.gamezone.domain;
+package com.gamezone.model;
 
 public class Seller extends Person {
 

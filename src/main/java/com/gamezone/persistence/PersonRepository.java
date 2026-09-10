@@ -1,6 +1,6 @@
 package com.gamezone.persistence;
 
-import com.gamezone.domain.Person;
+import com.gamezone.model.Person;
 
 import java.util.ArrayList;
 import java.util.List;

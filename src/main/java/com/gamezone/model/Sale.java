@@ -1,4 +1,4 @@
-package com.gamezone.domain;
+package com.gamezone.model;
 
 import java.time.LocalDate;
 import java.util.List;
