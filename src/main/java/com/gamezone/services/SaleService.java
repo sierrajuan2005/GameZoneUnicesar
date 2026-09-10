@@ -10,12 +10,12 @@ import java.util.List;
 
 public class SaleService {
     private SaleRepository saleRepository;
-    private ProductRepository productRepository;
+    private ProductService productService;
 
 
-    public SaleService(SaleRepository saleRepository, ProductRepository productRepository) {
+    public SaleService(SaleRepository saleRepository, ProductService productService) {
         this.saleRepository = saleRepository;
-        this.productRepository = productRepository;
+        this.productService = productService;
     }
 
     public void registerSale(Sale sale) {
@@ -69,8 +69,13 @@ public class SaleService {
         return history;
     }
 
-
-
-
+    private Product findProductById(List<Product> products, String identifier) {
+        for (Product product : products) {
+            if (product.getIdentifier().equals(identifier)) {
+                return product;
+            }
+        }
+        throw new IllegalArgumentException("Product not found: " + identifier);
+    }
 
 }
