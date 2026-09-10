@@ -133,6 +133,33 @@ public class SaleRepository {
         return products;
     }
 
+    private String convertProductToCsv(Product product) {
+
+        if (product instanceof VideoGame videoGame) {
+            return "VIDEO_GAME,"
+                    + videoGame.getIdentifier() + ","
+                    + videoGame.getTitle() + ","
+                    + videoGame.getPrice() + ","
+                    + videoGame.getAvailableQuantity() + ","
+                    + videoGame.getPlatform() + ","
+                    + videoGame.getGenre() + ","
+                    + videoGame.getAgeRating();
+        }
+
+        if (product instanceof Console console) {
+            return "CONSOLE,"
+                    + console.getIdentifier() + ","
+                    + console.getTitle() + ","
+                    + console.getPrice() + ","
+                    + console.getAvailableQuantity() + ","
+                    + console.getBrand() + ","
+                    + console.getModel() + ","
+                    + console.getGeneration();
+        }
+
+        throw new IllegalArgumentException("Unsupported product type.");
+    }
+
 
 
 
