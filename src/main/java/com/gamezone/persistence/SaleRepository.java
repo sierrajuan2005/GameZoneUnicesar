@@ -40,6 +40,25 @@ public class SaleRepository {
     }
 
 
+    public void saveAll(List<Sale> sales) {
+        Path path = Paths.get(FILE_PATH);
+
+        try {
+            Files.createDirectories(path.getParent());
+            List<String> lines = new ArrayList<>();
+
+            for (Sale sale : sales) {
+                lines.add(convertToCsv(sale));
+            }
+
+            Files.write(path, lines);
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving sales.", e);
+        }
+    }
+
+
 
 
 
