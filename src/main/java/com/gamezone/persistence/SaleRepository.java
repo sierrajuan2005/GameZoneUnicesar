@@ -124,6 +124,17 @@ public class SaleRepository {
     }
 
 
+    private List<Product> convertProductsFromCsv(String data) {
+        List<Product> products = new ArrayList<>();
+
+        for (String productData : data.split("\\|")) {
+            products.add(convertProductFromCsv(productData));
+        }
+        return products;
+    }
+
+
+
 
 
 
