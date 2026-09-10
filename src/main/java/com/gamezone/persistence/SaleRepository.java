@@ -22,4 +22,15 @@ public class SaleRepository {
     }
 
 
+    public void save(Sale sale) {
+        List<Sale> sales = loadAll();
+        sales.add(sale);
+        saveAll(sales);
+    }
+
+
+
+
+
+
 }
