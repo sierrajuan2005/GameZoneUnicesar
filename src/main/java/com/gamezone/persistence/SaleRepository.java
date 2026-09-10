@@ -84,6 +84,24 @@ public class SaleRepository {
         return sales;
     }
 
+    private String convertToCsv(Sale sale) {
+        Customer customer = sale.getCustomer();
+        Seller seller = sale.getSeller();
+
+        return sale.getDate() + ";"
+                + customer.getName() + ";"
+                + customer.getIdentification() + ";"
+                + customer.getPhone() + ";"
+                + customer.getEmail() + ";"
+                + seller.getName() + ";"
+                + seller.getIdentification() + ";"
+                + seller.getPhone() + ";"
+                + seller.getEmployeeCode() + ";"
+                + seller.getWorkShift() + ";"
+                + convertProductsToCsv(sale.getProducts());
+    }
+
+
 
 
 
