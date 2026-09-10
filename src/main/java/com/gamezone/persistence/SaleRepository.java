@@ -59,6 +59,32 @@ public class SaleRepository {
     }
 
 
+    public List<Sale> loadAll() {
+        Path path = Paths.get(FILE_PATH);
+        List<Sale> sales = new ArrayList<>();
+
+        if (!Files.exists(path)) {
+            return sales;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(path);
+
+            for (String line : lines) {
+                if (!line.isBlank()) {
+                    Sale sale = convertFromCsv(line);
+                    sales.add(sale);
+                }
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading sales.", e);
+        }
+
+        return sales;
+    }
+
+
 
 
 
