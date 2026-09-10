@@ -3,26 +3,19 @@ import com.gamezone.model.Customer;
 import com.gamezone.model.Product;
 import com.gamezone.model.Sale;
 import com.gamezone.model.Seller;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import com.gamezone.persistence.ProductRepository;
 import com.gamezone.persistence.SaleRepository;
-import com.gamezone.services.ProductService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SaleService {
     private SaleRepository saleRepository;
     private ProductRepository productRepository;
-    private PersonService personService;
 
 
-    public SaleService(SaleRepository saleRepository, ProductRepository productRepository, PersonService personService) {
+    public SaleService(SaleRepository saleRepository, ProductRepository productRepository) {
         this.saleRepository = saleRepository;
         this.productRepository = productRepository;
-        this.personService = personService;
     }
 
     public void registerSale(Sale sale) {
@@ -65,6 +58,17 @@ public class SaleService {
         }
         return history;
     }
+
+    public List<Sale> getSellerSalesHistory(Seller seller) {
+        List<Sale> history = new ArrayList<>();
+        for (Sale sale : saleRepository.load()) {
+            if (sale.getSeller().getIdentification().equals(seller.getIdentification())) {
+                history.add(sale);
+            }
+        }
+        return history;
+    }
+
 
 
 
