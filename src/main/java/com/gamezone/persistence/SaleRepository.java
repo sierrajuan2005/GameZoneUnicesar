@@ -1,9 +1,16 @@
 package com.gamezone.persistence;
-import com.gamezone.domain.Sale;
+import com.gamezone.domain.Console;
 import com.gamezone.domain.Customer;
-import com.gamezone.domain.Seller;
 import com.gamezone.domain.Product;
-import java.io.*;
+import com.gamezone.domain.Sale;
+import com.gamezone.domain.Seller;
+import com.gamezone.domain.VideoGame;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +34,14 @@ public class SaleRepository {
         sales.add(sale);
         saveAll(sales);
     }
+
+    public List<Sale> load() {
+        return loadAll();
+    }
+
+
+
+
 
 
 
