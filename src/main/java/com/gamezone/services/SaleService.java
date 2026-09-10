@@ -9,6 +9,11 @@ public class SaleService {
     private PersonService personService;
 
 
+    public SaleService(SaleRepository saleRepository, ProductRepository productRepository, PersonService personService) {
+        this.saleRepository = saleRepository;
+        this.productRepository = productRepository;
+        this.personService = personService;
+    }
 
 
 }
