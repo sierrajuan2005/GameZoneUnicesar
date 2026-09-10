@@ -101,6 +101,18 @@ public class SaleRepository {
                 + convertProductsToCsv(sale.getProducts());
     }
 
+    private Sale convertFromCsv(String line) {
+
+        String[] data = line.split(";");
+
+        LocalDate date = LocalDate.parse(data[0]);
+        Customer customer = new Customer(data[1], data[2], data[3], data[4]);
+        Seller seller = new Seller(data[5], data[6], data[7], data[8], data[9]);
+        List<Product> products = convertProductsFromCsv(data[10]);
+
+        return new Sale(date, customer, seller, products);
+    }
+
 
 
 
