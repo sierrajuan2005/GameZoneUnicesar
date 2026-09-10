@@ -1,6 +1,18 @@
 package com.gamezone.persistence;
+import com.gamezone.domain.Sale;
+import com.gamezone.domain.Customer;
+import com.gamezone.domain.Seller;
+import com.gamezone.domain.Product;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class SaleRepository {
+
+    private static final String FILE_PATH = "data/sales.txt";
+
 
 
 }

@@ -2,15 +2,14 @@ package com.gamezone.domain;
 
 import java.time.LocalDate;
 import java.util.List;
-
 public class Sale {
 
     private LocalDate date;
     private Customer customer;
     private Seller seller;
-    private List<product> products;
+    private List<Product> products;
 
-    public Sale(LocalDate date, Customer customer, Seller seller, List<product> products) {
+    public Sale(LocalDate date, Customer customer, Seller seller, List<Product> products) {
         this.date = date;
         this.customer = customer;
         this.seller = seller;
@@ -41,11 +40,11 @@ public class Sale {
         this.seller = seller;
     }
 
-    public List<product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(List<product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 
