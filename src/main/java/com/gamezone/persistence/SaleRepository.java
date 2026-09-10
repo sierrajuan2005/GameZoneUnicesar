@@ -162,13 +162,35 @@ public class SaleRepository {
 
 
 
+    private Product convertProductFromCsv(String data) {
 
+        String[] fields = data.split(",");
+        String type = fields[0];
 
+        if (type.equals("VIDEO_GAME")) {
+            return new VideoGame(
+                    fields[1],
+                    fields[2],
+                    Double.parseDouble(fields[3]),
+                    Integer.parseInt(fields[4]),
+                    fields[5],
+                    fields[6],
+                    fields[7]
+            );
+        }
 
+        if (type.equals("CONSOLE")) {
+            return new Console(
+                    fields[1],
+                    fields[2],
+                    Double.parseDouble(fields[3]),
+                    Integer.parseInt(fields[4]),
+                    fields[5],
+                    fields[6],
+                    fields[7]
+            );
+        }
 
-
-
-
-
-
+        throw new IllegalArgumentException("Unknown product type: " + type);
+    }
 }
