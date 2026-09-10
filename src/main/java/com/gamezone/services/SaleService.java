@@ -51,6 +51,11 @@ public class SaleService {
         saleRepository.save(sale);
     }
 
+    public List<Sale> listSales() {
+        return saleRepository.load();
+    }
+
+
 
 
 }
