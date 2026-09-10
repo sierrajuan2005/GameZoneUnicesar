@@ -1,9 +1,9 @@
 package com.gamezone.ui;
 
-import com.gamezone.model.Customer;
-import com.gamezone.model.Person;
-import com.gamezone.model.Seller;
-import com.gamezone.service.PersonService;
+import com.gamezone.domain.Customer;
+import com.gamezone.domain.Person;
+import com.gamezone.domain.Seller;
+import com.gamezone.services.PersonService;
 
 import java.util.Scanner;
 

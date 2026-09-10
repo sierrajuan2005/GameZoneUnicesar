@@ -1,6 +1,6 @@
-package com.gamezone.model;
+package com.gamezone.domain;
 
-public class Seller extends Person{
+public class Seller extends Person {
 
     private String employeeCode;
     private String workShift;

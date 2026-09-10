@@ -1,4 +1,4 @@
-package com.gamezone.model;
+package com.gamezone.domain;
 
 public abstract class Person {
 
