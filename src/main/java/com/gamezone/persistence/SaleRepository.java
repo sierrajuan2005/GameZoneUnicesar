@@ -13,6 +13,13 @@ public class SaleRepository {
 
     private static final String FILE_PATH = "data/sales.txt";
 
+    private PersonRepository personRepository;
+    private ProductRepository productRepository;
+
+    public SaleRepository(PersonRepository personRepository, ProductRepository productRepository) {
+        this.personRepository = personRepository;
+        this.productRepository = productRepository;
+    }
 
 
 }
