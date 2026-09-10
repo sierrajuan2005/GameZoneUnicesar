@@ -33,7 +33,24 @@ public class SaleService {
 
         List<Product> storedProducts = productService.listProducts();
 
+        for (Product soldProduct : soldProducts) {
+            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
+            if (storedProduct.getAvailableQuantity() < 1) {
+                throw new IllegalStateException("Insufficient stock for product: " + storedProduct.getTitle());
+            }
+        }
 
+
+        for (Product soldProduct : soldProducts) {
+            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
+            int newQuantity = storedProduct.getAvailableQuantity() - 1;
+            productService.updateStock(storedProduct, newQuantity);
+        }
+
+        sale.getCustomer().addToPurchaseHistory(sale);
+        saleRepository.save(sale);
     }
+
+
 
 }
