@@ -313,6 +313,36 @@ public class ConsoleUI {
     }
 
 
+    private void listAllSales() {
+        printSales(saleService.listSales());
+    }
+
+    private void showCustomerHistory() {
+        Customer customer = selectCustomer();
+        if (customer == null) {
+            return;
+        }
+        printSales(saleService.getCustomerPurchaseHistory(customer));
+    }
+
+    private void showSellerHistory() {
+        Seller seller = selectSeller();
+        if (seller == null) {
+            return;
+        }
+        printSales(saleService.getSellerSalesHistory(seller));
+    }
+
+    private void printSales(List<Sale> sales) {
+        if (sales.isEmpty()) {
+            System.out.println("No sales were found.");
+            return;
+        }
+        for (Sale sale : sales) {
+            System.out.println(sale);
+        }
+    }
+
 
 
 }
