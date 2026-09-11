@@ -27,6 +27,33 @@ public class PersonRepository {
         }
     }
 
+    public List<Person> loadAll() {
+        List<Person> persons = new ArrayList<>();
+        File file = new File(FILE_PATH);
+
+        if (!file.exists()) {
+            return persons;
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                String type = parts[0];
+
+                if ("CUSTOMER".equals(type)) {
+                    persons.add(new Customer(parts[1], parts[2], parts[3], parts[4]));
+                } else if ("SELLER".equals(type)) {
+                    persons.add(new Seller(parts[1], parts[2], parts[3], parts[4], parts[5]));
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading persons", e);
+        }
+
+        return persons;
+    }
+
     public void addPerson(Person person){
 
         people.add(person);
