@@ -55,13 +55,14 @@ public class PersonService {
     }
 
     /**
-     * Removes a person.
+     * Removes a person by identification.
      *
-     * @param person person to remove
+     * @param identification unique ID of the person
+     * @return true if removed, false otherwise
      */
-    public void removePerson(Person person){
 
-        personRepository.removePerson(person);
+    public boolean removePerson(String identification) {
+        return personRepository.removePerson(identification);
     }
 
 }
