@@ -10,5 +10,18 @@ public class BasicWarranty extends Warranty{
         super(warrantyIdentifier, associatedProduct, associatedSale, startDate, endDate);
     }
 
-    
+    @Override
+    public int getDurationInMonths() {
+        return DurationInMonths;
+    }
+
+    @Override
+    public String getWarrantyType() {
+        return WarrantyType;
+    }
+
+    @Override
+    public double getAdditionalCost() {
+        return AdditionalCost;
+    }
 }
