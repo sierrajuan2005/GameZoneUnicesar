@@ -9,7 +9,10 @@ import com.gamezone.model.VideoGame;
 import com.gamezone.services.PersonService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
-
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class ConsoleUI {
 
@@ -139,6 +142,71 @@ public class ConsoleUI {
             System.out.println(product.getDescription() + " | Stock: " + product.getAvailableQuantity());
         }
     }
+
+    public void showPersonMenu() {
+        System.out.println("\n--- Person Menu ---");
+        System.out.println("1. Register a customer");
+        System.out.println("2. List customers");
+        System.out.println("3. List sellers");
+        System.out.println("0. Back");
+        System.out.print("Choose an option: ");
+
+        switch (scanner.nextLine()) {
+            case "1" -> registerCustomer();
+            case "2" -> listCustomers();
+            case "3" -> listSellers();
+            case "0" -> { }
+            default -> System.out.println("Invalid option.");
+        }
+    }
+
+    private void registerCustomer() {
+        try {
+            System.out.print("Name: ");
+            String name = scanner.nextLine();
+            System.out.print("Identification: ");
+            String identification = scanner.nextLine();
+            System.out.print("Phone: ");
+            String phone = scanner.nextLine();
+            System.out.print("Email: ");
+            String email = scanner.nextLine();
+
+            Customer customer = new Customer(name, identification, phone, email);
+            personService.addPerson(customer);
+            System.out.println("Customer registered successfully.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void listCustomers() {
+        List<Person> people = personService.getAllPeople();
+        boolean found = false;
+        for (Person person : people) {
+            if (person instanceof Customer) {
+                System.out.println(person);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("There are no customers registered yet.");
+        }
+    }
+
+    private void listSellers() {
+        List<Person> people = personService.getAllPeople();
+        boolean found = false;
+        for (Person person : people) {
+            if (person instanceof Seller) {
+                System.out.println(person);
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("There are no sellers registered yet.");
+        }
+    }
+
 
 
 
