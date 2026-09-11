@@ -54,10 +54,12 @@ public class PersonRepository {
         return persons;
     }
 
-    public void addPerson(Person person){
-
-        people.add(person);
+    public void addPerson(Person person) {
+        List<Person> persons = loadAll();
+        persons.add(person);
+        saveAll(persons);
     }
+
 
     /**
      * Returns all persons in the repository.
