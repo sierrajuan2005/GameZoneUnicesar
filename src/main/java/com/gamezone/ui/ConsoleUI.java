@@ -279,6 +279,40 @@ public class ConsoleUI {
     }
 
 
+    private List<Product> selectProducts() {
+        List<Product> selectedProducts = new ArrayList<>();
+        List<Product> availableProducts = productService.listProducts();
+        String identifier;
+
+        System.out.println("Enter product identifiers one at a time. Leave empty to finish.");
+        do {
+            System.out.print("Product identifier (empty to finish): ");
+            identifier = scanner.nextLine();
+
+            if (!identifier.isBlank()) {
+                Product product = findProductById(availableProducts, identifier);
+                if (product != null) {
+                    selectedProducts.add(product);
+                    System.out.println("Added: " + product.getDescription());
+                } else {
+                    System.out.println("No product found with that identifier.");
+                }
+            }
+        } while (!identifier.isBlank());
+
+        return selectedProducts;
+    }
+
+    private Product findProductById(List<Product> products, String identifier) {
+        for (Product product : products) {
+            if (product.getIdentifier().equals(identifier)) {
+                return product;
+            }
+        }
+        return null;
+    }
+
+
 
 
 }
