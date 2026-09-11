@@ -22,5 +22,13 @@ public class Main {
         SaleService saleService = new SaleService(saleRepository, productService);
 
 
+        preloadSellers(personService);
+
+        ConsoleUI consoleUI = new ConsoleUI(personService, productService, saleService);
+        consoleUI.start();
+    }
+
+
+
     }
 }
