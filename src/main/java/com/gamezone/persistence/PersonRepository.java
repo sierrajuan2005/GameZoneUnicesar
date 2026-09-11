@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class PersonRepository {
 
-    private List<Person> people;
+    private static final String FILE_PATH = "data/persons.csv";
 
     /** Creates an empty repository. */
     public PersonRepository() {
