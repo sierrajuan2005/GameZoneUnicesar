@@ -1,7 +1,7 @@
 package com.gamezone.persistence;
-import com.gamezone.domain.Product;
-import com.gamezone.domain.Console;
-import com.gamezone.domain.VideoGame;
+import com.gamezone.model.Product;
+import com.gamezone.model.Console;
+import com.gamezone.model.VideoGame;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -1,4 +1,4 @@
-package com.gamezone.domain;
+package com.gamezone.model;
 /*
 Represents a video game product.
  */

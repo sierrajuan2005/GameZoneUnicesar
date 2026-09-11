@@ -1,6 +1,6 @@
 package com.gamezone;
 
-import com.gamezone.service.PersonService;
+import com.gamezone.services.PersonService;
 import com.gamezone.ui.ConsoleUI;
 
 public class Main {

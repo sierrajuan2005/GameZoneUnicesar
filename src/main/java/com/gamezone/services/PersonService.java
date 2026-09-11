@@ -1,4 +1,4 @@
-package com.gamezone.service;
+package com.gamezone.services;
 
 import com.gamezone.model.Person;
 import com.gamezone.persistence.PersonRepository;

@@ -1,5 +1,5 @@
 package com.gamezone.services;
-import com.gamezone.domain.Product;
+import com.gamezone.model.Product;
 import com.gamezone.persistence.ProductRepository;
 
 import java.util.List;

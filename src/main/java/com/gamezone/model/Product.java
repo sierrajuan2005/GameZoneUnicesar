@@ -1,4 +1,4 @@
-package com.gamezone.domain;
+package com.gamezone.model;
 /*
 Represents the abstract base class for all products 
 available in GameZone.
