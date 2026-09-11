@@ -14,32 +14,38 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
+/**
+ * Repository responsible for saving and loading sales from a text file.
+ */
 public class SaleRepository {
 
     private static final String FILE_PATH = "data/sales.txt";
 
-    private PersonRepository personRepository;
-    private ProductRepository productRepository;
-
-    public SaleRepository(PersonRepository personRepository, ProductRepository productRepository) {
-        this.personRepository = personRepository;
-        this.productRepository = productRepository;
-    }
-
-
+    /**
+     * Saves a new sale.
+     *
+     * @param sale sale to save
+     */
     public void save(Sale sale) {
         List<Sale> sales = loadAll();
         sales.add(sale);
         saveAll(sales);
     }
 
+    /**
+     * Loads all sales from the file.
+     *
+     * @return list of sales
+     */
     public List<Sale> load() {
         return loadAll();
     }
 
-
+    /**
+     * Saves all sales to the file.
+     *
+     * @param sales list of sales to save
+     */
     public void saveAll(List<Sale> sales) {
         Path path = Paths.get(FILE_PATH);
 
@@ -58,7 +64,11 @@ public class SaleRepository {
         }
     }
 
-
+    /**
+     * Loads all sales stored in the file.
+     *
+     * @return list of sales
+     */
     public List<Sale> loadAll() {
         Path path = Paths.get(FILE_PATH);
         List<Sale> sales = new ArrayList<>();
@@ -113,16 +123,15 @@ public class SaleRepository {
         return new Sale(date, customer, seller, products);
     }
 
-
     private String convertProductsToCsv(List<Product> products) {
         List<String> productParts = new ArrayList<>();
 
         for (Product product : products) {
             productParts.add(convertProductToCsv(product));
         }
+
         return String.join("|", productParts);
     }
-
 
     private List<Product> convertProductsFromCsv(String data) {
         List<Product> products = new ArrayList<>();
@@ -130,6 +139,7 @@ public class SaleRepository {
         for (String productData : data.split("\\|")) {
             products.add(convertProductFromCsv(productData));
         }
+
         return products;
     }
 
@@ -159,8 +169,6 @@ public class SaleRepository {
 
         throw new IllegalArgumentException("Unsupported product type.");
     }
-
-
 
     private Product convertProductFromCsv(String data) {
 

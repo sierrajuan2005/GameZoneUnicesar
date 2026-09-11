@@ -8,16 +8,30 @@ import com.gamezone.persistence.SaleRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the business logic related to sales.
+ */
 public class SaleService {
+
     private SaleRepository saleRepository;
     private ProductService productService;
 
-
+    /**
+     * Creates a SaleService with the required repositories and services.
+     *
+     * @param saleRepository repository used to store sales
+     * @param productService service used to manage products and stock
+     */
     public SaleService(SaleRepository saleRepository, ProductService productService) {
         this.saleRepository = saleRepository;
         this.productService = productService;
     }
 
+    /**
+     * Registers a sale and updates the stock of the sold products.
+     *
+     * @param sale sale to register
+     */
     public void registerSale(Sale sale) {
         List<Product> soldProducts = sale.getProducts();
 
@@ -29,11 +43,13 @@ public class SaleService {
 
         for (Product soldProduct : soldProducts) {
             Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
+
             if (storedProduct.getAvailableQuantity() < 1) {
-                throw new IllegalStateException("Insufficient stock for product: " + storedProduct.getTitle());
+                throw new IllegalStateException(
+                        "Insufficient stock for product: " + storedProduct.getTitle()
+                );
             }
         }
-
 
         for (Product soldProduct : soldProducts) {
             Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
@@ -45,27 +61,48 @@ public class SaleService {
         saleRepository.save(sale);
     }
 
+    /**
+     * Returns all registered sales.
+     *
+     * @return list of registered sales
+     */
     public List<Sale> listSales() {
         return saleRepository.load();
     }
 
+    /**
+     * Returns the sales made by a specific customer.
+     *
+     * @param customer customer whose purchase history is requested
+     * @return list of sales made by the customer
+     */
     public List<Sale> getCustomerPurchaseHistory(Customer customer) {
         List<Sale> history = new ArrayList<>();
+
         for (Sale sale : saleRepository.load()) {
             if (sale.getCustomer().getIdentification().equals(customer.getIdentification())) {
                 history.add(sale);
             }
         }
+
         return history;
     }
 
+    /**
+     * Returns the sales handled by a specific seller.
+     *
+     * @param seller seller whose sales history is requested
+     * @return list of sales handled by the seller
+     */
     public List<Sale> getSellerSalesHistory(Seller seller) {
         List<Sale> history = new ArrayList<>();
+
         for (Sale sale : saleRepository.load()) {
             if (sale.getSeller().getIdentification().equals(seller.getIdentification())) {
                 history.add(sale);
             }
         }
+
         return history;
     }
 
@@ -75,7 +112,7 @@ public class SaleService {
                 return product;
             }
         }
+
         throw new IllegalArgumentException("Product not found: " + identifier);
     }
-
 }
