@@ -33,6 +33,33 @@ public class ConsoleUI {
     }
 
 
+    public void start() {
+        boolean running = true;
+        while (running) {
+            showMainMenu();
+            switch (scanner.nextLine()) {
+                case "1" -> showProductMenu();
+                case "2" -> showPersonMenu();
+                case "3" -> showSaleMenu();
+                case "0" -> running = false;
+                default -> System.out.println("Invalid option.");
+            }
+        }
+        System.out.println("Closing GameZone Unicesar. See you soon!");
+    }
+
+
+    public void showMainMenu() {
+        System.out.println("\n===== GameZone Unicesar =====");
+        System.out.println("1. Manage products");
+        System.out.println("2. Manage customers and sellers");
+        System.out.println("3. Manage sales");
+        System.out.println("0. Exit");
+        System.out.print("Choose an option: ");
+    }
+
+
+
 }
 
 
