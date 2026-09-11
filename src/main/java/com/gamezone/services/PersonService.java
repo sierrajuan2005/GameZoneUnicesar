@@ -1,6 +1,7 @@
 package com.gamezone.services;
 
 import com.gamezone.model.Person;
+import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public class PersonService {
 
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
     /** Creates service with given repository. */
     public PersonService(PersonRepository personRepository) {
@@ -60,9 +61,25 @@ public class PersonService {
      * @param identification unique ID of the person
      * @return true if removed, false otherwise
      */
-
     public boolean removePerson(String identification) {
         return personRepository.removePerson(identification);
     }
 
+    /**
+     * Preloads default sellers if none exist in the repository.
+     *
+     * @param personService service instance to use for adding sellers
+     */
+    public static void preloadSellers(PersonService personService) {
+        boolean hasSellers = personService.getAllPeople().stream()
+                .anyMatch(p -> p instanceof Seller);
+
+        if (hasSellers) {
+            return;
+        }
+
+        personService.addPerson(new Seller("Laura Gomez", "1007", "3001234567", "EMP007", "Morning"));
+        personService.addPerson(new Seller("Carlos Perez", "1008", "3009876543", "EMP008", "Afternoon"));
+        personService.addPerson(new Seller("Maria Rodriguez", "1009", "3004567890", "EMP009", "Night"));
+    }
 }
