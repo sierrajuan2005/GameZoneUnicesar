@@ -60,40 +60,24 @@ public class PersonRepository {
         saveAll(persons);
     }
 
-
-    /**
-     * Returns all persons in the repository.
-     *
-     * @return list of persons
-     */
-    public List<Person> getPeople(){
-
-        return people;
+    public List<Person> getPeople() {
+        return loadAll();
     }
 
-    /**
-     * Finds a person by identification.
-     *
-     * @param identification unique identifier
-     * @return matching person or null if not found
-     */
-    public Person findByIdentification(String identification){
+    public Person findByIdentification(String identification) {
+        return loadAll().stream()
+                .filter(p -> p.getIdentification().equals(identification))
+                .findFirst()
+                .orElse(null);
+    }
 
-        for (Person p : people){
-            if (p.getIdentification().equals(identification)){
-                return p;
-            }
+    public boolean removePerson(String identification) {
+        List<Person> persons = loadAll();
+        boolean removed = persons.removeIf(p -> p.getIdentification().equals(identification));
+        if (removed) {
+            saveAll(persons);
         }
-        return null;
-    }
-
-    /**
-     * Removes a person from the repository.
-     *
-     * @param person person to remove
-     */
-    public void removePerson(Person person){
-
-        people.remove(person);
+        return removed;
     }
 }
+
