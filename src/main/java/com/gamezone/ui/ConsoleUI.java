@@ -227,6 +227,57 @@ public class ConsoleUI {
         }
     }
 
+    private void registerSale() {
+        Customer customer = selectCustomer();
+        if (customer == null) {
+            return;
+        }
+
+        Seller seller = selectSeller();
+        if (seller == null) {
+            return;
+        }
+
+        List<Product> products = selectProducts();
+        if (products.isEmpty()) {
+            System.out.println("A sale must contain at least one product. Sale cancelled.");
+            return;
+        }
+
+        Sale sale = new Sale(LocalDate.now(), customer, seller, products);
+
+        try {
+            saleService.registerSale(sale);
+            System.out.println("Sale registered successfully. Total: " + sale.calculateTotal());
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            System.out.println("Could not register the sale: " + e.getMessage());
+        }
+    }
+
+    private Customer selectCustomer() {
+        System.out.print("Customer identification: ");
+        String identification = scanner.nextLine();
+        Person person = personService.findPersonByIdentification(identification);
+
+        if (person instanceof Customer) {
+            return (Customer) person;
+        }
+        System.out.println("No customer found with that identification.");
+        return null;
+    }
+
+    private Seller selectSeller() {
+        System.out.print("Seller identification: ");
+        String identification = scanner.nextLine();
+        Person person = personService.findPersonByIdentification(identification);
+
+        if (person instanceof Seller) {
+            return (Seller) person;
+        }
+        System.out.println("No seller found with that identification.");
+        return null;
+    }
+
 
 
 
