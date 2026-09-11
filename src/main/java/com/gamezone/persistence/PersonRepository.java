@@ -6,13 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Repository for managing Person entities.
- * Provides basic CRUD operations using a list.
+ * Repository class for managing Person entities.
+ * Provides persistence to a CSV file and methods to save and load data.
  */
 public class PersonRepository {
 
     private static final String FILE_PATH = "data/persons.csv";
 
+    /**
+     * Saves all persons to the CSV file.
+     *
+     * @param persons list of persons to persist
+     */
     public void saveAll(List<Person> persons) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (Person p : persons) {
@@ -27,6 +32,11 @@ public class PersonRepository {
         }
     }
 
+    /**
+     * Loads all persons from the CSV file.
+     *
+     * @return list of persons, empty if file does not exist
+     */
     public List<Person> loadAll() {
         List<Person> persons = new ArrayList<>();
         File file = new File(FILE_PATH);
@@ -54,16 +64,32 @@ public class PersonRepository {
         return persons;
     }
 
+    /**
+     * Adds a new person to the repository and persists changes.
+     *
+     * @param person person to add
+     */
     public void addPerson(Person person) {
         List<Person> persons = loadAll();
         persons.add(person);
         saveAll(persons);
     }
 
+    /**
+     * Retrieves all persons from the repository.
+     *
+     * @return list of persons
+     */
     public List<Person> getPeople() {
         return loadAll();
     }
 
+    /**
+     * Finds a person by identification.
+     *
+     * @param identification unique ID of the person
+     * @return person if found, null otherwise
+     */
     public Person findByIdentification(String identification) {
         return loadAll().stream()
                 .filter(p -> p.getIdentification().equals(identification))
@@ -71,6 +97,12 @@ public class PersonRepository {
                 .orElse(null);
     }
 
+    /**
+     * Removes a person from the repository by identification and persists changes.
+     *
+     * @param identification unique ID of the person to remove
+     * @return true if the person was removed, false if not found
+     */
     public boolean removePerson(String identification) {
         List<Person> persons = loadAll();
         boolean removed = persons.removeIf(p -> p.getIdentification().equals(identification));
