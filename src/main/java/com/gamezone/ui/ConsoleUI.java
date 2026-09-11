@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * Provides the console interface for interacting with the GameZone system.
+ */
 public class ConsoleUI {
 
     private final PersonService personService;
@@ -24,9 +27,9 @@ public class ConsoleUI {
     /**
      * Creates the console user interface.
      *
-     * @param personService  service used to manage customers and sellers
+     * @param personService service used to manage customers and sellers
      * @param productService service used to manage products
-     * @param saleService    service used to manage sales
+     * @param saleService service used to manage sales
      */
     public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService) {
         this.personService = personService;
@@ -35,11 +38,15 @@ public class ConsoleUI {
         this.scanner = new Scanner(System.in);
     }
 
-
+    /**
+     * Starts the main menu of the application.
+     */
     public void start() {
         boolean running = true;
+
         while (running) {
             showMainMenu();
+
             switch (scanner.nextLine()) {
                 case "1" -> showProductMenu();
                 case "2" -> showPersonMenu();
@@ -48,10 +55,13 @@ public class ConsoleUI {
                 default -> System.out.println("Invalid option.");
             }
         }
+
         System.out.println("Closing GameZone Unicesar. See you soon!");
     }
 
-
+    /**
+     * Displays the main application menu.
+     */
     public void showMainMenu() {
         System.out.println("\n===== GameZone Unicesar =====");
         System.out.println("1. Manage products");
@@ -61,6 +71,9 @@ public class ConsoleUI {
         System.out.print("Choose an option: ");
     }
 
+    /**
+     * Displays the product management menu.
+     */
     public void showProductMenu() {
         System.out.println("\n--- Product Menu ---");
         System.out.println("1. Register a video game");
@@ -98,6 +111,7 @@ public class ConsoleUI {
             Product videoGame = new VideoGame(id, title, price, stock, platform, genre, ageRating);
             productService.registerProduct(videoGame);
             System.out.println("Video game registered successfully.");
+
         } catch (NumberFormatException e) {
             System.out.println("Error: price and quantity must be valid numbers.");
         } catch (IllegalArgumentException e) {
@@ -125,6 +139,7 @@ public class ConsoleUI {
             Product console = new Console(id, title, price, stock, brand, model, generation);
             productService.registerProduct(console);
             System.out.println("Console registered successfully.");
+
         } catch (NumberFormatException e) {
             System.out.println("Error: price and quantity must be valid numbers.");
         } catch (IllegalArgumentException e) {
@@ -134,15 +149,20 @@ public class ConsoleUI {
 
     private void listProducts() {
         List<Product> products = productService.listProducts();
+
         if (products.isEmpty()) {
             System.out.println("There are no products registered yet.");
             return;
         }
+
         for (Product product : products) {
             System.out.println(product.getDescription() + " | Stock: " + product.getAvailableQuantity());
         }
     }
 
+    /**
+     * Displays the customer and seller management menu.
+     */
     public void showPersonMenu() {
         System.out.println("\n--- Person Menu ---");
         System.out.println("1. Register a customer");
@@ -174,6 +194,7 @@ public class ConsoleUI {
             Customer customer = new Customer(name, identification, phone, email);
             personService.addPerson(customer);
             System.out.println("Customer registered successfully.");
+
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -182,12 +203,14 @@ public class ConsoleUI {
     private void listCustomers() {
         List<Person> people = personService.getAllPeople();
         boolean found = false;
+
         for (Person person : people) {
             if (person instanceof Customer) {
                 System.out.println(person);
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println("There are no customers registered yet.");
         }
@@ -196,18 +219,22 @@ public class ConsoleUI {
     private void listSellers() {
         List<Person> people = personService.getAllPeople();
         boolean found = false;
+
         for (Person person : people) {
             if (person instanceof Seller) {
                 System.out.println(person);
                 found = true;
             }
         }
+
         if (!found) {
             System.out.println("There are no sellers registered yet.");
         }
     }
 
-
+    /**
+     * Displays the sales management menu.
+     */
     public void showSaleMenu() {
         System.out.println("\n--- Sale Menu ---");
         System.out.println("1. Register a sale");
@@ -229,16 +256,19 @@ public class ConsoleUI {
 
     private void registerSale() {
         Customer customer = selectCustomer();
+
         if (customer == null) {
             return;
         }
 
         Seller seller = selectSeller();
+
         if (seller == null) {
             return;
         }
 
         List<Product> products = selectProducts();
+
         if (products.isEmpty()) {
             System.out.println("A sale must contain at least one product. Sale cancelled.");
             return;
@@ -249,6 +279,7 @@ public class ConsoleUI {
         try {
             saleService.registerSale(sale);
             System.out.println("Sale registered successfully. Total: " + sale.calculateTotal());
+
         } catch (IllegalArgumentException | IllegalStateException e) {
             System.out.println("Could not register the sale: " + e.getMessage());
         }
@@ -257,11 +288,13 @@ public class ConsoleUI {
     private Customer selectCustomer() {
         System.out.print("Customer identification: ");
         String identification = scanner.nextLine();
+
         Person person = personService.findPersonByIdentification(identification);
 
         if (person instanceof Customer) {
             return (Customer) person;
         }
+
         System.out.println("No customer found with that identification.");
         return null;
     }
@@ -269,15 +302,16 @@ public class ConsoleUI {
     private Seller selectSeller() {
         System.out.print("Seller identification: ");
         String identification = scanner.nextLine();
+
         Person person = personService.findPersonByIdentification(identification);
 
         if (person instanceof Seller) {
             return (Seller) person;
         }
+
         System.out.println("No seller found with that identification.");
         return null;
     }
-
 
     private List<Product> selectProducts() {
         List<Product> selectedProducts = new ArrayList<>();
@@ -285,12 +319,14 @@ public class ConsoleUI {
         String identifier;
 
         System.out.println("Enter product identifiers one at a time. Leave empty to finish.");
+
         do {
             System.out.print("Product identifier (empty to finish): ");
             identifier = scanner.nextLine();
 
             if (!identifier.isBlank()) {
                 Product product = findProductById(availableProducts, identifier);
+
                 if (product != null) {
                     selectedProducts.add(product);
                     System.out.println("Added: " + product.getDescription());
@@ -298,6 +334,7 @@ public class ConsoleUI {
                     System.out.println("No product found with that identifier.");
                 }
             }
+
         } while (!identifier.isBlank());
 
         return selectedProducts;
@@ -309,9 +346,9 @@ public class ConsoleUI {
                 return product;
             }
         }
+
         return null;
     }
-
 
     private void listAllSales() {
         printSales(saleService.listSales());
@@ -319,17 +356,21 @@ public class ConsoleUI {
 
     private void showCustomerHistory() {
         Customer customer = selectCustomer();
+
         if (customer == null) {
             return;
         }
+
         printSales(saleService.getCustomerPurchaseHistory(customer));
     }
 
     private void showSellerHistory() {
         Seller seller = selectSeller();
+
         if (seller == null) {
             return;
         }
+
         printSales(saleService.getSellerSalesHistory(seller));
     }
 
@@ -338,13 +379,9 @@ public class ConsoleUI {
             System.out.println("No sales were found.");
             return;
         }
+
         for (Sale sale : sales) {
             System.out.println(sale);
         }
     }
-
-
-
 }
-
-

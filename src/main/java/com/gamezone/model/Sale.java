@@ -2,6 +2,10 @@ package com.gamezone.model;
 
 import java.time.LocalDate;
 import java.util.List;
+
+/**
+ * Represents a sale made by a customer and handled by a seller.
+ */
 public class Sale {
 
     private LocalDate date;
@@ -9,6 +13,14 @@ public class Sale {
     private Seller seller;
     private List<Product> products;
 
+    /**
+     * Creates a new sale.
+     *
+     * @param date sale date
+     * @param customer customer who made the purchase
+     * @param seller seller who handled the sale
+     * @param products products included in the sale
+     */
     public Sale(LocalDate date, Customer customer, Seller seller, List<Product> products) {
         this.date = date;
         this.customer = customer;
@@ -48,15 +60,27 @@ public class Sale {
         this.products = products;
     }
 
-    public void addProduct(Product product){
+    /**
+     * Adds a product to the sale.
+     *
+     * @param product product to add
+     */
+    public void addProduct(Product product) {
         this.products.add(product);
     }
 
-    public double calculateTotal(){
+    /**
+     * Calculates the total price of the sale.
+     *
+     * @return total price
+     */
+    public double calculateTotal() {
         double total = 0.0;
-        for (Product product : products){
+
+        for (Product product : products) {
             total += product.getPrice();
         }
+
         return total;
     }
 
@@ -69,6 +93,5 @@ public class Sale {
                 ", products=" + products +
                 '}';
     }
-
 }
 
