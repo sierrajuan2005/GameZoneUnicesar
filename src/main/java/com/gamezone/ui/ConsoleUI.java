@@ -15,7 +15,7 @@ public class ConsoleUI {
     public ConsoleUI(PersonService personService) {
 
         this.personService = personService;
-        this.scanner = new scanner(System.in);
+        this.scanner = new Scanner(System.in);
     }
 
     public void start(){
