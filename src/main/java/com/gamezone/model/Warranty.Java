@@ -16,4 +16,43 @@ public abstract class Warranty{
         this.startDate = startDate;
     }
     
+    public String getWarrantyIdentifier() {
+        return warrantyIdentifier;
+    }
+    
+
+    public Product getAssociatedProduct() {
+        return associatedProduct;
+    }
+
+    public Sale getAssociatedSale() {
+        return associatedSale;
+    }
+    
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public abstract int getDurationInMonths(){
+        
+    }
+
+    public abstract String getWarrantyType(){
+        
+    }
+    public abstract double getAdditionalCost(){
+
+    }
+
+    public boolean getIsActive(){
+
+    }
+    public String generateWarrantyCertificate(){
+
+    }
 }
