@@ -4,7 +4,6 @@
 This document records the contributions made by Developer 2 in the Person module of the GameZone project, assisted by AI tools.
 
 ---
-
 ### Entry 1
 *Date:* 2026-09-06  
 *Tool used:* AI Assistant (Copilot)  
@@ -14,7 +13,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Implemented PersonService with a PersonRepository attribute, constructors (default and dependency injection), and methods addPerson, getAllPeople, findPersonByIdentification, and removePerson.
 
 ---
-
 ### Entry 2
 *Date:* 2026-09-07  
 *Tool used:* AI Assistant (Copilot)  
@@ -24,7 +22,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Changed the return type of findPersonByIdentification to Optional<Person> to avoid null pointer exceptions and improve clarity.
 
 ---
-
 ### Entry 3
 *Date:* 2026-09-07  
 *Tool used:* AI Assistant (Copilot)  
@@ -34,7 +31,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Kept a List<Person> for simplicity, but considered HashMap<String, Person> as a future optimization.
 
 ---
-
 ### Entry 4
 *Date:* 2026-09-07  
 *Tool used:* AI Assistant (Copilot)  
@@ -44,7 +40,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Structured commits by functionality (constructor, getters/setters, repository methods, service methods) to maintain clarity in the history.
 
 ---
-
 ### Entry 5
 *Date:* 2026-09-07  
 *Tool used:* AI Assistant (Copilot)  
@@ -54,7 +49,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Configured IntelliJ IDEA to mark src/main/java as *Source Root*, created the root package com.gamezone, and organized subfolders. The project compiled and ran without package conflicts.
 
 ---
-
 ### Entry 6
 *Date:* 2026-09-10  
 *Tool used:* AI Assistant (Copilot)  
@@ -68,7 +62,6 @@ This document records the contributions made by Developer 2 in the Person module
 - Javadoc commit was successfully aligned with develop.
 
 ---
-
 ### Entry 7
 *Date:* 2026-09-10  
 *Tool used:* AI Assistant (Copilot)  
@@ -78,7 +71,6 @@ This document records the contributions made by Developer 2 in the Person module
 *Solution and decision:* Added Javadoc to PersonService and Main, following the same format used in model and repository classes.
 
 ---
-
 ### Entry 8
 *Date:* 2026-09-11 (Pull Request #5: Integration of Person module)  
 *Tool used:* AI Assistant (Copilot)  
