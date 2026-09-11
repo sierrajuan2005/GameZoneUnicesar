@@ -13,16 +13,20 @@ public class PersonRepository {
 
     private static final String FILE_PATH = "data/persons.csv";
 
-    /** Creates an empty repository. */
-    public PersonRepository() {
-        this.people = new ArrayList<>();
+    public void saveAll(List<Person> persons) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
+            for (Person p : persons) {
+                if (p instanceof Customer c) {
+                    writer.println("CUSTOMER;" + c.getIdentification() + ";" + c.getName() + ";" + c.getPhone() + ";" + c.getEmail());
+                } else if (p instanceof Seller s) {
+                    writer.println("SELLER;" + s.getIdentification() + ";" + s.getName() + ";" + s.getPhone() + ";" + s.getEmployeeCode() + ";" + s.getWorkShift());
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error saving persons", e);
+        }
     }
 
-    /**
-     * Adds a person to the repository.
-     *
-     * @param person person to add
-     */
     public void addPerson(Person person){
 
         people.add(person);
