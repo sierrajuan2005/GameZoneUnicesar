@@ -208,6 +208,26 @@ public class ConsoleUI {
     }
 
 
+    public void showSaleMenu() {
+        System.out.println("\n--- Sale Menu ---");
+        System.out.println("1. Register a sale");
+        System.out.println("2. List all sales");
+        System.out.println("3. View a customer's purchase history");
+        System.out.println("4. View sales handled by a seller");
+        System.out.println("0. Back");
+        System.out.print("Choose an option: ");
+
+        switch (scanner.nextLine()) {
+            case "1" -> registerSale();
+            case "2" -> listAllSales();
+            case "3" -> showCustomerHistory();
+            case "4" -> showSellerHistory();
+            case "0" -> { }
+            default -> System.out.println("Invalid option.");
+        }
+    }
+
+
 
 
 }
