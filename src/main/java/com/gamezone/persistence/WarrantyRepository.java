@@ -24,5 +24,10 @@ public class WarrantyRepository {
         saveAll(warranties);
     }
 
+    public List<Warranty> getWarranties(){
+        return warranties;
+    }
+
+
 
 }
