@@ -19,4 +19,10 @@ public class WarrantyRepository {
         this.warranties = new ArrayList<>();
     }
 
+    public void addWarranty(Warranty warranty){
+        warranties.add(warranty);
+        saveAll(warranties);
+    }
+
+
 }
