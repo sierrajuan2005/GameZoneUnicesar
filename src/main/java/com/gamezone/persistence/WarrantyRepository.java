@@ -80,13 +80,13 @@ public class WarrantyRepository {
         return null;
     }
 
-    private void loadAll(){
+    public List<Warranty> loadAll(){
         Path path = Paths.get(FILE_PATH);
 
         try {
             if (!Files.exists(path)){
                 warranties.clear();
-                return;
+                return warranties;
             }
 
             List<String>lines  = Files.readAllLines(path);
@@ -102,6 +102,7 @@ public class WarrantyRepository {
         catch (IOException e){
             throw new RuntimeException("Error loading warranties.", e);
         }
+        return warranties;
     }
 
 
