@@ -39,16 +39,12 @@ public abstract class Warranty{
         return endDate;
     }
 
-    public abstract int getDurationInMonths(){
-        
-    }
+    public abstract int getDurationInMonths();
 
-    public abstract String getWarrantyType(){
-        
-    }
-    public abstract double getAdditionalCost(){
+    public abstract String getWarrantyType();
 
-    }
+    public abstract double getAdditionalCost();
+    
 
     public boolean getIsActive(){
         return !date.isBefore(startDate) && !date.isAfter(endDate);
