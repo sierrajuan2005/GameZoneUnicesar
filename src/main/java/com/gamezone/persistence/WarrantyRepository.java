@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,25 @@ public class WarrantyRepository {
                     e.getStartDate() + ";" + e.getEndDate();
         }
         return "";
+    }
+
+    private Warranty convertFromCsv(String line){
+        String[] data= line.split(";");
+        String type = data[0];
+        String warrantyIdentifier = data[1];
+        String productIdentifier = data[2];
+        String saleIdentifier = [3];
+        LocalDate startDate = LocalDate.parse(data[4]);
+        LocalDate endDate = LocalDate.parse(data[5]);
+
+        Product product = productRepository.findByIdentifier(productIdentifier);
+        Sale sale = saleRepository.findByIdentifier(saleIdentifier);
+        if ("BASIC".equals(type)) {
+            return new BasicWarranty(warrantyIdentifier, product, sale, startDate, endDate);
+        } else if ("EXTENDED".equals(type)) {
+            return new ExtendedWarranty(warrantyIdentifier, product, sale, startDate, endDate)
+        }
+        return null;
     }
 
 
