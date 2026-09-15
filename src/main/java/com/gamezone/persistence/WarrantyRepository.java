@@ -50,14 +50,14 @@ public class WarrantyRepository {
     private String convertToCsv (Warranty w){
 
         if (w instanceof BasicWarranty b){
-         return "BASIC;" + b.getWarrantyIdentifier() + ";" +
-         b.getAssociatedProduct().getIdentifier() + ";" +
-         b.getAssociatedSale().getIdentifier() + ";" +
+         return "BASIC;" + b.getIdentifier() + ";" +
+         b.getProduct().getIdentifier() + ";" +
+         b.getSale().getIdentifier() + ";" +
          b.getStartDate() + ";" + b.getEndDate();
         } else if (w instanceof ExtendedWarranty e) {
-            return "EXTENDED;" +e.getWarrantyIdentifier() + ";" +
-                    e.getAssociatedProduct().getIdentifier() + ";" +
-                    e.getAssociatedSale().getIdentifier() + ";" +
+            return "EXTENDED;" +e.getIdentifier() + ";" +
+                    e.getProduct().getIdentifier() + ";" +
+                    e.getSale().getIdentifier() + ";" +
                     e.getStartDate() + ";" + e.getEndDate();
         }
         return "";
