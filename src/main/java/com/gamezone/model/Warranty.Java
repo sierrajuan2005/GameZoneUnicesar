@@ -14,6 +14,7 @@ public abstract class Warranty{
         this.associatedProduct = associatedProduct;
         this.associatedSale = associatedSale;
         this.startDate = startDate;
+        this.endDate= startDate.plusMonths(getDurationInMonths());
     }
     
     public String getWarrantyIdentifier() {
@@ -50,9 +51,18 @@ public abstract class Warranty{
     }
 
     public boolean getIsActive(){
-
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
-    public String generateWarrantyCertificate(){
 
+    public String generateWarrantyCertificate(){
+        return "Warranty Certificate\n" +
+                "Warranty Identifier: " + warrantyIdentifier + "\n" +
+                "Warranty Type: " + getWarrantyType() + "\n" +
+                "Associated Product: " + associatedProduct.getProductName() + "\n" +
+                "Associated Sale: " + associatedSale.getSaleIdentifier() + "\n" +
+                "Start Date: " + startDate.toString() + "\n" +
+                "End Date: " + endDate.toString() + "\n" +
+                "Duration (Months): " + getDurationInMonths() + "\n" +
+                "Additional Cost: $" + getAdditionalCost();
     }
 }
