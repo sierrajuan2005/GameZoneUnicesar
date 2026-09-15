@@ -3,8 +3,8 @@ import java.time.LocalDate;
 
 public class ExtendedWarranty extends Warranty{
 
-    public ExtendedWarranty(String warrantyIdentifier, Product associatedProduct, Sale associatedSale, LocalDate startDate, LocalDate endDate) {
-        super(warrantyIdentifier, associatedProduct, associatedSale, startDate, endDate);
+    public ExtendedWarranty(String id, Product product, Sale sale, LocalDate startDate) {
+        super(id, product, sale, startDate);
     }
 
     @Override
@@ -14,7 +14,7 @@ public class ExtendedWarranty extends Warranty{
 
     @Override
     public String getWarrantyType() {
-        return "Extended Warranty" ;
+        return "Garantía Extendida" ;
     }
 
     @Override
