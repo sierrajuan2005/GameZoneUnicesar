@@ -40,7 +40,7 @@ public class WarrantyRepository {
 
     public Warranty findByIdentifier(String identifier){
         for (Warranty w : warranties){
-            if (w.getWarrantyIdentifier().equals(identifier)){
+            if (w.getIdentifier().equals(identifier)){
                 return w;
             }
         }
@@ -66,18 +66,18 @@ public class WarrantyRepository {
     private Warranty convertFromCsv(String line){
         String[] data= line.split(";");
         String type = data[0];
-        String warrantyIdentifier = data[1];
+        String identifier = data[1];
         String productIdentifier = data[2];
         String saleIdentifier = data[3];
         LocalDate startDate = LocalDate.parse(data[4]);
-        LocalDate endDate = LocalDate.parse(data[5]);
 
         Product product = productRepository.findByIdentifier(productIdentifier);
         Sale sale = saleRepository.findByIdentifier(saleIdentifier);
+
         if ("BASIC".equals(type)) {
-            return new BasicWarranty(warrantyIdentifier, product, sale, startDate, endDate);
+            return new BasicWarranty(identifier, product, sale, startDate);
         } else if ("EXTENDED".equals(type)) {
-            return new ExtendedWarranty(warrantyIdentifier, product, sale, startDate, endDate)
+            return new ExtendedWarranty(identifier, product, sale, startDate);
         }
         return null;
     }
