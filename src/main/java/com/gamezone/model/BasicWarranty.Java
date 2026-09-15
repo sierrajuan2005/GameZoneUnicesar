@@ -3,8 +3,8 @@ import java.time.LocalDate;
 
 public class BasicWarranty extends Warranty{
 
-    public BasicWarranty(String warrantyIdentifier, Product associatedProduct, Sale associatedSale, LocalDate startDate, LocalDate endDate) {
-        super(warrantyIdentifier, associatedProduct, associatedSale, startDate, endDate);
+    public BasicWarranty(String id, Product product, Sale sale, LocalDate startDate, LocalDate endDate) {
+        super(id, product, sale, startDate);
     }
 
     @Override
@@ -14,7 +14,7 @@ public class BasicWarranty extends Warranty{
 
     @Override
     public String getWarrantyType() {
-        return "Basic Warranty";
+        return "Garantía Básica";
     }
 
     @Override
