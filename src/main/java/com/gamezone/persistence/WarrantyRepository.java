@@ -33,7 +33,7 @@ public class WarrantyRepository {
     }
 
     public List<Warranty> getAllWarranties(){
-        return warranties;
+        return  new ArrayList<>(warranties);
     }
 
     private String convertToCsv (Warranty w){
