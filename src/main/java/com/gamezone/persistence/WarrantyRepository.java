@@ -80,6 +80,20 @@ public class WarrantyRepository {
         return null;
     }
 
+    private  void saveAll(List<Warranty> warranties){
+        Path path = Paths.get(FILE_PATH);
+        List<String> lines = new ArrayList<>();
+
+        for (Warranty w : warranties){
+            lines.add(convertToCsv(w));
+        }
+        try {
+            Files.write(path, lines);
+        }catch (IOException e){
+            throw new RuntimeException("Error saving warranties.", e);
+        }
+    }
+
     public List<Warranty> loadAll(){
         Path path = Paths.get(FILE_PATH);
 
