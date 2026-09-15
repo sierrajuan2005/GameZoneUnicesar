@@ -19,8 +19,8 @@ public class WarrantyRepository {
     private static final String FILE_PATH = "data/warranties.csv";
 
     private List<Warranty> warranties;
-    private SaleRepository saleRepository;
-    private ProductRepository productRepository;
+    private final SaleRepository saleRepository;
+    private final ProductRepository productRepository;
 
     public WarrantyRepository(SaleRepository saleRepository, ProductRepository productRepository) {
         this.saleRepository = saleRepository;
