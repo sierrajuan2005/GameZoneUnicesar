@@ -3,6 +3,8 @@ package com.gamezone.services;
 import com.gamezone.model.Warranty;
 import com.gamezone.persistence.WarrantyRepository;
 
+import java.util.List;
+
 public class WarrantyService {
 
     private final WarrantyRepository warrantyRepository;
@@ -17,4 +19,9 @@ public class WarrantyService {
         }
         warrantyRepository.addWarranty(warranty);
     }
+
+    public List<Warranty> listWarranties(){
+        return warrantyRepository.getAllWarranties();
+    }
+
 }
