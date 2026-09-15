@@ -153,4 +153,14 @@ public class ProductRepository{
 
         throw new IllegalArgumentException("Unknown product type: " + type);
     }
+
+    public Product findByIdentifier(String identifier) {
+        List<Product> products = loadAll();
+        for (Product product : products) {
+            if (product.getIdentifier().equals(identifier)) {
+                return product;
+            }
+        }
+        return null;
+    }
 }
