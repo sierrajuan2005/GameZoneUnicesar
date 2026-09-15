@@ -1,33 +1,32 @@
 package com.gamezone.model;
 import java.time.LocalDate;
-import java.util.List;
 
 public abstract class Warranty{
-    private String warrantyIdentifier;
-    private Product associatedProduct;
-    private Sale associatedSale;
+    private String id;
+    private Product product;
+    private Sale sale;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    public Warranty(String warrantyIdentifier, Product associatedProduct, Sale associatedSale, LocalDate startDate, LocalDate endDate){
-        this.warrantyIdentifier = warrantyIdentifier;
-        this.associatedProduct = associatedProduct;
-        this.associatedSale = associatedSale;
+    public Warranty(String id, Product product, Sale sale, LocalDate startDate){
+        this.id = id;
+        this.product = product;
+        this.sale = sale;
         this.startDate = startDate;
-        this.endDate= startDate.plusMonths(getDurationInMonths());
+        this.endDate = startDate.plusMonths(getDurationInMonths());
     }
     
-    public String getWarrantyIdentifier() {
-        return warrantyIdentifier;
+    public String getId() {
+        return id;
     }
     
 
-    public Product getAssociatedProduct() {
-        return associatedProduct;
+    public Product getProduct() {
+        return product;
     }
 
-    public Sale getAssociatedSale() {
-        return associatedSale;
+    public Sale getSale() {
+        return sale;
     }
     
 
@@ -44,21 +43,20 @@ public abstract class Warranty{
     public abstract String getWarrantyType();
 
     public abstract double getAdditionalCost();
-    
 
-    public boolean getIsActive(){
-        return !date.isBefore(startDate) && !date.isAfter(endDate);
+
+    public boolean isActive(LocalDate currentDate) {
+        return !currentDate.isBefore(startDate) && !currentDate.isAfter(endDate);
     }
 
     public String generateWarrantyCertificate(){
-        return "Warranty Certificate\n" +
-                "Warranty Identifier: " + warrantyIdentifier + "\n" +
-                "Warranty Type: " + getWarrantyType() + "\n" +
-                "Associated Product: " + associatedProduct.getProductName() + "\n" +
-                "Associated Sale: " + associatedSale.getSaleIdentifier() + "\n" +
-                "Start Date: " + startDate.toString() + "\n" +
-                "End Date: " + endDate.toString() + "\n" +
-                "Duration (Months): " + getDurationInMonths() + "\n" +
-                "Additional Cost: $" + getAdditionalCost();
+        return "Certificado de Garantía\n" +
+            "ID: " + id + "\n" +
+            "Tipo: " + getWarrantyType() + "\n" +
+            "Producto: " + product.getTitle() + "\n" +
+            "Fecha de inicio: " + startDate + "\n" +
+            "Fecha de vencimiento: " + endDate + "\n" +
+            "Duración (meses): " + getDurationInMonths() + "\n" +
+            "Costo adicional: $" + getAdditionalCost();
     }
 }
