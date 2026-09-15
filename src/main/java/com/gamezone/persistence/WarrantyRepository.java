@@ -66,7 +66,7 @@ public class WarrantyRepository {
         String type = data[0];
         String warrantyIdentifier = data[1];
         String productIdentifier = data[2];
-        String saleIdentifier = [3];
+        String saleIdentifier = data[3];
         LocalDate startDate = LocalDate.parse(data[4]);
         LocalDate endDate = LocalDate.parse(data[5]);
 
