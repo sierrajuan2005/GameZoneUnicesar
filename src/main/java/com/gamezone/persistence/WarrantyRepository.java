@@ -36,6 +36,15 @@ public class WarrantyRepository {
         return  new ArrayList<>(warranties);
     }
 
+    public Warranty findByIdentifier(String identifier){
+        for (Warranty w : warranties){
+            if (w.getWarrantyIdentifier().equals(identifier)){
+                return w;
+            }
+        }
+        return null;
+    }
+
     private String convertToCsv (Warranty w){
 
         if (w instanceof BasicWarranty b){
