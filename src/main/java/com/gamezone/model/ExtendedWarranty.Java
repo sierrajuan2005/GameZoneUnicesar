@@ -14,11 +14,11 @@ public class ExtendedWarranty extends Warranty{
 
     @Override
     public String getWarrantyType() {
-        return "Garantía Extendida" ;
+        return "Extended Warranty" ;
     }
 
     @Override
     public double getAdditionalCost() {
-        return getAssociatedProduct().getPrice() * 0.1;
+        return getProduct().getPrice() * 0.10;
     }
 }
