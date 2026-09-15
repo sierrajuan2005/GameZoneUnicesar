@@ -26,6 +26,7 @@ public class WarrantyRepository {
         this.saleRepository = saleRepository;
         this.productRepository = productRepository;
         this.warranties = new ArrayList<>();
+        loadAll();
     }
 
     public void addWarranty(Warranty warranty){
