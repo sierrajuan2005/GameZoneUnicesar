@@ -71,6 +71,30 @@ public class WarrantyRepository {
         return null;
     }
 
+    private void loadAll(){
+        Path path = Paths.get(FILE_PATH);
+
+        try {
+            if (!Files.exists(path)){
+                warranties.clear();
+                return;
+            }
+
+            List<String>lines  = Files.readAllLines(path);
+            warranties.clear();
+
+            for (String line : lines){
+                Warranty warranty = convertFromCsv(line);
+                if (warranty != null){
+                    warranties.add(warranty);
+                }
+            }
+        }
+        catch (IOException e){
+            throw new RuntimeException("Error loading warranties.", e);
+        }
+    }
+
 
 
 }
