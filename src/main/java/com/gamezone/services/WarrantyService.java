@@ -31,4 +31,8 @@ public class WarrantyService {
         return warrantyRepository.findByIdentifier(identifier);
     }
 
+    public List<Warranty> reloadWarranties(){
+        return warrantyRepository.loadAll();
+    }
+
 }
