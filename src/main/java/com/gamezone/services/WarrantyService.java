@@ -24,4 +24,11 @@ public class WarrantyService {
         return warrantyRepository.getAllWarranties();
     }
 
+    public Warranty findWarrantyByIdentifier(String identifier){
+        if (identifier == null || identifier.isEmpty()){
+            throw new IllegalArgumentException("Identifier cannot be null or empty.");
+        }
+        return warrantyRepository.findByIdentifier(identifier);
+    }
+
 }
