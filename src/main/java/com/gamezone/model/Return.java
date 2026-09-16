@@ -18,6 +18,8 @@ public class Return {
         this.returnedProducts = returnedProducts;
         this.reason = reason;
         this.refundAmount = 0.0;
+
+        calculateRefundAmount();
     }
 
     public String getIdentifier() {
@@ -36,6 +38,15 @@ public class Return {
         return reason;
     }
     public double getRefundAmount() {
+        return refundAmount;
+    }
+
+    public double calculateRefundAmount() {
+        double total = 0.0;
+        for (Product product : returnedProducts) {
+            total += product.getPrice();
+        }
+        this.refundAmount = total;
         return refundAmount;
     }
 }
