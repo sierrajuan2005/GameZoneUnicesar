@@ -48,4 +48,12 @@ public class WarrantyService {
         return warranty;
     }
 
+    public Warranty findWarrantyByProduct(String productIdentifier, String saleIdentifier) {
+        return warrantyRepository.getAllWarranties().stream()
+                .filter(w -> w.getProduct().getIdentifier().equals(productIdentifier)
+                        && w.getSale().getIdentifier().equals(saleIdentifier))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
