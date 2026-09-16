@@ -22,9 +22,10 @@ public class SaleService {
      * @param saleRepository repository used to store sales
      * @param productService service used to manage products and stock
      */
-    public SaleService(SaleRepository saleRepository, ProductService productService) {
+    public SaleService(SaleRepository saleRepository, ProductService productService, WarrantyService warrantyService) {
         this.saleRepository = saleRepository;
         this.productService = productService;
+        this.warrantyService = warrantyService;
     }
 
     /**
