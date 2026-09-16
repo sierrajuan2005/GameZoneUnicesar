@@ -33,7 +33,7 @@ public class SaleService {
      *
      * @param sale sale to register
      */
-    public void registerSale(Sale sale) {
+    public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         List<Product> soldProducts = sale.getProducts();
 
         if (soldProducts.isEmpty()) {
@@ -44,11 +44,8 @@ public class SaleService {
 
         for (Product soldProduct : soldProducts) {
             Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-
             if (storedProduct.getAvailableQuantity() < 1) {
-                throw new IllegalStateException(
-                        "Insufficient stock for product: " + storedProduct.getTitle()
-                );
+                throw new IllegalStateException("Insufficient stock for product: " + storedProduct.getTitle());
             }
         }
 
@@ -60,6 +57,8 @@ public class SaleService {
 
         sale.getCustomer().addToPurchaseHistory(sale);
         saleRepository.save(sale);
+
+        assignWarranties(sale, productIdsWithExtendedWarranty);
     }
 
     /**
