@@ -11,4 +11,12 @@ public class Return {
     private String reason;
     private double refundAmount;
 
+    public Return(String identifier, LocalDate returnDate, Sale originalSale, List<Product> returnedProducts, String reason) {
+        this.identifier = identifier;
+        this.returnDate = returnDate;
+        this.originalSale = originalSale;
+        this.returnedProducts = returnedProducts;
+        this.reason = reason;
+        this.refundAmount = 0.0;
+    }
 }
