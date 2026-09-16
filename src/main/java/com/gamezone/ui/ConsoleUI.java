@@ -9,6 +9,8 @@ import com.gamezone.model.VideoGame;
 import com.gamezone.services.PersonService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
+import com.gamezone.services.WarrantyService;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -278,16 +280,42 @@ public class ConsoleUI {
             return;
         }
 
+        List<String> productIdsWithExtendedWarranty = askExtendedWarranties(products);
+
         Sale sale = new Sale(LocalDate.now(), customer, seller, products);
 
         try {
-            saleService.registerSale(sale);
-            System.out.println("Sale registered successfully. Total: " + sale.calculateTotal());
+            saleService.registerSale(sale, productIdsWithExtendedWarranty);
 
+            double extendedWarrantyCost = 0.0;
+            for (Product product : products) {
+                if (productIdsWithExtendedWarranty.contains(product.getIdentifier())) {
+                    extendedWarrantyCost += product.getPrice() * 0.10;
+                }
+            }
+            System.out.println("Venta registrada exitosamente. Total: " + (sale.calculateTotal() + extendedWarrantyCost));
         } catch (IllegalArgumentException | IllegalStateException e) {
-            System.out.println("Could not register the sale: " + e.getMessage());
+            System.out.println("No se pudo registrar la venta: " + e.getMessage());
         }
     }
+
+    private List<String> askExtendedWarranties(List<Product> products) {
+        List<String> selected = new ArrayList<>();
+
+        for (Product product : products) {
+            if (!(product instanceof Console)) {
+                continue;
+            }
+            System.out.print("¿Desea agregar garantía extendida para " + product.getTitle()
+                    + " (costo adicional del 10%)? (s/n): ");
+            String answer = scanner.nextLine();
+            if (answer.equalsIgnoreCase("s")) {
+                selected.add(product.getIdentifier());
+            }
+        }
+        return selected;
+    }
+
 
     private Customer selectCustomer() {
         System.out.print("Customer identification: ");
