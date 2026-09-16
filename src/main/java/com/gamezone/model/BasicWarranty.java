@@ -1,24 +1,24 @@
 package com.gamezone.model;
 import java.time.LocalDate;
 
-public class ExtendedWarranty extends Warranty{
+public class BasicWarranty extends Warranty {
 
-    public ExtendedWarranty(String identifier, Product product, Sale sale, LocalDate startDate) {
+    public BasicWarranty(String identifier, Product product, Sale sale, LocalDate startDate) {
         super(identifier, product, sale, startDate);
     }
 
     @Override
     public int getDurationInMonths() {
-        return 12;
+        return 6;
     }
 
     @Override
     public String getWarrantyType() {
-        return "Extended Warranty" ;
+        return "Basic Warranty";
     }
 
     @Override
     public double getAdditionalCost() {
-        return getProduct().getPrice() * 0.10;
+        return 0.0;
     }
 }

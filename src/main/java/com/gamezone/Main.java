@@ -4,9 +4,11 @@ import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
 import com.gamezone.persistence.ProductRepository;
 import com.gamezone.persistence.SaleRepository;
+import com.gamezone.persistence.WarrantyRepository;
 import com.gamezone.services.PersonService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
+import com.gamezone.services.WarrantyService;
 import com.gamezone.ui.ConsoleUI;
 
 
@@ -16,15 +18,17 @@ public class Main {
         PersonRepository personRepository = new PersonRepository();
         ProductRepository productRepository = new ProductRepository();
             SaleRepository saleRepository = new SaleRepository();
+        WarrantyRepository warrantyRepository = new WarrantyRepository(saleRepository, productRepository);
 
         PersonService personService = new PersonService(personRepository);
         ProductService productService = new ProductService(productRepository);
-        SaleService saleService = new SaleService(saleRepository, productService);
+        WarrantyService warrantyService = new WarrantyService(warrantyRepository);
+        SaleService saleService = new SaleService(saleRepository, productService, warrantyService);
 
 
         preloadSellers(personService);
 
-        ConsoleUI consoleUI = new ConsoleUI(personService, productService, saleService);
+        ConsoleUI consoleUI = new ConsoleUI(personService, productService, saleService, warrantyService);
         consoleUI.start();
     }
 

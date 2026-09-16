@@ -1,7 +1,7 @@
 package com.gamezone.model;
 import java.time.LocalDate;
 
-public abstract class Warranty{
+public abstract class Warranty {
     private String identifier;
     private Product product;
     private Sale sale;
