@@ -106,6 +106,14 @@ public class SaleService {
         return history;
     }
 
+    /**
+     * Finds a product by its identifier within a given list of products.
+     *
+     * @param products   list of products to search
+     * @param identifier identifier of the product to find
+     * @return the product with the matching identifier
+     * @throws IllegalArgumentException if no product with the given identifier is found
+     */
     private Product findProductById(List<Product> products, String identifier) {
         for (Product product : products) {
             if (product.getIdentifier().equals(identifier)) {
