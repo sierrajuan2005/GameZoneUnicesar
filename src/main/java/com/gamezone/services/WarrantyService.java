@@ -5,6 +5,7 @@ import com.gamezone.persistence.WarrantyRepository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WarrantyService {
 
@@ -54,6 +55,13 @@ public class WarrantyService {
                         && w.getSale().getIdentifier().equals(saleIdentifier))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Warranty> listActiveWarranties() {
+        LocalDate today = LocalDate.now();
+        return warrantyRepository.getAllWarranties().stream()
+                .filter(w -> w.isActive(today))
+                .collect(Collectors.toList());
     }
 
 }
