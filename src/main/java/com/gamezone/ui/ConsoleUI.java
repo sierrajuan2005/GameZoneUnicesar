@@ -23,7 +23,7 @@ public class ConsoleUI {
     private final ProductService productService;
     private final SaleService saleService;
     private final Scanner scanner;
-
+    private final WarrantyService warrantyService;
     /**
      * Creates the console user interface.
      *
@@ -31,12 +31,14 @@ public class ConsoleUI {
      * @param productService service used to manage products
      * @param saleService service used to manage sales
      */
-    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService) {
+    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService, WarrantyService warrantyService) {
         this.personService = personService;
         this.productService = productService;
         this.saleService = saleService;
         this.scanner = new Scanner(System.in);
+        this.warrantyService = warrantyService;
     }
+
 
     /**
      * Starts the main menu of the application.
