@@ -19,4 +19,23 @@ public class Return {
         this.reason = reason;
         this.refundAmount = 0.0;
     }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+    public LocalDate getReturnDate() {
+        return returnDate;
+    }
+    public Sale getOriginalSale() {
+        return originalSale;
+    }
+    public List<Product> getReturnedProducts() {
+        return returnedProducts;
+    }
+    public String getReason() {
+        return reason;
+    }
+    public double getRefundAmount() {
+        return refundAmount;
+    }
 }
