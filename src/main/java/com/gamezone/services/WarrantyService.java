@@ -1,8 +1,12 @@
 package com.gamezone.services;
 
+import com.gamezone.model.BasicWarranty;
+import com.gamezone.model.Product;
+import com.gamezone.model.Sale;
 import com.gamezone.model.Warranty;
 import com.gamezone.persistence.WarrantyRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class WarrantyService {
@@ -33,6 +37,12 @@ public class WarrantyService {
 
     public List<Warranty> reloadWarranties(){
         return warrantyRepository.loadAll();
+    }
+
+    public BasicWarranty assignBasicWarranty(Product product, Sale sale, LocalDate startDate) {
+        BasicWarranty warranty = new BasicWarranty(product.getIdentifier(), product, sale, startDate);
+        warrantyRepository.addWarranty(warranty);
+        return warranty;
     }
 
 }
