@@ -53,6 +53,7 @@ public class ConsoleUI {
                 case "1" -> showProductMenu();
                 case "2" -> showPersonMenu();
                 case "3" -> showSaleMenu();
+                case "4" -> showWarrantyMenu();
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option.");
             }
@@ -69,6 +70,7 @@ public class ConsoleUI {
         System.out.println("1. Manage products");
         System.out.println("2. Manage customers and sellers");
         System.out.println("3. Manage sales");
+        System.out.println("4. Gestionar garantías");
         System.out.println("0. Exit");
         System.out.print("Choose an option: ");
     }
