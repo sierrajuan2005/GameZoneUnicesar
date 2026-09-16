@@ -201,4 +201,14 @@ public class SaleRepository {
 
         throw new IllegalArgumentException("Unknown product type: " + type);
     }
+
+    public Sale findByIdentifier(String identifier) {
+        List<Sale> sales = load();
+        for (Sale sale : sales) {
+            if (sale.getIdentifier().equals(identifier)) {
+                return sale;
+            }
+        }
+        return null;
+    }
 }
