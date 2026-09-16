@@ -84,6 +84,12 @@ public class Sale {
         return total;
     }
 
+    public boolean canBeReturned(){
+        LocalDate currentDate = LocalDate.now();
+        LocalDate returnDeadline = date.plusDays(30);
+        return !currentDate.isBefore(date) && currentDate.isAfter(returnDeadline);
+    }
+
     @Override
     public String toString() {
         return "Sale{" +
