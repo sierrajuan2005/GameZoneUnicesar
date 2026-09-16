@@ -1,10 +1,6 @@
 package com.gamezone.services;
-import com.gamezone.model.Customer;
-import com.gamezone.model.Product;
-import com.gamezone.model.Sale;
-import com.gamezone.model.Seller;
+import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +11,7 @@ public class SaleService {
 
     private SaleRepository saleRepository;
     private ProductService productService;
+    private WarrantyService warrantyService;
 
     /**
      * Creates a SaleService with the required repositories and services.
