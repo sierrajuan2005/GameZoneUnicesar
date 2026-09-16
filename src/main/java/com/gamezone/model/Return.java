@@ -49,4 +49,21 @@ public class Return {
         this.refundAmount = total;
         return refundAmount;
     }
+
+
+    public String generateReturnReceipt(){
+        StringBuilder receipt = new StringBuilder();
+        receipt.append("Return Receipt\n");
+        receipt.append("Identifier: ").append(identifier).append("\n");
+        receipt.append("Return Date: ").append(returnDate).append("\n");
+        receipt.append("Original Sale ID: ").append(originalSale).append("\n");
+        receipt.append("Returned Products:\n");
+        for (Product product : returnedProducts) {
+            receipt.append("- ").append(product.getTitle()).append(": $").append(product.getPrice()).append("\n");
+        }
+        receipt.append("Reason for Return: ").append(reason).append("\n");
+        receipt.append("Total Refund Amount: $").append(refundAmount).append("\n");
+
+        return receipt.toString();
+    }
 }
