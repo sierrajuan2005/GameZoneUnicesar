@@ -61,6 +61,25 @@ public class SaleService {
         assignWarranties(sale, productIdsWithExtendedWarranty);
     }
 
+
+    private void assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
+        List<String> extendedWarrantyIds = productIdsWithExtendedWarranty == null
+                ? new ArrayList<>()
+                : productIdsWithExtendedWarranty;
+
+        for (Product product : sale.getProducts()) {
+            if (!(product instanceof Console)) {
+                continue;
+            }
+
+            warrantyService.assignBasicWarranty(product, sale, sale.getDate());
+
+            if (extendedWarrantyIds.contains(product.getIdentifier())) {
+                warrantyService.assignExtendedWarranty(product, sale, sale.getDate());
+            }
+        }
+    }
+
     /**
      * Returns all registered sales.
      *
