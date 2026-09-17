@@ -36,7 +36,7 @@ public class PromotionRepository {
                     bd.getName() + ";" +
                     bd.getStartDate() + ";" +
                     bd.getEndDate() + ";" +
-                    bd.getMinQuantity() + ";" +
+                    bd.getMinimumQuantity() + ";" +
                     bd.getDiscountPercentage();
         }
         return "";
@@ -114,4 +114,5 @@ public class PromotionRepository {
 
         return promotions;
     }
+
 }
