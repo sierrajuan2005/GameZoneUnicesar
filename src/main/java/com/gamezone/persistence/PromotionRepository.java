@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +57,36 @@ public class PromotionRepository {
             Files.write(path, lines);
         } catch (IOException e) {
             throw new RuntimeException("Error saving promotions.", e);
+        }
+    }
+
+    private Promotion convertFromCsv(String line) {
+        String[] data = line.split(";");
+        if (data.length < 6) return null;
+
+        String type = data[0];
+        String identifier = data[1];
+        String name = data[2];
+        LocalDate startDate = LocalDate.parse(data[3]);
+        LocalDate endDate = LocalDate.parse(data[4]);
+
+        switch (type) {
+            case "PERCENTAGE":
+                double pDiscount = Double.parseDouble(data[5]);
+                return new PercentageDiscount(identifier, name, startDate, endDate, pDiscount);
+
+            case "CATEGORY":
+                double cDiscount = Double.parseDouble(data[5]);
+                String category = data[6];
+                return new CategoryDiscount(identifier, name, startDate, endDate, cDiscount, category);
+
+            case "BULK":
+                int minQty = Integer.parseInt(data[5]);
+                double bDiscount = Double.parseDouble(data[6]);
+                return new BulkPurchaseDiscount(identifier, name, startDate, endDate, minQty, bDiscount);
+
+            default:
+                return null;
         }
     }
 }
