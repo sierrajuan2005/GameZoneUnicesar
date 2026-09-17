@@ -66,9 +66,18 @@ public class ReturnRepository {
         StringBuilder sb = new StringBuilder();
         sb.append(r.getIdentifier()).append(";")
                 .append(r.getReturnDate()).append(";")
-                .append(r.getOriginalSale().toString()).append(";")
+                .append(r.getOriginalSale() != null ? r.getOriginalSale().getIdentifier() : "").append(";")
                 .append(r.getReason()).append(";")
-                .append(r.getRefundAmount());
+                .append(r.getRefundAmount()).append(";");
+
+        List<String> productIds = new ArrayList<>();
+        if (r.getReturnedProducts() != null) {
+            for (Product p : r.getReturnedProducts()) {
+                productIds.add(p.getIdentifier());
+            }
+        }
+        sb.append(String.join(",", productIds));
+
         return sb.toString();
     }
 
