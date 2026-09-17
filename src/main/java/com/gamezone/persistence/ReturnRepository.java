@@ -60,4 +60,14 @@ public class ReturnRepository {
         return returns;
     }
 
+    private String convertToCsv(Return r) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(r.getIdentifier()).append(";")
+                .append(r.getReturnDate()).append(";")
+                .append(r.getOriginalSale().toString()).append(";")
+                .append(r.getReason()).append(";")
+                .append(r.getRefundAmount());
+        return sb.toString();
+    }
+
 }
