@@ -7,6 +7,7 @@ import com.gamezone.model.Promotion;
 import com.gamezone.persistence.PromotionRepository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PromotionService {
@@ -59,5 +60,16 @@ public class PromotionService {
 
     public List<Promotion> listAllPromotions() {
         return promotionRepository.loadAll();
+    }
+
+    public List<Promotion> listActivePromotions() {
+        List<Promotion> active = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (Promotion p : promotionRepository.loadAll()) {
+            if (p.isActive(today)) {
+                active.add(p);
+            }
+        }
+        return active;
     }
 }
