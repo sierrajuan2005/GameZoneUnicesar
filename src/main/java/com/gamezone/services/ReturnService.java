@@ -52,4 +52,16 @@ public class ReturnService {
         return returnRepository.loadAll();
     }
 
+    public List<Return> viewReturnsByCustomer(String customerId) {
+        List<Return> result = new ArrayList<>();
+        for (Return returnRecord : returnRepository.loadAll()) {
+            Sale sale = returnRecord.getOriginalSale();
+            if (sale != null && sale.getCustomer() != null
+                    && sale.getCustomer().getIdentification().equals(customerId)) {
+                result.add(returnRecord);
+            }
+        }
+        return result;
+    }
+
 }
