@@ -50,16 +50,24 @@ public class Return {
         return refundAmount;
     }
 
-
-    public String generateReturnReceipt(){
+    /*
+     * Generates a detailed text receipt for the return record.
+     *
+     * @return a formatted string containing return details and refund summary
+     */
+    public String generateReturnReceipt() {
         StringBuilder receipt = new StringBuilder();
         receipt.append("Return Receipt\n");
         receipt.append("Identifier: ").append(identifier).append("\n");
         receipt.append("Return Date: ").append(returnDate).append("\n");
-        receipt.append("Original Sale ID: ").append(originalSale).append("\n");
+        receipt.append("Original Sale ID: ")
+                .append(originalSale != null ? originalSale.getIdentifier() : "")
+                .append("\n");
         receipt.append("Returned Products:\n");
-        for (Product product : returnedProducts) {
-            receipt.append("- ").append(product.getTitle()).append(": $").append(product.getPrice()).append("\n");
+        if (returnedProducts != null) {
+            for (Product product : returnedProducts) {
+                receipt.append("- ").append(product.getTitle()).append(": $").append(product.getPrice()).append("\n");
+            }
         }
         receipt.append("Reason for Return: ").append(reason).append("\n");
         receipt.append("Total Refund Amount: $").append(refundAmount).append("\n");
