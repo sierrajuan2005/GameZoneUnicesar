@@ -141,19 +141,19 @@ public class SaleService {
     }
 
     /**
-     * Finds a sale by its identifier.
+     * Searches for a sale using its unique identifier.
      *
-     * @param saleId identifier of the sale
-     * @return the sale with the matching identifier, or null if not found
+     * @param saleId the identifier of the sale to search for
+     * @return the sale that matches the given identifier, or {@code null}
+     *         if no sale is found
      */
     public Sale findSaleById(String saleId) {
         for (Sale sale : saleRepository.load()) {
-            // Aquí depende de cómo estés manejando el identificador de la venta
-            // Si tu clase Sale tiene un atributo "identifier", úsalo directamente
-            if (sale.toString().contains(saleId)) {
+            if (sale.getIdentifier().equals(saleId)) {
                 return sale;
             }
         }
+
         return null;
     }
 }
