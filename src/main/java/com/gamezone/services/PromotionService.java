@@ -1,8 +1,10 @@
 package com.gamezone.services;
 
+import com.gamezone.model.PercentageDiscount;
 import com.gamezone.model.Promotion;
 import com.gamezone.persistence.PromotionRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class PromotionService {
@@ -33,5 +35,11 @@ public class PromotionService {
         List<Promotion> promotions = promotionRepository.loadAll();
         promotions.add(promotion);
         promotionRepository.saveAll(promotions);
+    }
+
+    public void registerPercentageDiscount(String identifier, String name, LocalDate startDate, LocalDate endDate, double discountPercentage) {
+        validateUniqueId(identifier);
+        PercentageDiscount pd = new PercentageDiscount(identifier, name, startDate, endDate, discountPercentage);
+        savePromotion(pd);
     }
 }
