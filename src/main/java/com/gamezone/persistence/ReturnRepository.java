@@ -25,7 +25,7 @@ public class ReturnRepository {
         this.productService = productService;
     }
 
-    private  void saveAll(List<Return> returns){
+    public void saveAll(List<Return> returns){
         Path path = Paths.get(FILE_PATH);
         List<String> lines = new ArrayList<>();
 
