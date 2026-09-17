@@ -89,4 +89,29 @@ public class PromotionRepository {
                 return null;
         }
     }
+
+    public List<Promotion> loadAll() {
+        Path path = Paths.get(FILE_PATH);
+        List<Promotion> promotions = new ArrayList<>();
+
+        if (!Files.exists(path)) {
+            return promotions;
+        }
+
+        try {
+            List<String> lines = Files.readAllLines(path);
+            for (String line : lines) {
+                if (!line.isBlank()) {
+                    Promotion p = convertFromCsv(line);
+                    if (p != null) {
+                        promotions.add(p);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading promotions.", e);
+        }
+
+        return promotions;
+    }
 }
