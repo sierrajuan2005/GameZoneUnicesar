@@ -139,4 +139,21 @@ public class SaleService {
 
         throw new IllegalArgumentException("Product not found: " + identifier);
     }
+
+    /**
+     * Finds a sale by its identifier.
+     *
+     * @param saleId identifier of the sale
+     * @return the sale with the matching identifier, or null if not found
+     */
+    public Sale findSaleById(String saleId) {
+        for (Sale sale : saleRepository.load()) {
+            // Aquí depende de cómo estés manejando el identificador de la venta
+            // Si tu clase Sale tiene un atributo "identifier", úsalo directamente
+            if (sale.toString().contains(saleId)) {
+                return sale;
+            }
+        }
+        return null;
+    }
 }
