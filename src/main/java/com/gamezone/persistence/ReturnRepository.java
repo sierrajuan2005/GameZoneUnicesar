@@ -37,4 +37,27 @@ public class ReturnRepository {
             throw new RuntimeException("Error saving returns.", e);
         }
     }
+
+    public List<Return> loadAll() {
+        Path path = Paths.get(FILE_PATH);
+        List<Return> returns = new ArrayList<>();
+        if (!Files.exists(path)) {
+            return returns;
+        }
+        try {
+            List<String> lines = Files.readAllLines(path);
+            for (String line : lines) {
+                if (!line.isBlank()) {
+                    Return r = convertFromCsv(line);
+                    if (r != null) {
+                        returns.add(r);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading returns.", e);
+        }
+        return returns;
+    }
+
 }
