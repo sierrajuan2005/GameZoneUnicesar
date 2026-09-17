@@ -13,10 +13,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Handles the persistence operations for promotions using a CSV file storage mechanism.
+ */
 public class PromotionRepository {
 
     private static final String FILE_PATH = "data/promotions.csv";
 
+    /*
+     * Converts a {@link Promotion} object into its CSV formatted string representation.
+     *
+     * @param p the promotion instance to convert
+     * @return a CSV line representing the promotion, or an empty string if type is unrecognized
+     */
     private String convertToCsv(Promotion p) {
         if (p instanceof PercentageDiscount pd) {
             return "PERCENTAGE;" + pd.getIdentifier() + ";" +
@@ -42,6 +51,12 @@ public class PromotionRepository {
         return "";
     }
 
+    /*
+     * Saves the list of promotions to the CSV file.
+     *
+     * @param promotions the list of promotions to persist
+     * @throws RuntimeException if an I/O error occurs while writing to the file
+     */
     public void saveAll(List<Promotion> promotions) {
         Path path = Paths.get(FILE_PATH);
         List<String> lines = new ArrayList<>();
@@ -60,6 +75,12 @@ public class PromotionRepository {
         }
     }
 
+    /*
+     * Converts a CSV formatted string line into a concrete {@link Promotion} object.
+     *
+     * @param line the line read from the CSV file
+     * @return a {@link Promotion} instance, or {@code null} if parsing fails or type is unknown
+     */
     private Promotion convertFromCsv(String line) {
         String[] data = line.split(";");
         if (data.length < 6) return null;
@@ -90,6 +111,12 @@ public class PromotionRepository {
         }
     }
 
+    /*
+     * Loads all stored promotions from the CSV file.
+     *
+     * @return a list of all loaded promotions, or an empty list if the file does not exist
+     * @throws RuntimeException if an I/O error occurs while reading the file
+     */
     public List<Promotion> loadAll() {
         Path path = Paths.get(FILE_PATH);
         List<Promotion> promotions = new ArrayList<>();
