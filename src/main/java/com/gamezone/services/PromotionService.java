@@ -20,4 +20,10 @@ public class PromotionService {
         }
         return null;
     }
+
+    private void validateUniqueId(String identifier) {
+        if (findByIdentifier(identifier) != null) {
+            throw new IllegalArgumentException("A promotion with identifier " + identifier + " already exists.");
+        }
+    }
 }
