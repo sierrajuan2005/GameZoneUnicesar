@@ -120,7 +120,7 @@ public class SaleRepository {
         Seller seller = new Seller(data[5], data[6], data[7], data[8], data[9]);
         List<Product> products = convertProductsFromCsv(data[10]);
 
-        return new Sale(date, customer, seller, products);
+        return new Sale("SALE-" + System.currentTimeMillis(),date, customer, seller, products);
     }
 
     private String convertProductsToCsv(List<Product> products) {
@@ -200,5 +200,15 @@ public class SaleRepository {
         }
 
         throw new IllegalArgumentException("Unknown product type: " + type);
+    }
+
+    public Sale findByIdentifier(String identifier) {
+        List<Sale> sales = load();
+        for (Sale sale : sales) {
+            if (sale.getIdentifier().equals(identifier)) {
+                return sale;
+            }
+        }
+        return null;
     }
 }

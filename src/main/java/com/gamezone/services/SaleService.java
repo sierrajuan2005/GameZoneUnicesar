@@ -1,10 +1,6 @@
 package com.gamezone.services;
-import com.gamezone.model.Customer;
-import com.gamezone.model.Product;
-import com.gamezone.model.Sale;
-import com.gamezone.model.Seller;
+import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +11,7 @@ public class SaleService {
 
     private SaleRepository saleRepository;
     private ProductService productService;
+    private WarrantyService warrantyService;
 
     /**
      * Creates a SaleService with the required repositories and services.
@@ -22,9 +19,10 @@ public class SaleService {
      * @param saleRepository repository used to store sales
      * @param productService service used to manage products and stock
      */
-    public SaleService(SaleRepository saleRepository, ProductService productService) {
+    public SaleService(SaleRepository saleRepository, ProductService productService, WarrantyService warrantyService) {
         this.saleRepository = saleRepository;
         this.productService = productService;
+        this.warrantyService = warrantyService;
     }
 
     /**
@@ -32,7 +30,7 @@ public class SaleService {
      *
      * @param sale sale to register
      */
-    public void registerSale(Sale sale) {
+    public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         List<Product> soldProducts = sale.getProducts();
 
         if (soldProducts.isEmpty()) {
@@ -43,11 +41,8 @@ public class SaleService {
 
         for (Product soldProduct : soldProducts) {
             Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-
             if (storedProduct.getAvailableQuantity() < 1) {
-                throw new IllegalStateException(
-                        "Insufficient stock for product: " + storedProduct.getTitle()
-                );
+                throw new IllegalStateException("Insufficient stock for product: " + storedProduct.getTitle());
             }
         }
 
@@ -59,6 +54,27 @@ public class SaleService {
 
         sale.getCustomer().addToPurchaseHistory(sale);
         saleRepository.save(sale);
+
+        assignWarranties(sale, productIdsWithExtendedWarranty);
+    }
+
+
+    private void assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
+        List<String> extendedWarrantyIds = productIdsWithExtendedWarranty == null
+                ? new ArrayList<>()
+                : productIdsWithExtendedWarranty;
+
+        for (Product product : sale.getProducts()) {
+            if (!(product instanceof Console)) {
+                continue;
+            }
+
+            warrantyService.assignBasicWarranty(product, sale, sale.getDate());
+
+            if (extendedWarrantyIds.contains(product.getIdentifier())) {
+                warrantyService.assignExtendedWarranty(product, sale, sale.getDate());
+            }
+        }
     }
 
     /**
@@ -106,6 +122,14 @@ public class SaleService {
         return history;
     }
 
+    /**
+     * Finds a product by its identifier within a given list of products.
+     *
+     * @param products   list of products to search
+     * @param identifier identifier of the product to find
+     * @return the product with the matching identifier
+     * @throws IllegalArgumentException if no product with the given identifier is found
+     */
     private Product findProductById(List<Product> products, String identifier) {
         for (Product product : products) {
             if (product.getIdentifier().equals(identifier)) {

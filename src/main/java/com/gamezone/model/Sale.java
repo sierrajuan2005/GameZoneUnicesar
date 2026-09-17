@@ -8,6 +8,7 @@ import java.util.List;
  */
 public class Sale {
 
+    private String identifier;
     private LocalDate date;
     private Customer customer;
     private Seller seller;
@@ -21,11 +22,21 @@ public class Sale {
      * @param seller seller who handled the sale
      * @param products products included in the sale
      */
-    public Sale(LocalDate date, Customer customer, Seller seller, List<Product> products) {
+
+    public Sale(String identifier, LocalDate date, Customer customer, Seller seller, List<Product> products) {
+        this.identifier = identifier;
         this.date = date;
         this.customer = customer;
         this.seller = seller;
         this.products = products;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public LocalDate getDate() {
@@ -93,6 +104,7 @@ public class Sale {
     @Override
     public String toString() {
         return "Sale{" +
+                "identifier=" + identifier + '\'' +
                 "date=" + date +
                 ", customer=" + customer +
                 ", seller=" + seller +
