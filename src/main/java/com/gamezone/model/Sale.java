@@ -98,7 +98,9 @@ public class Sale {
     public boolean canBeReturned(){
         LocalDate currentDate = LocalDate.now();
         LocalDate returnDeadline = date.plusDays(30);
-        return !currentDate.isBefore(date) && currentDate.isAfter(returnDeadline);
+
+        return !currentDate.isBefore(date)
+                && !currentDate.isAfter(returnDeadline);
     }
 
     @Override
