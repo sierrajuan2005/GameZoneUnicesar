@@ -1,6 +1,8 @@
 package com.gamezone.persistence;
 
+import com.gamezone.model.Product;
 import com.gamezone.model.Return;
+import com.gamezone.model.Sale;
 import com.gamezone.model.Warranty;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,6 +71,20 @@ public class ReturnRepository {
                 .append(r.getReason()).append(";")
                 .append(r.getRefundAmount());
         return sb.toString();
+    }
+
+    private Return convertFromCsv(String line) {
+        String[] data = line.split(";");
+        if (data.length < 5) return null;
+
+        String identifier = data[0];
+        LocalDate returnDate = LocalDate.parse(data[1]);
+        Sale sale = saleService.findSaleById(data[2]);
+        String reason = data[3];
+        double refundAmount = Double.parseDouble(data[4]);
+
+        List<Product> returnedProducts = new ArrayList<>();
+        return new Return(identifier, returnDate, sale, returnedProducts, reason);
     }
 
 }
