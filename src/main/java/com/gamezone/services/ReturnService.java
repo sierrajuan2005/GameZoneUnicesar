@@ -75,4 +75,30 @@ public class ReturnService {
         return result;
     }
 
+    public double generateMonthlyBalance(int month, int year) {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Month must be between 1 and 12.");
+        }
+        if (year < 1) {
+            throw new IllegalArgumentException("Year must be greater than zero.");
+        }
+
+        double totalSales = 0.0;
+        double totalReturns = 0.0;
+
+        for (Sale sale : saleService.listSales()) {
+            if (sale.getDate().getMonthValue() == month && sale.getDate().getYear() == year) {
+                totalSales += sale.calculateTotal();
+            }
+        }
+
+        for (Return returnRecord : returnRepository.loadAll()) {
+            if (returnRecord.getReturnDate().getMonthValue() == month && returnRecord.getReturnDate().getYear() == year) {
+                totalReturns += returnRecord.getRefundAmount();
+            }
+        }
+
+        return totalSales - totalReturns;
+    }
+
 }
