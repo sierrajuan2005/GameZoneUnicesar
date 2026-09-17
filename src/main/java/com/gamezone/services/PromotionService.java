@@ -3,6 +3,8 @@ package com.gamezone.services;
 import com.gamezone.model.Promotion;
 import com.gamezone.persistence.PromotionRepository;
 
+import java.util.List;
+
 public class PromotionService {
 
     private final PromotionRepository promotionRepository;
@@ -25,5 +27,11 @@ public class PromotionService {
         if (findByIdentifier(identifier) != null) {
             throw new IllegalArgumentException("A promotion with identifier " + identifier + " already exists.");
         }
+    }
+
+    private void savePromotion(Promotion promotion) {
+        List<Promotion> promotions = promotionRepository.loadAll();
+        promotions.add(promotion);
+        promotionRepository.saveAll(promotions);
     }
 }
