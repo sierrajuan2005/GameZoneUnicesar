@@ -14,17 +14,33 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Repository class responsible for persisting and loading {@link Return} records
+ * to and from a CSV file storage.
+ */
 public class ReturnRepository {
 
     private static final String FILE_PATH = "data/returns.csv";
     private final SaleService saleService;
     private final ProductService productService;
 
+    /*
+     * Constructs a ReturnRepository with required service dependencies.
+     *
+     * @param saleService    service used to reconstruct original sales
+     * @param productService service used to reconstruct returned products
+     */
     public ReturnRepository(SaleService saleService, ProductService productService) {
         this.saleService = saleService;
         this.productService = productService;
     }
 
+    /*
+     * Saves all given return records to the CSV file.
+     *
+     * @param returns list of {@link Return} objects to persist
+     * @throws RuntimeException if an I/O error occurs during saving
+     */
     public void saveAll(List<Return> returns){
         Path path = Paths.get(FILE_PATH);
         List<String> lines = new ArrayList<>();
@@ -40,6 +56,12 @@ public class ReturnRepository {
         }
     }
 
+    /*
+     * Loads all return records from the CSV file.
+     *
+     * @return list of loaded {@link Return} objects, or an empty list if the file does not exist
+     * @throws RuntimeException if an I/O error occurs during loading
+     */
     public List<Return> loadAll() {
         Path path = Paths.get(FILE_PATH);
         List<Return> returns = new ArrayList<>();
@@ -62,6 +84,12 @@ public class ReturnRepository {
         return returns;
     }
 
+    /*
+     * Converts a {@link Return} object into a CSV-formatted string line.
+     *
+     * @param r the return entity to serialize
+     * @return CSV formatted string representing the return
+     */
     private String convertToCsv(Return r) {
         StringBuilder sb = new StringBuilder();
         sb.append(r.getIdentifier()).append(";")
@@ -81,6 +109,12 @@ public class ReturnRepository {
         return sb.toString();
     }
 
+    /*
+     * Reconstructs a {@link Return} object from a single CSV line.
+     *
+     * @param line CSV text line containing return data
+     * @return deserialized {@link Return} instance, or {@code null} if line format is invalid
+     */
     private Return convertFromCsv(String line) {
         String[] data = line.split(";", -1);
         if (data.length < 5) return null;
