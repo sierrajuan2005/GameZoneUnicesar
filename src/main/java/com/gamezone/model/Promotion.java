@@ -98,4 +98,12 @@ public abstract class Promotion {
     public boolean isActive(LocalDate date){
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
+
+
+    /*
+    Calculates the discount that this promotion would apply to a sale.  
+    @param sale sale to which the promotion may be applied
+    @return discount amount
+    */
+    public abstract double calculateDiscount(Sale sale);
 }
