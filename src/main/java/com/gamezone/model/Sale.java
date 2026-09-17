@@ -95,11 +95,24 @@ public class Sale {
         return total;
     }
 
+    public boolean canBeReturned(){
+        LocalDate currentDate = LocalDate.now();
+        LocalDate returnDeadline = date.plusDays(30);
+
+        return !currentDate.isBefore(date)
+                && !currentDate.isAfter(returnDeadline);
+    }
+
+    /*
+     * Returns a string representation of the sale.
+     *
+     * @return a formatted string containing the sale details
+     */
     @Override
     public String toString() {
         return "Sale{" +
-                "identifier=" + identifier + '\'' +
-                "date=" + date +
+                "identifier='" + identifier + '\'' +
+                ", date=" + date +
                 ", customer=" + customer +
                 ", seller=" + seller +
                 ", products=" + products +

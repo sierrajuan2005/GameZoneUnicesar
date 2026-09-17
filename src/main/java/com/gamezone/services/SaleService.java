@@ -139,4 +139,21 @@ public class SaleService {
 
         throw new IllegalArgumentException("Product not found: " + identifier);
     }
+
+    /**
+     * Searches for a sale using its unique identifier.
+     *
+     * @param saleId the identifier of the sale to search for
+     * @return the sale that matches the given identifier, or {@code null}
+     *         if no sale is found
+     */
+    public Sale findSaleById(String saleId) {
+        for (Sale sale : saleRepository.load()) {
+            if (sale.getIdentifier().equals(saleId)) {
+                return sale;
+            }
+        }
+
+        return null;
+    }
 }
