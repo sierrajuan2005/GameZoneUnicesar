@@ -48,4 +48,8 @@ public class ReturnService {
         return r;
     }
 
+    public List<Return> viewAllReturns() {
+        return returnRepository.loadAll();
+    }
+
 }
