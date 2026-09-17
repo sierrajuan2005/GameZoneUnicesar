@@ -47,6 +47,26 @@ public class ProductService{
         return productRepository.loadAll();
     }
 
+    /*
+     * Finds a product in the repository by its unique identifier.
+     *
+     * @param identifier the unique identifier of the product to search for.
+     * @return the corresponding {@link Product} if found,
+     *         or {@code null} if no product exists with the given identifier.
+     */
+    public Product findByIdentifier(String identifier) {
+
+        List<Product> products = productRepository.loadAll();
+
+        for (Product product : products) {
+            if (product.getIdentifier().equals(identifier)) {
+                return product;
+            }
+        }
+
+        return null;
+    }
+
 
      /*
     Updates the stock quantity of a product
