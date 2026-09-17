@@ -83,6 +83,6 @@ public class PromotionService {
             }
         }
 
-        return bestPromotion;
+        return maxDiscount > 0.0 ? bestPromotion : null;
     }
 }
