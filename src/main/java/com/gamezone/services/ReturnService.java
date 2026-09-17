@@ -64,4 +64,15 @@ public class ReturnService {
         return result;
     }
 
+    public List<Return> viewReturnsBySale(String saleId) {
+        List<Return> result = new ArrayList<>();
+        for (Return returnRecord : returnRepository.loadAll()) {
+            Sale sale = returnRecord.getOriginalSale();
+            if (sale != null && sale.getIdentifier().equals(saleId)) {
+                result.add(returnRecord);
+            }
+        }
+        return result;
+    }
+
 }
