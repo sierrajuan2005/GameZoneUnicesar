@@ -1,5 +1,6 @@
 package com.gamezone.services;
 
+import com.gamezone.model.BulkPurchaseDiscount;
 import com.gamezone.model.CategoryDiscount;
 import com.gamezone.model.PercentageDiscount;
 import com.gamezone.model.Promotion;
@@ -48,5 +49,11 @@ public class PromotionService {
         validateUniqueId(identifier);
         CategoryDiscount cd = new CategoryDiscount(identifier, name, startDate, endDate, discountPercentage, targetCategory);
         savePromotion(cd);
+    }
+
+    public void registerBulkPurchaseDiscount(String identifier, String name, LocalDate startDate, LocalDate endDate, int minQuantity, double discountPercentage) {
+        validateUniqueId(identifier);
+        BulkPurchaseDiscount bd = new BulkPurchaseDiscount(identifier, name, startDate, endDate, minQuantity, discountPercentage);
+        savePromotion(bd);
     }
 }
