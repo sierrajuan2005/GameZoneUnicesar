@@ -3,7 +3,6 @@ package com.gamezone.persistence;
 import com.gamezone.model.Product;
 import com.gamezone.model.Return;
 import com.gamezone.model.Sale;
-import com.gamezone.model.Warranty;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
 
