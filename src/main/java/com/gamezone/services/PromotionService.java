@@ -15,7 +15,7 @@ public class PromotionService {
         this.promotionRepository = promotionRepository;
     }
 
-    public Promotion findByIdentifier(String identifier) {
+    public Promotion findById(String identifier) {
         if (identifier == null) return null;
         for (Promotion p : promotionRepository.loadAll()) {
             if (identifier.equals(p.getIdentifier())) {
@@ -26,7 +26,7 @@ public class PromotionService {
     }
 
     private void validateUniqueId(String identifier) {
-        if (findByIdentifier(identifier) != null) {
+        if (findById(identifier) != null) {
             throw new IllegalArgumentException("A promotion with identifier " + identifier + " already exists.");
         }
     }
