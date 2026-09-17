@@ -56,4 +56,8 @@ public class PromotionService {
         BulkPurchaseDiscount bd = new BulkPurchaseDiscount(identifier, name, startDate, endDate, minQuantity, discountPercentage);
         savePromotion(bd);
     }
+
+    public List<Promotion> listAllPromotions() {
+        return promotionRepository.loadAll();
+    }
 }
