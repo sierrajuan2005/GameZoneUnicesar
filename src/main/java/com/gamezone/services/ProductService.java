@@ -104,4 +104,34 @@ public class ProductService{
 
         productRepository.saveAll(products);
     }
+
+    /*
+     * Restores the stock quantity for a specific product.
+     *
+     * @param productId the unique identifier of the product to update.
+     * @param quantity  the amount of stock to add back; must be greater than zero.
+     * @throws IllegalArgumentException if {@code quantity} is less than or equal to zero,
+     *                                  or if no product is found with the given {@code productId}.
+     */
+    public void restoreStock(String productId, int quantity) {
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Quantity to restore must be greater than zero."
+            );
+        }
+
+        Product product = findByIdentifier(productId);
+
+        if (product == null) {
+            throw new IllegalArgumentException(
+                    "Product not found."
+            );
+        }
+
+        int newQuantity =
+                product.getAvailableQuantity() + quantity;
+
+        updateStock(product, newQuantity);
+    }
 }
