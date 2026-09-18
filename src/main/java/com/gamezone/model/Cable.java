@@ -21,8 +21,8 @@ public class Cable extends Accessory {
      * @param connectorType type of connector for the cable
      */
 
-    public Cable(String identifier, String title, double price, int availability, List<Console> compatibleConsoles, double length, String connectorType) {
-        super(identifier, title, price, availability, compatibleConsoles);
+    public Cable(String identifier, String title, double price, int availableQuantity, List<Console> compatibleConsoles, double length, String connectorType) {
+        super(identifier, title, price, availableQuantity, compatibleConsoles);
         this.length = length;
         this.connectorType = connectorType;
     }

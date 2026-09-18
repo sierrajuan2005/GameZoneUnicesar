@@ -19,8 +19,8 @@ public class Memory extends Accessory{
      * @param capacity capacity of the memory in GB
      * @param memoryType type of memory (e.g., DDR4, DDR5)
      */
-    public Memory(String identifier, String title, double price, int availability, List<Console> compatibleConsoles, int capacity, String memoryType) {
-        super(identifier, title, price, availability, compatibleConsoles);
+    public Memory(String identifier, String title, double price, int availableQuantity, List<Console> compatibleConsoles, int capacity, String memoryType) {
+        super(identifier, title, price, availableQuantity, compatibleConsoles);
         this.capacity = capacity;
         this.memoryType = memoryType;
     }

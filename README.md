@@ -1,180 +1,305 @@
-GameZone Unicesar
+# GameZone Unicesar
 
+Information system for managing a video game and console store located in the university district of Valledupar. The system supports the management of products, accessories, customers, sellers, sales, returns, and promotions, with data persistence between executions.
 
+Project developed as part of the Object-Oriented Programming workshop, applying a layered architecture consisting of **model, persistence, service, and user interface** layers.
 
-Information system for managing a video game and console store located in the university district of Valledupar. It supports managing products, customers, sellers and sales, with data persistence between executions.
+---
 
+# Features
 
+## Product Management
 
-Project developed as part of the Object-Oriented Programming workshop, applying a layered architecture (model, persistence, service, user interface).
+* Register video games with platform, genre, and age rating.
+* Register consoles with brand, model, and generation.
+* List the available product inventory.
 
+## Person Management
 
+* Register customers with name, identification, phone, and email.
+* List registered customers.
+* List registered sellers.
+* Sellers are preloaded the first time the application starts and are not registered through the user interface.
 
-Features
+## Sale Management
 
+* Register a sale with a customer, a seller, and one or more products.
+* Validate that a sale contains at least one product.
+* Validate product stock before completing a sale.
+* Automatically update inventory when a sale is registered.
+* List all registered sales.
+* Query the purchase history of a specific customer.
+* Query the sales handled by a specific seller.
 
+## Return Management
 
-Product management
+* Record the return of one or more products from an existing sale.
+* Support partial returns.
+* Validate that returns are made within 30 days of the original sale.
+* Validate that returned products belong to the specified sale.
+* Automatically restore inventory when a return is successfully processed.
+* View all registered returns.
+* View returns by customer.
+* View returns associated with a specific sale.
+* Generate a monthly balance report based on sales minus returns for a specified month and year.
 
+## Promotion Management
 
+* Register promotions of three types:
 
-Register video games (platform, genre, age rating).
+    * Percentage-based promotions.
+    * Category-based promotions for video games or consoles.
+    * Bulk purchase promotions.
+* Validate promotion validity based on a start and end date.
+* Automatically apply the best available promotion when registering a sale.
+* Promotions are not cumulative; only the promotion with the highest monetary discount is applied.
+* Display the promotion name and applied discount on the sales receipt.
+* View all registered promotions.
+* View only currently active promotions.
 
-Register consoles (brand, model, generation).
+---
 
-List the available product inventory.
+# Accessory Management
 
+The accessory module extends the existing product hierarchy and integrates with the current sales and inventory system.
 
+## Implemented Accessory Types
 
-Person management
+The system supports three types of accessories:
 
+* **Controller** – includes the connection type.
+* **Cable** – includes the cable length and connector type.
+* **Memory** – includes the storage capacity and memory type.
 
+All accessory types extend the `Accessory` class, which in turn extends `Product`.
 
-Register customers (name, identification, phone, email).
+This allows accessories to reuse common product attributes and behavior such as:
 
-List registered customers.
+* Identifier.
+* Title.
+* Price.
+* Available stock.
 
-List registered sellers (sellers are preloaded the first time the application starts; they are not registered through the user interface).
+The hierarchy is:
 
+```text
+Product
+   ↓
+Accessory
+   ├── Controller
+   ├── Cable
+   └── Memory
+```
 
+## Accessory Operations
 
-Sale management
+The `AccessoryService` provides the following operations:
 
+* Register controllers.
+* Register cables.
+* Register memory devices.
+* List all registered accessories.
+* Filter accessories by type.
+* Find accessories compatible with a specific console.
+* Search accessories by identifier.
+* Update accessory stock.
 
+## Console Compatibility
 
-Register a sale with a customer, a seller and one or more products.
+Accessories can be associated with the consoles they are compatible with.
 
-Business rule validation: a sale requires at least one product, and a product cannot be sold if there is not enough stock. The inventory is automatically discounted when a sale is registered.
+The compatibility relationship is represented through a list of `Console` objects inside the `Accessory` class.
 
-List all registered sales.
+The system allows users to select a console and find the accessories compatible with it.
 
-Query the purchase history of a specific customer.
+## Accessory Persistence
 
-Query the sales handled by a specific seller.
+Accessory information is persisted through the `AccessoryRepository` using:
 
+```text
+data/accessories.csv
+```
 
+The repository identifies each accessory by its type and reconstructs the corresponding subclass when the data is loaded.
 
-Persistence
+## Accessory Integration
 
+The accessory module is integrated into the existing application through dependency injection.
 
+The main application connects:
 
-All information (products, people, sales) is stored in text files inside the data/ folder, and is preserved between executions of the application.
+```text
+Main
+ ├── AccessoryRepository
+ │        ↓
+ │   AccessoryService
+ │        ↓
+ ├── SaleService
+ │
+ └── ConsoleUI
+          ↓
+    AccessoryService
+```
 
-Architecture
+This allows accessories to participate in the existing product, inventory, sales, and user interface flow without replacing the previous product functionality.
 
+---
 
+# Persistence
 
-The project is organized into four layers, following the dependency direction user interface → service → persistence → model:
+The application uses text-based files to preserve information between executions.
 
+The main data files are stored inside the `data/` directory:
 
+```text
+data/
+├── products.csv
+├── people.csv
+├── sales.csv
+├── returns.csv
+├── promotions.csv
+└── accessories.csv
+```
 
+Repositories are responsible for reading and writing persistent data, while services contain the corresponding business rules.
+
+---
+
+# Architecture
+
+The project follows a layered architecture with the following dependency direction:
+
+```text
+User Interface
+       ↓
+   Services
+       ↓
+  Persistence
+       ↓
+     Model
+```
+
+The main project structure is:
+
+```text
 src/main/java/com/gamezone/
 
-├── model/         # Domain classes: Person, Customer, Seller, Product, VideoGame, Console, Sale
+├── model/
+│   ├── Person
+│   ├── Customer
+│   ├── Seller
+│   ├── Product
+│   ├── VideoGame
+│   ├── Console
+│   ├── Accessory
+│   ├── Controller
+│   ├── Cable
+│   ├── Memory
+│   ├── Sale
+│   ├── Return
+│   └── Promotion
+│
+├── persistence/
+│   ├── PersonRepository
+│   ├── ProductRepository
+│   ├── SaleRepository
+│   ├── ReturnRepository
+│   ├── PromotionRepository
+│   └── AccessoryRepository
+│
+├── services/
+│   ├── PersonService
+│   ├── ProductService
+│   ├── SaleService
+│   ├── ReturnService
+│   ├── PromotionService
+│   ├── WarrantyService
+│   └── AccessoryService
+│
+├── ui/
+│   └── ConsoleUI
+│
+└── Main.java
+```
 
-├── persistence/    # File access: PersonRepository, ProductRepository, SaleRepository
+The **model layer** represents the domain entities.
 
-├── services/       # Business rules: PersonService, ProductService, SaleService
+The **service layer** contains business rules and application logic.
 
-├── ui/             # Console interface: ConsoleUI
+The **persistence layer** handles file-based data storage.
 
-└── Main.java       # Application entry point
+The **UI layer** is responsible for interaction with the user through the console.
 
-Team
+This structure promotes code reuse, separation of responsibilities, maintainability, and clear dependency management.
 
+---
 
+# Requirements
 
-See TEAM.md for the complete team information, assigned roles and class distribution.
+* Java 17 or higher.
+* Maven 3.8 or higher.
 
+---
 
-
-Requirements
-
-Java 17 or higher
-
-Maven 3.8 or higher
-
-Build
-
-
+# Build
 
 From the project root:
 
-
-
-bash
-
+```bash
 mvn clean compile
+```
 
+To package the project into a `.jar`:
 
-
-To package the project into a .jar:
-
-
-
-bash
-
+```bash
 mvn clean package
+```
 
-Run
+---
 
+# Run
 
+Run the application from the project root using the configured Maven command or IDE.
 
-The first time the application runs, the system automatically preloads 3 default sellers and creates the data/ folder where the information is stored.
+The first time the application runs, the system automatically preloads three default sellers and creates the `data/` directory where persistent information is stored.
 
+---
 
+# Git Workflow
 
-Git workflow
+The team follows a simplified Git Flow model:
 
+```text
+main
+  ↓
+Stable version of the system.
+Protected against direct writes.
 
+develop
+  ↓
+Team integration branch.
+Protected against direct writes.
 
-The team works under the simplified Git Flow model:
+feature/*
+  ↓
+Feature branches.
+Merged into develop through Pull Requests.
+```
 
+Each Pull Request is reviewed by another team member before being merged.
 
+Every commit follows the **Conventional Commits** convention and is written in English:
 
-main: stable version of the system, protected against direct writes.
+```text
+feat:
+fix:
+refactor:
+docs:
+chore:
+```
 
-develop: the team's integration branch, protected against direct writes.
+---
 
-feature/\*: feature branches, merged into develop through a Pull Request reviewed by another team member.
+# Team
 
-
-
-Every commit follows the Conventional Commits convention (feat:, fix:, refactor:, docs:, chore:), written in English.
-
-
-
-
-
-Returns Management
-
-
-
-Record the return of one or more products from an existing sale (the return may be partial).
-
-Timeframe validation: Returns can only be recorded within 30 days of the original sale.
-
-Belonging validation: Returned products must actually belong to the specified sale.
-
-Automatic inventory update upon processing a successful return.
-
-View all returns, by customer, or by specific sale.
-
-Generate a monthly balance report (sales minus returns) for a specified month and year.
-
-
-
-Promotion Management
-
-
-
-Register promotions of three types: percentage-based, category-based (video games or consoles), and bulk purchase-based.
-
-Validity by date range: a promotion is only applied if the current date falls within its validity period.
-
-Automatic application of the best available promotion when registering a sale (promotions are not cumulative; only the one with the highest monetary discount is applied).
-
-The sales receipt displays the subtotal, the applied discount (including the promotion name), and the final total.
-
-View all registered promotions or only those currently active.
-
+See [`TEAM.md`](TEAM.md) for the complete team information, assigned roles, and class distribution.
