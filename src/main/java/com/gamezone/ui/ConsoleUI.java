@@ -867,5 +867,56 @@ public class ConsoleUI {
         }
     }
 
+    private List<Console> selectCompatibleConsoles() {
+        List<Console> consoles = new ArrayList<>();
+
+        List<Product> products = productService.listProducts();
+
+        System.out.println("\n=== CONSOLAS DISPONIBLES ===");
+
+        for (Product product : products) {
+            if (product instanceof Console console) {
+                System.out.println(
+                        console.getIdentifier() + " - "
+                                + console.getTitle()
+                );
+            }
+        }
+
+        System.out.println("Ingrese los identificadores de las consolas compatibles.");
+        System.out.println("Deje vacío para terminar.");
+
+        while (true) {
+            System.out.print("ID de consola: ");
+            String consoleId = scanner.nextLine();
+
+            if (consoleId.isBlank()) {
+                break;
+            }
+
+            Console console = findConsoleById(products, consoleId);
+
+            if (console != null) {
+                consoles.add(console);
+                System.out.println("Consola agregada: " + console.getTitle());
+            } else {
+                System.out.println("No se encontró una consola con ese identificador.");
+            }
+        }
+
+        return consoles;
+    }
+
+    private Console findConsoleById(List<Product> products, String identifier) {
+        for (Product product : products) {
+            if (product instanceof Console console
+                    && console.getIdentifier().equals(identifier)) {
+                return console;
+            }
+        }
+
+        return null;
+    }
+
 
 }
