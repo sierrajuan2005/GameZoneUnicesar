@@ -44,6 +44,11 @@ Domain classes should not be responsible for saving or retrieving information be
 
 ## 11. What dependencies are allowed between the layers, and which ones are prohibited? Justify the purpose of the allowed dependencies.
 
+## 
+
+
+
+
 The allowed dependencies are:
 
 ```text

@@ -47,6 +47,26 @@ public class ProductService{
         return productRepository.loadAll();
     }
 
+    /*
+     * Finds a product in the repository by its unique identifier.
+     *
+     * @param identifier the unique identifier of the product to search for.
+     * @return the corresponding {@link Product} if found,
+     *         or {@code null} if no product exists with the given identifier.
+     */
+    public Product findByIdentifier(String identifier) {
+
+        List<Product> products = productRepository.loadAll();
+
+        for (Product product : products) {
+            if (product.getIdentifier().equals(identifier)) {
+                return product;
+            }
+        }
+
+        return null;
+    }
+
 
      /*
     Updates the stock quantity of a product
@@ -83,5 +103,35 @@ public class ProductService{
         }
 
         productRepository.saveAll(products);
+    }
+
+    /*
+     * Restores the stock quantity for a specific product.
+     *
+     * @param productId the unique identifier of the product to update.
+     * @param quantity  the amount of stock to add back; must be greater than zero.
+     * @throws IllegalArgumentException if {@code quantity} is less than or equal to zero,
+     *                                  or if no product is found with the given {@code productId}.
+     */
+    public void restoreStock(String productId, int quantity) {
+
+        if (quantity <= 0) {
+            throw new IllegalArgumentException(
+                    "Quantity to restore must be greater than zero."
+            );
+        }
+
+        Product product = findByIdentifier(productId);
+
+        if (product == null) {
+            throw new IllegalArgumentException(
+                    "Product not found."
+            );
+        }
+
+        int newQuantity =
+                product.getAvailableQuantity() + quantity;
+
+        updateStock(product, newQuantity);
     }
 }

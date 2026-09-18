@@ -4,6 +4,7 @@ import com.gamezone.services.PersonService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
 import com.gamezone.services.WarrantyService;
+import com.gamezone.services.ReturnService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -20,8 +21,7 @@ public class ConsoleUI {
     private final SaleService saleService;
     private final Scanner scanner;
     private final WarrantyService warrantyService;
-    private final promotionService promotionService;
-
+    private final ReturnService returnService;
     /**
      * Creates the console user interface.
      *
@@ -29,10 +29,11 @@ public class ConsoleUI {
      * @param productService service used to manage products
      * @param saleService service used to manage sales
      */
-    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService, WarrantyService warrantyService) {
+    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService, WarrantyService warrantyService, ReturnService returnService) {
         this.personService = personService;
         this.productService = productService;
         this.saleService = saleService;
+        this.returnService = returnService;
         this.scanner = new Scanner(System.in);
         this.warrantyService = warrantyService;
     }
@@ -52,6 +53,7 @@ public class ConsoleUI {
                 case "2" -> showPersonMenu();
                 case "3" -> showSaleMenu();
                 case "4" -> showWarrantyMenu();
+                case "5" -> showReturnMenu();
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option.");
             }
@@ -68,7 +70,8 @@ public class ConsoleUI {
         System.out.println("1. Manage products");
         System.out.println("2. Manage customers and sellers");
         System.out.println("3. Manage sales");
-        System.out.println("4. Gestionar garantías");
+        System.out.println("4. Manage warrantis");
+        System.out.println("5. Manage Returns");
         System.out.println("0. Exit");
         System.out.print("Choose an option: ");
     }
@@ -477,4 +480,115 @@ public class ConsoleUI {
             System.out.println("---");
         }
     }
+
+
+    /**
+     * Shows the return submenu and handles its options.
+     */
+    public void showReturnMenu() {
+        System.out.println("\n--- MANAGE RETURNS ---");
+        System.out.println("1. Registrar una devolución");
+        System.out.println("2. Consultar todas las devoluciones");
+        System.out.println("3. Consultar devoluciones por cliente");
+        System.out.println("4. Consultar devoluciones por venta");
+        System.out.println("5. Consultar balance mensual");
+        System.out.println("0. Volver");
+        System.out.print("Seleccione una opción: ");
+
+        switch (scanner.nextLine()) {
+            case "1" -> registerReturn();
+            case "2" -> listAllReturns();
+            case "3" -> listReturnsByCustomer();
+            case "4" -> listReturnsBySale();
+            case "5" -> showMonthlyBalance();
+            case "0" -> { }
+            default -> System.out.println("Opción inválida.");
+        }
+    }
+    private void registerReturn() {
+        System.out.print("Identificador de la venta: ");
+        String saleId = scanner.nextLine();
+
+        Sale sale = saleService.findSaleById(saleId);
+        if (sale == null) {
+            System.out.println("No se encontró una venta con ese identificador.");
+            return;
+        }
+
+        System.out.println("Productos de la venta:");
+        for (Product product : sale.getProducts()) {
+            System.out.println("- " + product.getIdentifier() + ": " + product.getDescription());
+        }
+
+        List<String> productIds = new ArrayList<>();
+        String identifier;
+        System.out.println("Ingrese los identificadores de los productos a devolver. Deje vacío para terminar.");
+        do {
+            System.out.print("Identificador de producto (vacío para terminar): ");
+            identifier = scanner.nextLine();
+            if (!identifier.isBlank()) {
+                productIds.add(identifier);
+            }
+        } while (!identifier.isBlank());
+
+        if (productIds.isEmpty()) {
+            System.out.println("Debe indicar al menos un producto a devolver. Operación cancelada.");
+            return;
+        }
+
+        System.out.print("Motivo de la devolución: ");
+        String reason = scanner.nextLine();
+
+        try {
+            Return returnItem = returnService.registerReturn(saleId, productIds, reason);
+            System.out.println(returnItem.generateReturnReceipt());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se pudo registrar la devolución: " + e.getMessage());
+        }
+    }
+    private void listAllReturns() {
+        printReturns(returnService.viewAllReturns());
+    }
+
+    private void listReturnsByCustomer() {
+        System.out.print("Identificación del cliente: ");
+        String customerId = scanner.nextLine();
+        printReturns(returnService.viewReturnsByCustomer(customerId));
+    }
+
+    private void listReturnsBySale() {
+        System.out.print("Identificador de la venta: ");
+        String saleId = scanner.nextLine();
+        printReturns(returnService.viewReturnsBySale(saleId));
+    }
+
+
+    private void showMonthlyBalance() {
+        try {
+            System.out.print("Mes (1-12): ");
+            int month = Integer.parseInt(scanner.nextLine());
+            System.out.print("Año: ");
+            int year = Integer.parseInt(scanner.nextLine());
+
+            double balance = returnService.generateMonthlyBalance(month, year);
+            System.out.println("Balance neto de " + month + "/" + year + ": $" + balance);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: mes y año deben ser valores numéricos válidos.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void printReturns(List<Return> returns) {
+        if (returns.isEmpty()) {
+            System.out.println("No se encontraron devoluciones.");
+            return;
+        }
+        for (Return returnItem : returns) {
+            System.out.println(returnItem.generateReturnReceipt());
+            System.out.println("---");
+        }
+    }
+
+
 }
