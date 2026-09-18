@@ -33,6 +33,8 @@ public class Sale {
         this.customer = customer;
         this.seller = seller;
         this.products = products;
+        this.appliedPromotionName = appliedPromotionName;
+        this.discountAmount = discountAmount;
     }
 
     public String getIdentifier() {
@@ -73,6 +75,23 @@ public class Sale {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+
+    public String getAppliedPromotionName() {
+        return appliedPromotionName;
+    }
+
+    public void setAppliedPromotionName(String appliedPromotionName) {
+        this.appliedPromotionName = appliedPromotionName;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
     }
 
     /**
