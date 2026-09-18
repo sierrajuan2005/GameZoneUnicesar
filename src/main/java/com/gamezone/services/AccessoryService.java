@@ -51,5 +51,12 @@ public class AccessoryService {
                 .toList();
     }
 
+    public Accessory findById(String id) {
+        return accessoryRepository.loadAll().stream()
+                .filter(a -> a.getIdentifier().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
 
 }
