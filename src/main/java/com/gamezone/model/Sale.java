@@ -117,6 +117,33 @@ public class Sale {
 
         return total;
     }
+    /**
+     * Builds a formatted, human-readable receipt in Spanish, showing
+     * the subtotal, the applied promotion's discount (if any), and
+     * the final total.
+     *
+     * @return the formatted receipt text
+     */
+    public String generateReceipt() {
+        double subtotal = calculateTotal();
+        double finalTotal = subtotal - discountAmount;
+
+        StringBuilder receipt = new StringBuilder();
+        receipt.append("Recibo de venta\n");
+        receipt.append("Identificador: ").append(identifier).append("\n");
+        receipt.append("Subtotal: $").append(subtotal).append("\n");
+
+        if (appliedPromotionName != null && discountAmount > 0) {
+            receipt.append("Descuento aplicado (").append(appliedPromotionName).append("): -$")
+                    .append(discountAmount).append("\n");
+        } else {
+            receipt.append("Descuento aplicado: ninguno\n");
+        }
+
+        receipt.append("Total final: $").append(finalTotal);
+        return receipt.toString();
+    }
+
 
     @Override
     public String toString() {
