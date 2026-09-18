@@ -1,5 +1,4 @@
-Diagrama de clases
-
+```mermaid
 classDiagram
 direction TB
 %% =========================
@@ -20,7 +19,7 @@ class Product {
 +void setTitle(String title)
 +void setPrice(double price)
 +void setAvailableQuantity(int availableQuantity)
-+String getDescription()\*
++String getDescription()*
 }
 class Accessory {
 <<abstract>>
@@ -100,7 +99,7 @@ class Warranty {
 +void setName(String name)
 +void setDurationMonths(int durationMonths)
 +void setCoverage(String coverage)
-+abstract boolean isValid()
++boolean isValid()*
 }
 class BasicWarranty {
 -boolean coversManufacturingDefects
@@ -136,7 +135,7 @@ class Promotion {
 +LocalDate getEndDate()
 +boolean isActive()
 +void setActive(boolean active)
-+abstract double calculateDiscount(Sale sale)
++double calculateDiscount(Sale sale)*
 }
 class PercentageDiscount {
 -double percentage
@@ -232,41 +231,41 @@ class Return {
 %% PERSISTENCE LAYER
 %% =========================
 class PersonRepository {
--String FILE\_PATH
+-String FILE_PATH
 +PersonRepository()
 +void save(Person person)
 +List~Person~ loadAll()
 +void saveAll(List~Person~ people)
 }
 class ProductRepository {
--String FILE\_PATH
+-String FILE_PATH
 +ProductRepository()
 +List~Product~ loadAll()
 +void saveAll(List~Product~ products)
 +Optional~Product~ findById(String identifier)
 }
 class WarrantyRepository {
--String FILE\_PATH
+-String FILE_PATH
 +WarrantyRepository()
 +List~Warranty~ loadAll()
 +void saveAll(List~Warranty~ warranties)
 +Optional~Warranty~ findById(String identifier)
 }
 class PromotionRepository {
--String FILE\_PATH
+-String FILE_PATH
 +PromotionRepository()
 +List~Promotion~ loadAll()
 +void saveAll(List~Promotion~ promotions)
 }
 class SaleRepository {
--String FILE\_PATH
+-String FILE_PATH
 +SaleRepository()
 +void save(Sale sale)
 +List~Sale~ loadAll()
 +void saveAll(List~Sale~ sales)
 }
 class ReturnRepository {
--String FILE\_PATH
+-String FILE_PATH
 +ReturnRepository()
 +List~Return~ loadAll()
 +void saveAll(List~Return~ returns)
@@ -378,13 +377,13 @@ Person <|-- Seller
 %% =========================
 Sale "1" --> "1" Customer : has customer
 Sale "1" --> "1" Seller : has seller
-Sale "1" --> "1..\*" Product : contains products
+Sale "1" --> "1..*" Product : contains products
 Sale "0..1" --> "0..1" Warranty : may have warranty
 Sale "0..1" --> "0..1" Promotion : applies promotion
 Return "1" --> "1" Sale : references original sale
-Return "1" --> "1..\*" Product : contains returned products
-Accessory "0..\*" --> "0..\*" Console : compatible with
-Customer "1" --> "0..\*" Sale : purchase history
+Return "1" --> "1..*" Product : contains returned products
+Accessory "0..*" --> "0..*" Console : compatible with
+Customer "1" --> "0..*" Sale : purchase history
 %% =========================
 %% PERSISTENCE ASSOCIATIONS
 %% =========================
@@ -419,3 +418,4 @@ ConsoleUI --> PromotionService : uses
 ConsoleUI --> SaleService : uses
 ConsoleUI --> ReturnService : uses
 Main --> ConsoleUI : launches
+```
