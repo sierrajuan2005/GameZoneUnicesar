@@ -9,13 +9,28 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Repository for persisting {@link Accessory} objects in a CSV file.
+ * Provides methods to save and load accessories from disk.
+ */
 public class AccessoryRepository {
 
+    /* Path to the CSV file where accessories are stored. */
     private static final String FILE_PATH = "data/accessories.csv";
 
+    /*
+     * Constructs a new AccessoryRepository.
+     * No initialization is required beyond the file path constant.
+     */
     public AccessoryRepository() {
     }
 
+    /**
+     * Saves all accessories to the CSV file.
+     * Each accessory is serialized with its type and attributes.
+     *
+     * @param accessories list of accessories to persist
+     */
     public void saveAll(List<Accessory> accessories) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
             for (Accessory accessory : accessories) {
@@ -29,6 +44,13 @@ public class AccessoryRepository {
         }
     }
 
+    /*
+     * Loads all accessories from the CSV file.
+     * Uses the first column as a discriminator to instantiate
+     * {@link Controller}, {@link Cable}, or {@link Memory}.
+     *
+     * @return list of accessories loaded from file, or empty list if file does not exist
+     */
     public List<Accessory> loadAll() {
         List<Accessory> accessories = new ArrayList<>();
         File file = new File(FILE_PATH);
