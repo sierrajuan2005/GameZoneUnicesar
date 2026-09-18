@@ -13,6 +13,7 @@ public class SaleService {
     private ProductService productService;
     private WarrantyService warrantyService;
     private PromotionService promotionService;
+    private AccessoryService accessoryService;
 
     /**
      * Creates a SaleService with the required repositories and services.
@@ -22,10 +23,14 @@ public class SaleService {
      * @param warrantyService  service used to generate warranties for consoles
      * @param promotionService service used to find the best applicable promotion
      */
-    public SaleService(SaleRepository saleRepository, ProductService productService,
-                       WarrantyService warrantyService, PromotionService promotionService) {
+    public SaleService(SaleRepository saleRepository,
+                       ProductService productService,
+                       AccessoryService accessoryService,
+                       WarrantyService warrantyService,
+                       PromotionService promotionService) {
         this.saleRepository = saleRepository;
         this.productService = productService;
+        this.accessoryService = accessoryService;
         this.warrantyService = warrantyService;
         this.promotionService = promotionService;
     }
