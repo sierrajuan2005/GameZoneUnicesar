@@ -178,3 +178,91 @@ The sales receipt displays the subtotal, the applied discount (including the pro
 
 View all registered promotions or only those currently active.
 
+## Accessory Module Implementation
+
+The accessory module was integrated into the existing GameZone architecture while maintaining the current product hierarchy and layered design.
+
+### Implemented Features
+
+The module supports three types of accessories:
+
+* **Controller** – includes the connection type.
+* **Cable** – includes the cable length and connector type.
+* **Memory** – includes the storage capacity and memory type.
+
+All accessory types extend the `Accessory` class, which in turn extends `Product`. This allows accessories to reuse the common product attributes and behavior, such as identifier, title, price, and available stock.
+
+### Accessory Management
+
+The `AccessoryService` provides the following operations:
+
+* Register controllers.
+* Register cables.
+* Register memory devices.
+* List all registered accessories.
+* Filter accessories by type.
+* Find accessories compatible with a specific console.
+* Search accessories by identifier.
+* Update accessory stock.
+
+### Console Compatibility
+
+Accessories can be associated with the consoles they are compatible with. The compatibility relationship is represented through a list of `Console` objects inside the `Accessory` class.
+
+The system allows users to search for all accessories compatible with a selected console.
+
+### Persistence
+
+Accessory information is persisted through the `AccessoryRepository` using the file:
+
+`data/accessories.csv`
+
+The repository identifies each accessory by its type and reconstructs the corresponding subclass when the data is loaded.
+
+### Main Application Integration
+
+The accessory module was integrated into the main application through dependency injection.
+
+`Main` now creates and connects:
+
+* `AccessoryRepository`
+* `AccessoryService`
+* `AccessoryService` in `SaleService`
+* `AccessoryService` in `ConsoleUI`
+
+The resulting dependency flow is:
+
+```text
+Main
+ ├── AccessoryRepository
+ │        ↓
+ │   AccessoryService
+ │        ↓
+ ├── SaleService
+ │
+ └── ConsoleUI
+          ↓
+    AccessoryService
+```
+
+This integration allows the accessory module to work together with the existing product, sales, and user interface components without breaking the previous functionality.
+
+### Architectural Design
+
+The implementation follows the layered architecture used by the project:
+
+```text
+UI Layer
+    ↓
+Service Layer
+    ↓
+Persistence Layer
+    ↓
+Data Storage
+```
+
+The model classes represent the domain entities, services contain business logic, repositories handle persistence, and `ConsoleUI` is responsible for interaction with the user.
+
+This structure promotes code reuse, separation of responsibilities, and maintainability.
+
+
