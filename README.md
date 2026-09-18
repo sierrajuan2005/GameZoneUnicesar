@@ -162,3 +162,19 @@ View all returns, by customer, or by specific sale.
 
 Generate a monthly balance report (sales minus returns) for a specified month and year.
 
+
+
+Promotion Management
+
+
+
+Register promotions of three types: percentage-based, category-based (video games or consoles), and bulk purchase-based.
+
+Validity by date range: a promotion is only applied if the current date falls within its validity period.
+
+Automatic application of the best available promotion when registering a sale (promotions are not cumulative; only the one with the highest monetary discount is applied).
+
+The sales receipt displays the subtotal, the applied discount (including the promotion name), and the final total.
+
+View all registered promotions or only those currently active.
+
