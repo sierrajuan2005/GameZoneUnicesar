@@ -563,4 +563,32 @@ public class ConsoleUI {
     }
 
 
+    private void showMonthlyBalance() {
+        try {
+            System.out.print("Mes (1-12): ");
+            int month = Integer.parseInt(scanner.nextLine());
+            System.out.print("Año: ");
+            int year = Integer.parseInt(scanner.nextLine());
+
+            double balance = returnService.generateMonthlyBalance(month, year);
+            System.out.println("Balance neto de " + month + "/" + year + ": $" + balance);
+        } catch (NumberFormatException e) {
+            System.out.println("Error: mes y año deben ser valores numéricos válidos.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    private void printReturns(List<Return> returns) {
+        if (returns.isEmpty()) {
+            System.out.println("No se encontraron devoluciones.");
+            return;
+        }
+        for (Return returnItem : returns) {
+            System.out.println(returnItem.generateReturnReceipt());
+            System.out.println("---");
+        }
+    }
+
+
 }
