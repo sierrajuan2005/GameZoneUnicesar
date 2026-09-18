@@ -1,6 +1,11 @@
 package com.gamezone.services;
 
+import com.gamezone.model.Accessory;
+import com.gamezone.model.Console;
+import com.gamezone.model.Controller;
 import com.gamezone.persistence.AccessoryRepository;
+
+import java.util.List;
 
 public class AccessoryService {
 
@@ -8,6 +13,13 @@ public class AccessoryService {
 
     public AccessoryService(AccessoryRepository accessoryRepository) {
         this.accessoryRepository = accessoryRepository;
+    }
+
+    public void registerController(String id, String title, double price, int availability, List<Console> consoles, String connectionType) {
+        Controller controller = new Controller(id, title, price, availability, consoles, connectionType);
+        List<Accessory> accessories = accessoryRepository.loadAll();
+        accessories.add(controller);
+        accessoryRepository.saveAll(accessories);
     }
 
 
