@@ -1051,6 +1051,47 @@ public class ConsoleUI {
         }
     }
 
+    private void listCompatibleAccessories() {
+        System.out.println("\n=== ACCESORIOS COMPATIBLES ===");
+
+        List<Product> products = productService.listProducts();
+
+        System.out.println("=== CONSOLAS ===");
+
+        for (Product product : products) {
+            if (product instanceof Console console) {
+                System.out.println(
+                        console.getIdentifier()
+                                + " - "
+                                + console.getTitle()
+                );
+            }
+        }
+
+        System.out.print("Ingrese el ID de la consola: ");
+        String consoleId = scanner.nextLine();
+
+        List<Accessory> accessories =
+                accessoryService.findAccessoriesCompatibleWith(consoleId);
+
+        if (accessories.isEmpty()) {
+            System.out.println(
+                    "No se encontraron accesorios compatibles con esa consola."
+            );
+            return;
+        }
+
+        System.out.println("\nAccesorios compatibles:");
+
+        for (Accessory accessory : accessories) {
+            System.out.println(
+                    accessory.getIdentifier()
+                            + " | "
+                            + accessory.getDescription()
+            );
+        }
+    }
+
 
 
 
