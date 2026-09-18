@@ -70,8 +70,8 @@ public class ConsoleUI {
         System.out.println("1. Manage products");
         System.out.println("2. Manage customers and sellers");
         System.out.println("3. Manage sales");
-        System.out.println("4. Gestionar garantías");
-        System.out.println("5. Gestionar devoluciones");
+        System.out.println("4. Manage warrantis");
+        System.out.println("5. Manage Returns");
         System.out.println("0. Exit");
         System.out.print("Choose an option: ");
     }
@@ -478,6 +478,31 @@ public class ConsoleUI {
         for (Warranty warranty : warranties) {
             System.out.println(warranty.generateWarrantyCertificate());
             System.out.println("---");
+        }
+    }
+
+
+    /**
+     * Shows the return submenu and handles its options.
+     */
+    public void showReturnMenu() {
+        System.out.println("\n--- MANAGE RETURNS ---");
+        System.out.println("1. Registrar una devolución");
+        System.out.println("2. Consultar todas las devoluciones");
+        System.out.println("3. Consultar devoluciones por cliente");
+        System.out.println("4. Consultar devoluciones por venta");
+        System.out.println("5. Consultar balance mensual");
+        System.out.println("0. Volver");
+        System.out.print("Seleccione una opción: ");
+
+        switch (scanner.nextLine()) {
+            case "1" -> registerReturn();
+            case "2" -> listAllReturns();
+            case "3" -> listReturnsByCustomer();
+            case "4" -> listReturnsBySale();
+            case "5" -> showMonthlyBalance();
+            case "0" -> { }
+            default -> System.out.println("Opción inválida.");
         }
     }
 }
