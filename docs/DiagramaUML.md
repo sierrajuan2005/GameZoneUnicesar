@@ -1,3 +1,5 @@
+Diagrama de clases
+
 classDiagram
 direction TB
 %% =========================
@@ -277,8 +279,8 @@ class PersonService {
 +PersonService(PersonRepository personRepository)
 +void registerCustomer(Customer customer)
 +void registerSeller(Seller seller)
-+List\~Customer\~ listCustomers()
-+List\~Seller\~ listSellers()
++List~Customer~ listCustomers()
++List~Seller~ listSellers()
 }
 class ProductService {
 -ProductRepository productRepository
@@ -294,9 +296,9 @@ class AccessoryService {
 +void registerController(Controller controller)
 +void registerCable(Cable cable)
 +void registerMemory(Memory memory)
-+List\~Accessory\~ listAllAccessories()
-+List\~Accessory\~ listAccessoriesByType(String type)
-+List\~Accessory\~ findAccessoriesCompatibleWith(Console console)
++List~Accessory~ listAllAccessories()
++List~Accessory~ listAccessoriesByType(String type)
++List~Accessory~ findAccessoriesCompatibleWith(Console console)
 }
 class WarrantyService {
 -WarrantyRepository warrantyRepository
