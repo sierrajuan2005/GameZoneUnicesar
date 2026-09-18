@@ -505,4 +505,47 @@ public class ConsoleUI {
             default -> System.out.println("Opción inválida.");
         }
     }
+    private void registerReturn() {
+        System.out.print("Identificador de la venta: ");
+        String saleId = scanner.nextLine();
+
+        Sale sale = saleService.findSaleById(saleId);
+        if (sale == null) {
+            System.out.println("No se encontró una venta con ese identificador.");
+            return;
+        }
+
+        System.out.println("Productos de la venta:");
+        for (Product product : sale.getProducts()) {
+            System.out.println("- " + product.getIdentifier() + ": " + product.getDescription());
+        }
+
+        List<String> productIds = new ArrayList<>();
+        String identifier;
+        System.out.println("Ingrese los identificadores de los productos a devolver. Deje vacío para terminar.");
+        do {
+            System.out.print("Identificador de producto (vacío para terminar): ");
+            identifier = scanner.nextLine();
+            if (!identifier.isBlank()) {
+                productIds.add(identifier);
+            }
+        } while (!identifier.isBlank());
+
+        if (productIds.isEmpty()) {
+            System.out.println("Debe indicar al menos un producto a devolver. Operación cancelada.");
+            return;
+        }
+
+        System.out.print("Motivo de la devolución: ");
+        String reason = scanner.nextLine();
+
+        try {
+            Return returnItem = returnService.registerReturn(saleId, productIds, reason);
+            System.out.println(returnItem.generateReturnReceipt());
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se pudo registrar la devolución: " + e.getMessage());
+        }
+    }
+
+
 }
