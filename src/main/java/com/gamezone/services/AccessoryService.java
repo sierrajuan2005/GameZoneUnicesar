@@ -44,5 +44,12 @@ public class AccessoryService {
                 .toList();
     }
 
+    public List<Accessory> findAccessoriesCompatibleWith(String consoleId) {
+        return accessoryRepository.loadAll().stream()
+                .filter(a -> a.getCompatibleConsoles().stream()
+                        .anyMatch(c -> c.getIdentifier().equals(consoleId)))
+                .toList();
+    }
+
 
 }
