@@ -1032,8 +1032,7 @@ public class ConsoleUI {
         System.out.print("Ingrese el tipo: ");
         String type = scanner.nextLine();
 
-        List<Accessory> accessories =
-                accessoryService.listAccessoriesByType(type);
+        List<Accessory> accessories = accessoryService.listAccessoriesByType(type);
 
         if (accessories.isEmpty()) {
             System.out.println("No se encontraron accesorios de ese tipo.");

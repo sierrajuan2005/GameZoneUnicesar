@@ -18,7 +18,8 @@ import com.gamezone.persistence.AccessoryRepository;
 import com.gamezone.services.AccessoryService;
 
 
-public class Main {
+public class
+Main {
     public static void main(String[] args) {
 
         PersonRepository personRepository = new PersonRepository();
