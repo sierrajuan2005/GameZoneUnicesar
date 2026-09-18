@@ -18,8 +18,8 @@ public abstract class Accessory  extends Product {
      * @param availableQuantity available quantity in inventory
      * @param compatibleConsoles consoles compatible with the accessory
      */
-    public Accessory(String identifier, String title, double price, int availability, List<Console> compatibleConsoles) {
-        super(identifier, title, price, availability);
+    public Accessory(String identifier, String title, double price, int availableQuantity, List<Console> compatibleConsoles) {
+        super(identifier, title, price, availableQuantity);
         this.compatibleConsoles = compatibleConsoles;
     }
 
@@ -55,5 +55,5 @@ public abstract class Accessory  extends Product {
         return getTitle() + " - Compatible consoles: " + compatibleConsoles.size();
     }
 
-    
+
 }
