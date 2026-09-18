@@ -917,6 +917,7 @@ public class ConsoleUI {
 
         return null;
     }
+
     private void registerCable() {
         System.out.println("\n=== REGISTRAR CABLE ===");
 
@@ -955,6 +956,48 @@ public class ConsoleUI {
 
         } catch (IllegalArgumentException e) {
             System.out.println("No se pudo registrar el cable: "
+                    + e.getMessage());
+        }
+    }
+
+    private void registerMemory() {
+        System.out.println("\n=== REGISTRAR MEMORIA ===");
+
+        System.out.print("Identificador: ");
+        String id = scanner.nextLine();
+
+        System.out.print("Título: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Precio: ");
+        double price = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Cantidad disponible: ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Capacidad en GB: ");
+        int capacity = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Tipo de memoria: ");
+        String memoryType = scanner.nextLine();
+
+        List<Console> consoles = selectCompatibleConsoles();
+
+        try {
+            accessoryService.registerMemory(
+                    id,
+                    title,
+                    price,
+                    quantity,
+                    consoles,
+                    capacity,
+                    memoryType
+            );
+
+            System.out.println("Memoria registrada correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se pudo registrar la memoria: "
                     + e.getMessage());
         }
     }
