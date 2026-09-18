@@ -19,6 +19,7 @@ public class ConsoleUI {
     private final WarrantyService warrantyService;
     private final ReturnService returnService;
     private final PromotionService promotionService;
+    private final AccessoryService accessoryService;
 
     /**
      * Creates the console user interface.
@@ -28,9 +29,10 @@ public class ConsoleUI {
      * @param saleService service used to manage sales
      */
     public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService,
-                     WarrantyService warrantyService, ReturnService returnService, PromotionService promotionService) {
+                     WarrantyService warrantyService, ReturnService returnService, PromotionService promotionService)  {
         this.personService = personService;
         this.productService = productService;
+        this.accessoryService = accessoryService;
         this.saleService = saleService;
         this.warrantyService = warrantyService;
         this.returnService = returnService;
@@ -67,9 +69,10 @@ public class ConsoleUI {
         System.out.println("1. Manage products");
         System.out.println("2. Manage customers and sellers");
         System.out.println("3. Manage sales");
-        System.out.println("4. Manage warranties");
-        System.out.println("5. Manage returns");
-        System.out.println("6. Manage promotions");
+        System.out.println("4. Manage accessories");
+        System.out.println("5. Manage warranties");
+        System.out.println("6. Manage returns");
+        System.out.println("7. Manage promotions");
         System.out.println("0. Exit");
         System.out.print("Choose an option: ");
     }
