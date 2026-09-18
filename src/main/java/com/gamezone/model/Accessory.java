@@ -42,6 +42,18 @@ public abstract class Accessory  extends Product {
         this.compatibleConsoles = compatibleConsoles;
     }
 
-    
 
+
+    /*
+    *Returns a description of the accessory.
+    *
+    * @return accessory description
+    */
+
+    @Override
+    public String getDescription() {
+        return getTitle() + " - Compatible consoles: " + compatibleConsoles.size();
+    }
+
+    
 }
