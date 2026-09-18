@@ -1,0 +1,34 @@
+Index: src/main/java/com/gamezone/persistence/PersonRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.gamezone.persistence;\r\n\r\nimport com.gamezone.model.Person;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\n/**\r\n * Repository class for managing Person entities.\r\n * Provides persistence to a CSV file and methods to save and load data.\r\n */\r\npublic class PersonRepository {\r\n\r\n    private static final String FILE_PATH = \"data/persons.csv\";\r\n\r\n    /**\r\n     * Saves all persons to the CSV file.\r\n     *\r\n     * @param persons list of persons to persist\r\n     */\r\n    public void saveAll(List<Person> persons) {\r\n        try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {\r\n            for (Person p : persons) {\r\n                if (p instanceof Customer c) {\r\n                    writer.println(\"CUSTOMER;\" + c.getIdentification() + \";\" + c.getName() + \";\" + c.getPhone() + \";\" + c.getEmail());\r\n                } else if (p instanceof Seller s) {\r\n                    writer.println(\"SELLER;\" + s.getIdentification() + \";\" + s.getName() + \";\" + s.getPhone() + \";\" + s.getEmployeeCode() + \";\" + s.getWorkShift());\r\n                }\r\n            }\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(\"Error saving persons\", e);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Loads all persons from the CSV file.\r\n     *\r\n     * @return list of persons, empty if file does not exist\r\n     */\r\n    public List<Person> loadAll() {\r\n        List<Person> persons = new ArrayList<>();\r\n        File file = new File(FILE_PATH);\r\n\r\n        if (!file.exists()) {\r\n            return persons;\r\n        }\r\n\r\n        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {\r\n            String line;\r\n            while ((line = reader.readLine()) != null) {\r\n                String[] parts = line.split(\";\");\r\n                String type = parts[0];\r\n\r\n                if (\"CUSTOMER\".equals(type)) {\r\n                    persons.add(new Customer(parts[1], parts[2], parts[3], parts[4]));\r\n                } else if (\"SELLER\".equals(type)) {\r\n                    persons.add(new Seller(parts[1], parts[2], parts[3], parts[4], parts[5]));\r\n                }\r\n            }\r\n        } catch (IOException e) {\r\n            throw new RuntimeException(\"Error loading persons\", e);\r\n        }\r\n\r\n        return persons;\r\n    }\r\n\r\n    /**\r\n     * Adds a new person to the repository and persists changes.\r\n     *\r\n     * @param person person to add\r\n     */\r\n    public void addPerson(Person person) {\r\n        List<Person> persons = loadAll();\r\n        persons.add(person);\r\n        saveAll(persons);\r\n    }\r\n\r\n    /**\r\n     * Retrieves all persons from the repository.\r\n     *\r\n     * @return list of persons\r\n     */\r\n    public List<Person> getPeople() {\r\n        return loadAll();\r\n    }\r\n\r\n    /**\r\n     * Finds a person by identification.\r\n     *\r\n     * @param identification unique ID of the person\r\n     * @return person if found, null otherwise\r\n     */\r\n    public Person findByIdentification(String identification) {\r\n        return loadAll().stream()\r\n                .filter(p -> p.getIdentification().equals(identification))\r\n                .findFirst()\r\n                .orElse(null);\r\n    }\r\n\r\n    /**\r\n     * Removes a person from the repository by identification and persists changes.\r\n     *\r\n     * @param identification unique ID of the person to remove\r\n     * @return true if the person was removed, false if not found\r\n     */\r\n    public boolean removePerson(String identification) {\r\n        List<Person> persons = loadAll();\r\n        boolean removed = persons.removeIf(p -> p.getIdentification().equals(identification));\r\n        if (removed) {\r\n            saveAll(persons);\r\n        }\r\n        return removed;\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/gamezone/persistence/PersonRepository.java b/src/main/java/com/gamezone/persistence/PersonRepository.java
+--- a/src/main/java/com/gamezone/persistence/PersonRepository.java	(revision 1cefcac5e1bbff1dca7c769846d735b401cfda51)
++++ b/src/main/java/com/gamezone/persistence/PersonRepository.java	(date 1789141481413)
+@@ -1,7 +1,10 @@
+ package com.gamezone.persistence;
+ 
++import com.gamezone.model.Customer;
+ import com.gamezone.model.Person;
++import com.gamezone.model.Seller;
+ 
++import java.io.*;
+ import java.util.ArrayList;
+ import java.util.List;
+ 
+Index: data/products.csv
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>VIDEO_GAME;12345678;warzone;120.0;5;digital;action;18+\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/data/products.csv b/data/products.csv
+--- a/data/products.csv	(revision 1cefcac5e1bbff1dca7c769846d735b401cfda51)
++++ b/data/products.csv	(date 1789130621994)
+@@ -1,1 +1,2 @@
+ VIDEO_GAME;12345678;warzone;120.0;5;digital;action;18+
++VIDEO_GAME;123;Fortnite;80.0;2;digital;action;+15

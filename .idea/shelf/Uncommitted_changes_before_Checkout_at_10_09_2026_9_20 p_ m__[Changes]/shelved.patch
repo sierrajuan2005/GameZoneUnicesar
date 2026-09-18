@@ -1,0 +1,180 @@
+Index: src/main/java/com/gamezone/ui/ConsoleUI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.gamezone.ui;\r\nimport com.gamezone.model.Customer;\r\nimport com.gamezone.model.Person;\r\nimport com.gamezone.model.Seller;\r\nimport com.gamezone.services.PersonService;\r\n\r\nimport java.util.Scanner;\r\n\r\npublic class ConsoleUI {\r\n\r\n    private PersonService personService;\r\n    private Scanner scanner;\r\n\r\n    public ConsoleUI(PersonService personService) {\r\n\r\n        this.personService = personService;\r\n        this.scanner = new Scanner(System.in);\r\n    }\r\n\r\n    public void start(){\r\n\r\n        int option;\r\n\r\n        do {\r\n\r\n            System.out.println(\"=== Person Menu === \");\r\n            System.out.println(\"1. Register Customer \");\r\n            System.out.println(\"2. Register Seller \");\r\n            System.out.println(\"3. List People \");\r\n            System.out.println(\"4. Find Person by Identification \");\r\n            System.out.println(\"5. Remove Person \");\r\n            System.out.println(\"0. Exit \");\r\n\r\n            System.out.println(\"Choose an option: \");\r\n            option = scanner.nextInt();\r\n            scanner.nextLine();\r\n\r\n            switch (option){\r\n\r\n                case 1:\r\n                    registerCustomer();\r\n                    break;\r\n                case 2:\r\n                    registerSeller();\r\n                    break;\r\n                case 3:\r\n                    listPeople();\r\n                    break;\r\n                case 4:\r\n                    findPerson();\r\n                    break;\r\n                case 5:\r\n                    removePerson();\r\n                    break;\r\n            }\r\n        }while (option != 0);\r\n    }\r\n    private void registerCustomer(){\r\n\r\n        System.out.print(\"Name: \");\r\n        String name = scanner.nextLine();\r\n        System.out.print(\"Identification: \");\r\n        String identification = scanner.nextLine();\r\n        Customer customer = new Customer(name,identification);\r\n        personService.addPerson(customer);\r\n        System.out.println(\"Customer registered successfully!\");\r\n    }\r\n\r\n    public void registerSeller(){\r\n\r\n        System.out.print(\"Name: \");\r\n        String name = scanner.nextLine();\r\n        System.out.print(\"Identification: \");\r\n        String identification = scanner.nextLine();\r\n        Seller seller = new Seller(name,identification);\r\n        personService.addPerson(seller);\r\n        System.out.println(\"Seller registered successfully!\");\r\n    }\r\n\r\n    public void listPeople(){\r\n\r\n        for (Person p : personService.getAllPeople()){\r\n            System.out.println(p);\r\n        }\r\n    }\r\n\r\n    public void findPerson(){\r\n\r\n        System.out.print(\"Identification to search: \");\r\n        String identification = scanner.nextLine();\r\n        Person p = personService.findPersonByIdentification(identification);\r\n        if (p != null){\r\n\r\n            System.out.println(\"Found:\" + p);\r\n        }else {\r\n            System.out.println(\"Person not found.\");\r\n        }\r\n    }\r\n\r\n    public void removePerson(){\r\n\r\n        System.out.println(\"Identification to remove: \");\r\n        String identification = scanner.nextLine();\r\n        Person p = personService.findPersonByIdentification(identification);\r\n        if (p != null){\r\n\r\n            personService.removePerson(p);\r\n            System.out.println(\"Person removed successfully!\");\r\n        }else {\r\n            System.out.println(\"Person not found.\");\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/gamezone/ui/ConsoleUI.java b/src/main/java/com/gamezone/ui/ConsoleUI.java
+--- a/src/main/java/com/gamezone/ui/ConsoleUI.java	(revision fa0ecdb342142435570d3cc43dd58f008b11404b)
++++ b/src/main/java/com/gamezone/ui/ConsoleUI.java	(date 1789093007258)
+@@ -1,113 +1,32 @@
+ package com.gamezone.ui;
++import com.gamezone.model.Console;
+ import com.gamezone.model.Customer;
+ import com.gamezone.model.Person;
++import com.gamezone.model.Product;
++import com.gamezone.model.Sale;
+ import com.gamezone.model.Seller;
++import com.gamezone.model.VideoGame;
+ import com.gamezone.services.PersonService;
++import com.gamezone.services.ProductService;
++import com.gamezone.services.SaleService;
+ 
+-import java.util.Scanner;
+ 
+ public class ConsoleUI {
+ 
+-    private PersonService personService;
+-    private Scanner scanner;
++    private final PersonService personService;
++    private final ProductService productService;
++    private final SaleService saleService;
++    private final Scanner scanner;
+ 
+-    public ConsoleUI(PersonService personService) {
+ 
++
++    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService) {
+         this.personService = personService;
++        this.productService = productService;
++        this.saleService = saleService;
+         this.scanner = new Scanner(System.in);
+     }
+ 
+-    public void start(){
+-
+-        int option;
+-
+-        do {
+-
+-            System.out.println("=== Person Menu === ");
+-            System.out.println("1. Register Customer ");
+-            System.out.println("2. Register Seller ");
+-            System.out.println("3. List People ");
+-            System.out.println("4. Find Person by Identification ");
+-            System.out.println("5. Remove Person ");
+-            System.out.println("0. Exit ");
+-
+-            System.out.println("Choose an option: ");
+-            option = scanner.nextInt();
+-            scanner.nextLine();
+-
+-            switch (option){
+-
+-                case 1:
+-                    registerCustomer();
+-                    break;
+-                case 2:
+-                    registerSeller();
+-                    break;
+-                case 3:
+-                    listPeople();
+-                    break;
+-                case 4:
+-                    findPerson();
+-                    break;
+-                case 5:
+-                    removePerson();
+-                    break;
+-            }
+-        }while (option != 0);
+-    }
+-    private void registerCustomer(){
+-
+-        System.out.print("Name: ");
+-        String name = scanner.nextLine();
+-        System.out.print("Identification: ");
+-        String identification = scanner.nextLine();
+-        Customer customer = new Customer(name,identification);
+-        personService.addPerson(customer);
+-        System.out.println("Customer registered successfully!");
+-    }
+ 
+-    public void registerSeller(){
+ 
+-        System.out.print("Name: ");
+-        String name = scanner.nextLine();
+-        System.out.print("Identification: ");
+-        String identification = scanner.nextLine();
+-        Seller seller = new Seller(name,identification);
+-        personService.addPerson(seller);
+-        System.out.println("Seller registered successfully!");
+-    }
+-
+-    public void listPeople(){
+-
+-        for (Person p : personService.getAllPeople()){
+-            System.out.println(p);
+-        }
+-    }
+-
+-    public void findPerson(){
+-
+-        System.out.print("Identification to search: ");
+-        String identification = scanner.nextLine();
+-        Person p = personService.findPersonByIdentification(identification);
+-        if (p != null){
+-
+-            System.out.println("Found:" + p);
+-        }else {
+-            System.out.println("Person not found.");
+-        }
+-    }
+-
+-    public void removePerson(){
+-
+-        System.out.println("Identification to remove: ");
+-        String identification = scanner.nextLine();
+-        Person p = personService.findPersonByIdentification(identification);
+-        if (p != null){
+-
+-            personService.removePerson(p);
+-            System.out.println("Person removed successfully!");
+-        }else {
+-            System.out.println("Person not found.");
+-        }
+-    }
+ }
+Index: src/main/java/com/gamezone/services/SaleService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.gamezone.services;\r\nimport com.gamezone.model.Customer;\r\nimport com.gamezone.model.Product;\r\nimport com.gamezone.model.Sale;\r\nimport com.gamezone.model.Seller;\r\nimport com.gamezone.persistence.SaleRepository;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class SaleService {\r\n    private SaleRepository saleRepository;\r\n    private ProductRepository productRepository;\r\n\r\n\r\n    public SaleService(SaleRepository saleRepository, ProductRepository productRepository) {\r\n        this.saleRepository = saleRepository;\r\n        this.productRepository = productRepository;\r\n    }\r\n\r\n    public void registerSale(Sale sale) {\r\n        List<Product> soldProducts = sale.getProducts();\r\n\r\n        if (soldProducts.isEmpty()) {\r\n            throw new IllegalArgumentException(\"A sale must contain at least one product.\");\r\n        }\r\n\r\n        List<Product> storedProducts = productService.listProducts();\r\n\r\n        for (Product soldProduct : soldProducts) {\r\n            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());\r\n            if (storedProduct.getAvailableQuantity() < 1) {\r\n                throw new IllegalStateException(\"Insufficient stock for product: \" + storedProduct.getTitle());\r\n            }\r\n        }\r\n\r\n\r\n        for (Product soldProduct : soldProducts) {\r\n            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());\r\n            int newQuantity = storedProduct.getAvailableQuantity() - 1;\r\n            productService.updateStock(storedProduct, newQuantity);\r\n        }\r\n\r\n        sale.getCustomer().addToPurchaseHistory(sale);\r\n        saleRepository.save(sale);\r\n    }\r\n\r\n    public List<Sale> listSales() {\r\n        return saleRepository.load();\r\n    }\r\n\r\n    public List<Sale> getCustomerPurchaseHistory(Customer customer) {\r\n        List<Sale> history = new ArrayList<>();\r\n        for (Sale sale : saleRepository.load()) {\r\n            if (sale.getCustomer().getIdentification().equals(customer.getIdentification())) {\r\n                history.add(sale);\r\n            }\r\n        }\r\n        return history;\r\n    }\r\n\r\n    public List<Sale> getSellerSalesHistory(Seller seller) {\r\n        List<Sale> history = new ArrayList<>();\r\n        for (Sale sale : saleRepository.load()) {\r\n            if (sale.getSeller().getIdentification().equals(seller.getIdentification())) {\r\n                history.add(sale);\r\n            }\r\n        }\r\n        return history;\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n}
+===================================================================
+diff --git a/src/main/java/com/gamezone/services/SaleService.java b/src/main/java/com/gamezone/services/SaleService.java
+--- a/src/main/java/com/gamezone/services/SaleService.java	(revision fa0ecdb342142435570d3cc43dd58f008b11404b)
++++ b/src/main/java/com/gamezone/services/SaleService.java	(date 1789060428874)
+@@ -10,12 +10,12 @@
+ 
+ public class SaleService {
+     private SaleRepository saleRepository;
+-    private ProductRepository productRepository;
++    private ProductService productService;
+ 
+ 
+-    public SaleService(SaleRepository saleRepository, ProductRepository productRepository) {
++    public SaleService(SaleRepository saleRepository, ProductService productService) {
+         this.saleRepository = saleRepository;
+-        this.productRepository = productRepository;
++        this.productService = productService;
+     }
+ 
+     public void registerSale(Sale sale) {
+@@ -69,8 +69,13 @@
+         return history;
+     }
+ 
+-
+-
+-
++    private Product findProductById(List<Product> products, String identifier) {
++        for (Product product : products) {
++            if (product.getIdentifier().equals(identifier)) {
++                return product;
++            }
++        }
++        throw new IllegalArgumentException("Product not found: " + identifier);
++    }
+ 
+ }
+\ No newline at end of file
