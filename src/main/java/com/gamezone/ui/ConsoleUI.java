@@ -1025,5 +1025,33 @@ public class ConsoleUI {
         }
     }
 
+    private void listAccessoriesByType() {
+        System.out.println("\n=== ACCESORIOS POR TIPO ===");
+        System.out.println("Tipos disponibles: Controller, Cable, Memory");
+
+        System.out.print("Ingrese el tipo: ");
+        String type = scanner.nextLine();
+
+        List<Accessory> accessories =
+                accessoryService.listAccessoriesByType(type);
+
+        if (accessories.isEmpty()) {
+            System.out.println("No se encontraron accesorios de ese tipo.");
+            return;
+        }
+
+        for (Accessory accessory : accessories) {
+            System.out.println(
+                    accessory.getIdentifier()
+                            + " | "
+                            + accessory.getDescription()
+                            + " | Stock: "
+                            + accessory.getAvailableQuantity()
+            );
+        }
+    }
+
+
+
 
 }
