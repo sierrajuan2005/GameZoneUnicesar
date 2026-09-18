@@ -46,23 +46,69 @@ public class SaleService {
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         List<Product> soldProducts = sale.getProducts();
 
-        if (soldProducts.isEmpty()) {
+        if (soldProducts == null || soldProducts.isEmpty()) {
             throw new IllegalArgumentException("A sale must contain at least one product.");
         }
 
         List<Product> storedProducts = productService.listProducts();
+        List<Accessory> storedAccessories = accessoryService.listAllAccessories();
 
         for (Product soldProduct : soldProducts) {
-            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-            if (storedProduct.getAvailableQuantity() < 1) {
-                throw new IllegalStateException("Insufficient stock for product: " + storedProduct.getTitle());
+
+            if (soldProduct instanceof Accessory) {
+
+                Accessory storedAccessory =
+                        findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+
+                if (storedAccessory.getAvailableQuantity() < 1) {
+                    throw new IllegalStateException(
+                            "Insufficient stock for accessory: "
+                                    + storedAccessory.getTitle()
+                    );
+                }
+
+            } else {
+
+                Product storedProduct =
+                        findProductById(storedProducts, soldProduct.getIdentifier());
+
+                if (storedProduct.getAvailableQuantity() < 1) {
+                    throw new IllegalStateException(
+                            "Insufficient stock for product: "
+                                    + storedProduct.getTitle()
+                    );
+                }
             }
         }
 
         for (Product soldProduct : soldProducts) {
-            Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-            int newQuantity = storedProduct.getAvailableQuantity() - 1;
-            productService.updateStock(storedProduct, newQuantity);
+
+            if (soldProduct instanceof Accessory) {
+
+                Accessory storedAccessory =
+                        findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+
+                int newQuantity =
+                        storedAccessory.getAvailableQuantity() - 1;
+
+                accessoryService.updateStock(
+                        storedAccessory.getIdentifier(),
+                        newQuantity
+                );
+
+            } else {
+
+                Product storedProduct =
+                        findProductById(storedProducts, soldProduct.getIdentifier());
+
+                int newQuantity =
+                        storedProduct.getAvailableQuantity() - 1;
+
+                productService.updateStock(
+                        storedProduct,
+                        newQuantity
+                );
+            }
         }
 
         applyBestPromotion(sale);
@@ -161,6 +207,21 @@ public class SaleService {
         }
 
         throw new IllegalArgumentException("Product not found: " + identifier);
+    }
+
+    private Accessory findAccessoryById(
+            List<Accessory> accessories,
+            String identifier) {
+
+        for (Accessory accessory : accessories) {
+            if (accessory.getIdentifier().equals(identifier)) {
+                return accessory;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Accessory not found: " + identifier
+        );
     }
 
     /**
