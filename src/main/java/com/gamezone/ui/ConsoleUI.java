@@ -1002,5 +1002,28 @@ public class ConsoleUI {
         }
     }
 
+    private void listAllAccessories() {
+        System.out.println("\n=== TODOS LOS ACCESORIOS ===");
+
+        List<Accessory> accessories = accessoryService.listAllAccessories();
+
+        if (accessories.isEmpty()) {
+            System.out.println("No hay accesorios registrados.");
+            return;
+        }
+
+        for (Accessory accessory : accessories) {
+            System.out.println(
+                    accessory.getIdentifier()
+                            + " | "
+                            + accessory.getDescription()
+                            + " | Precio: $"
+                            + accessory.getPrice()
+                            + " | Stock: "
+                            + accessory.getAvailableQuantity()
+            );
+        }
+    }
+
 
 }
