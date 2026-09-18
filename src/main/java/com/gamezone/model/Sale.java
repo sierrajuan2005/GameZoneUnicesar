@@ -14,6 +14,10 @@ public class Sale {
     private Seller seller;
     private List<Product> products;
 
+
+    private String appliedPromotionName;
+    private double discountAmount;
+
     /**
      * Creates a new sale.
      *
