@@ -142,3 +142,23 @@ feature/\*: feature branches, merged into develop through a Pull Request reviewe
 
 Every commit follows the Conventional Commits convention (feat:, fix:, refactor:, docs:, chore:), written in English.
 
+
+
+
+
+Returns Management
+
+
+
+Record the return of one or more products from an existing sale (the return may be partial).
+
+Timeframe validation: Returns can only be recorded within 30 days of the original sale.
+
+Belonging validation: Returned products must actually belong to the specified sale.
+
+Automatic inventory update upon processing a successful return.
+
+View all returns, by customer, or by specific sale.
+
+Generate a monthly balance report (sales minus returns) for a specified month and year.
+
