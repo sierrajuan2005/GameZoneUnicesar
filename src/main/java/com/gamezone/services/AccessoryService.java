@@ -34,5 +34,9 @@ public class AccessoryService {
         accessoryRepository.saveAll(accessories);
     }
 
+    public List<Accessory> listAllAccessories() {
+        return accessoryRepository.loadAll();
+    }
+
 
 }
