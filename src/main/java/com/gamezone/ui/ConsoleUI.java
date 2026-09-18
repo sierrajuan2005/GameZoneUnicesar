@@ -917,6 +917,47 @@ public class ConsoleUI {
 
         return null;
     }
+    private void registerCable() {
+        System.out.println("\n=== REGISTRAR CABLE ===");
+
+        System.out.print("Identificador: ");
+        String id = scanner.nextLine();
+
+        System.out.print("Título: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Precio: ");
+        double price = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Cantidad disponible: ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Longitud en metros: ");
+        double length = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Tipo de conector: ");
+        String connectorType = scanner.nextLine();
+
+        List<Console> consoles = selectCompatibleConsoles();
+
+        try {
+            accessoryService.registerCable(
+                    id,
+                    title,
+                    price,
+                    quantity,
+                    consoles,
+                    length,
+                    connectorType
+            );
+
+            System.out.println("Cable registrado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se pudo registrar el cable: "
+                    + e.getMessage());
+        }
+    }
 
 
 }
