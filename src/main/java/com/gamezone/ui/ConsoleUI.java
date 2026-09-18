@@ -546,6 +546,21 @@ public class ConsoleUI {
             System.out.println("No se pudo registrar la devolución: " + e.getMessage());
         }
     }
+    private void listAllReturns() {
+        printReturns(returnService.viewAllReturns());
+    }
+
+    private void listReturnsByCustomer() {
+        System.out.print("Identificación del cliente: ");
+        String customerId = scanner.nextLine();
+        printReturns(returnService.viewReturnsByCustomer(customerId));
+    }
+
+    private void listReturnsBySale() {
+        System.out.print("Identificador de la venta: ");
+        String saleId = scanner.nextLine();
+        printReturns(returnService.viewReturnsBySale(saleId));
+    }
 
 
 }
