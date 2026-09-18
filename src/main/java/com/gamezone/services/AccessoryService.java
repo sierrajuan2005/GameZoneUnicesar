@@ -38,5 +38,11 @@ public class AccessoryService {
         return accessoryRepository.loadAll();
     }
 
+    public List<Accessory> listAccessoriesByType(String type) {
+        return accessoryRepository.loadAll().stream()
+                .filter(a -> a.getClass().getSimpleName().equalsIgnoreCase(type))
+                .toList();
+    }
+
 
 }
