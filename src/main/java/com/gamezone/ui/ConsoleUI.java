@@ -829,5 +829,43 @@ public class ConsoleUI {
         }
     }
 
+    private void registerController() {
+        System.out.println("\n=== REGISTRAR CONTROLADOR ===");
+
+        System.out.print("Identificador: ");
+        String id = scanner.nextLine();
+
+        System.out.print("Título: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Precio: ");
+        double price = Double.parseDouble(scanner.nextLine());
+
+        System.out.print("Cantidad disponible: ");
+        int quantity = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Tipo de conexión: ");
+        String connectionType = scanner.nextLine();
+
+        List<Console> consoles = selectCompatibleConsoles();
+
+        try {
+            accessoryService.registerController(
+                    id,
+                    title,
+                    price,
+                    quantity,
+                    consoles,
+                    connectionType
+            );
+
+            System.out.println("Controlador registrado correctamente.");
+
+        } catch (IllegalArgumentException e) {
+            System.out.println("No se pudo registrar el controlador: "
+                    + e.getMessage());
+        }
+    }
+
 
 }
