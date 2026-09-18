@@ -12,23 +12,31 @@ public class SaleService {
     private SaleRepository saleRepository;
     private ProductService productService;
     private WarrantyService warrantyService;
+    private PromotionService promotionService;
 
     /**
      * Creates a SaleService with the required repositories and services.
      *
-     * @param saleRepository repository used to store sales
-     * @param productService service used to manage products and stock
+     * @param saleRepository   repository used to store sales
+     * @param productService   service used to manage products and stock
+     * @param warrantyService  service used to generate warranties for consoles
+     * @param promotionService service used to find the best applicable promotion
      */
-    public SaleService(SaleRepository saleRepository, ProductService productService, WarrantyService warrantyService) {
+    public SaleService(SaleRepository saleRepository, ProductService productService,
+                       WarrantyService warrantyService, PromotionService promotionService) {
         this.saleRepository = saleRepository;
         this.productService = productService;
         this.warrantyService = warrantyService;
+        this.promotionService = promotionService;
     }
 
     /**
-     * Registers a sale and updates the stock of the sold products.
+     * Registers a sale, updates the stock of the sold products,
+     * generates warranties where applicable, applies the best
+     * available promotion to the sale, and persists everything.
      *
      * @param sale sale to register
+     * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
      */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         List<Product> soldProducts = sale.getProducts();
@@ -52,12 +60,30 @@ public class SaleService {
             productService.updateStock(storedProduct, newQuantity);
         }
 
+        applyBestPromotion(sale);
+
         sale.getCustomer().addToPurchaseHistory(sale);
         saleRepository.save(sale);
 
         assignWarranties(sale, productIdsWithExtendedWarranty);
     }
 
+    /**
+     * Finds the best active promotion for the sale, if any, and
+     * assigns its name and discount amount to the sale. If no
+     * promotion applies, the sale keeps no discount.
+     *
+     * @param sale sale to evaluate and update
+     */
+    private void applyBestPromotion(Sale sale) {
+        Promotion bestPromotion = promotionService.findBestPromotionFor(sale);
+
+        if (bestPromotion != null) {
+            double discount = bestPromotion.calculateDiscount(sale);
+            sale.setAppliedPromotionName(bestPromotion.getName());
+            sale.setDiscountAmount(discount);
+        }
+    }
 
     private void assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
         List<String> extendedWarrantyIds = productIdsWithExtendedWarranty == null
@@ -122,14 +148,6 @@ public class SaleService {
         return history;
     }
 
-    /**
-     * Finds a product by its identifier within a given list of products.
-     *
-     * @param products   list of products to search
-     * @param identifier identifier of the product to find
-     * @return the product with the matching identifier
-     * @throws IllegalArgumentException if no product with the given identifier is found
-     */
     private Product findProductById(List<Product> products, String identifier) {
         for (Product product : products) {
             if (product.getIdentifier().equals(identifier)) {
@@ -138,5 +156,21 @@ public class SaleService {
         }
 
         throw new IllegalArgumentException("Product not found: " + identifier);
+    }
+
+    /**
+     * Searches for a sale using its unique identifier.
+     *
+     * @param saleId the identifier of the sale to search for
+     * @return the sale that matches the given identifier, or {@code null} if no sale is found
+     */
+    public Sale findSaleById(String saleId) {
+        for (Sale sale : saleRepository.load()) {
+            if (sale.getIdentifier().equals(saleId)) {
+                return sale;
+            }
+        }
+
+        return null;
     }
 }
