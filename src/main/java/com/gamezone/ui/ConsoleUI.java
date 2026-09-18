@@ -1,10 +1,6 @@
 package com.gamezone.ui;
 import com.gamezone.model.*;
-import com.gamezone.services.PersonService;
-import com.gamezone.services.ProductService;
-import com.gamezone.services.SaleService;
-import com.gamezone.services.WarrantyService;
-import com.gamezone.services.ReturnService;
+import com.gamezone.services.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -22,6 +18,7 @@ public class ConsoleUI {
     private final Scanner scanner;
     private final WarrantyService warrantyService;
     private final ReturnService returnService;
+    private final PromotionService promotionService;
     /**
      * Creates the console user interface.
      *
@@ -29,13 +26,15 @@ public class ConsoleUI {
      * @param productService service used to manage products
      * @param saleService service used to manage sales
      */
-    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService, WarrantyService warrantyService, ReturnService returnService) {
+    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService,
+                     WarrantyService warrantyService, ReturnService returnService, PromotionService promotionService) {
         this.personService = personService;
         this.productService = productService;
         this.saleService = saleService;
-        this.returnService = returnService;
-        this.scanner = new Scanner(System.in);
         this.warrantyService = warrantyService;
+        this.returnService = returnService;
+        this.promotionService = promotionService;
+        this.scanner = new Scanner(System.in);
     }
 
 
