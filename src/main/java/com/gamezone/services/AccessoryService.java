@@ -1,6 +1,7 @@
 package com.gamezone.services;
 
 import com.gamezone.model.Accessory;
+import com.gamezone.model.Cable;
 import com.gamezone.model.Console;
 import com.gamezone.model.Controller;
 import com.gamezone.persistence.AccessoryRepository;
@@ -19,6 +20,13 @@ public class AccessoryService {
         Controller controller = new Controller(id, title, price, availability, consoles, connectionType);
         List<Accessory> accessories = accessoryRepository.loadAll();
         accessories.add(controller);
+        accessoryRepository.saveAll(accessories);
+    }
+
+    public void registerCable(String id, String title, double price, int availability, List<Console> consoles, double length, String connectorType) {
+        Cable cable = new Cable(id, title, price, availability, consoles, length, connectorType);
+        List<Accessory> accessories = accessoryRepository.loadAll();
+        accessories.add(cable);
         accessoryRepository.saveAll(accessories);
     }
 
