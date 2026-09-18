@@ -35,7 +35,9 @@ public class Main {
         preloadSellers(personService);
 
         ConsoleUI consoleUI = new ConsoleUI(personService, productService, saleService, warrantyService, returnService);
+        consoleUI.start();
     }
+
 
     private static void preloadSellers(PersonService personService) {
 
