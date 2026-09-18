@@ -262,6 +262,7 @@ public class ConsoleUI {
         System.out.println("2. List all sales");
         System.out.println("3. View a customer's purchase history");
         System.out.println("4. View sales handled by a seller");
+        System.out.println("5. Ver detalle de una venta específica");
         System.out.println("0. Back");
         System.out.print("Choose an option: ");
 
@@ -270,9 +271,22 @@ public class ConsoleUI {
             case "2" -> listAllSales();
             case "3" -> showCustomerHistory();
             case "4" -> showSellerHistory();
+            case "5" -> showSaleDetail();
             case "0" -> { }
             default -> System.out.println("Invalid option.");
         }
+    }
+
+    private void showSaleDetail() {
+        System.out.print("Sale ID: ");
+        String saleId = scanner.nextLine();
+
+        Sale sale = saleService.findSaleById(saleId);
+        if (sale == null) {
+            System.out.println("No sale was found with that ID.");
+            return;
+        }
+        System.out.println(sale.generateReceipt());
     }
 
     private void registerSale() {
