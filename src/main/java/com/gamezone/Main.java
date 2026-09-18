@@ -14,7 +14,8 @@ import com.gamezone.services.PromotionService;
 import com.gamezone.ui.ConsoleUI;
 import com.gamezone.services.ReturnService;
 import com.gamezone.persistence.ReturnRepository;
-
+import com.gamezone.persistence.AccessoryRepository;
+import com.gamezone.services.AccessoryService;
 
 
 public class Main {
@@ -22,23 +23,24 @@ public class Main {
 
         PersonRepository personRepository = new PersonRepository();
         ProductRepository productRepository = new ProductRepository();
+        AccessoryRepository accessoryRepository = new AccessoryRepository();
         SaleRepository saleRepository = new SaleRepository();
         PromotionRepository promotionRepository = new PromotionRepository();
         WarrantyRepository warrantyRepository = new WarrantyRepository(saleRepository, productRepository);
 
         PersonService personService = new PersonService(personRepository);
         ProductService productService = new ProductService(productRepository);
-
+        AccessoryService accessoryService = new AccessoryService(accessoryRepository);
         PromotionService promotionService = new PromotionService(promotionRepository);
         WarrantyService warrantyService = new WarrantyService(warrantyRepository);
-        SaleService saleService = new SaleService(saleRepository, productService, warrantyService, promotionService);
+        SaleService saleService = new SaleService(saleRepository, productService, accessoryService, warrantyService, promotionService);
         ReturnRepository returnRepository = new ReturnRepository(saleService, productService);
         ReturnService returnService = new ReturnService(returnRepository, saleService, productService);
 
 
         preloadSellers(personService);
 
-        ConsoleUI consoleUI = new ConsoleUI(personService, productService, saleService, warrantyService, returnService, promotionService);
+        ConsoleUI consoleUI = new ConsoleUI(personService, productService,accessoryService, saleService, warrantyService, returnService, promotionService);
         consoleUI.start();
     }
 

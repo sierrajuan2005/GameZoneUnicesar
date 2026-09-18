@@ -1092,7 +1092,4 @@ public class ConsoleUI {
         }
     }
 
-
-
-
 }
