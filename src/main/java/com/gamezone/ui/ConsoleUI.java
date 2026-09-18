@@ -28,7 +28,7 @@ public class ConsoleUI {
      * @param productService service used to manage products
      * @param saleService service used to manage sales
      */
-    public ConsoleUI(PersonService personService, ProductService productService, SaleService saleService,
+    public ConsoleUI(PersonService personService, ProductService productService, AccessoryService accessoryService, SaleService saleService,
                      WarrantyService warrantyService, ReturnService returnService, PromotionService promotionService)  {
         this.personService = personService;
         this.productService = productService;
@@ -53,9 +53,10 @@ public class ConsoleUI {
                 case "1" -> showProductMenu();
                 case "2" -> showPersonMenu();
                 case "3" -> showSaleMenu();
-                case "4" -> showWarrantyMenu();
-                case "5" -> showReturnMenu();
-                case "6" -> showPromotionMenu();
+                case "4" -> showAccessoryMenu();
+                case "5" -> showWarrantyMenu();
+                case "6" -> showReturnMenu();
+                case "7" -> showPromotionMenu();
                 case "0" -> running = false;
                 default -> System.out.println("Invalid option.");
             }
@@ -798,4 +799,35 @@ public class ConsoleUI {
             );
         }
     }
+
+
+    private void showAccessoryMenu() {
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\n=== GESTIÓN DE ACCESORIOS ===");
+            System.out.println("1. Registrar controlador");
+            System.out.println("2. Registrar cable");
+            System.out.println("3. Registrar memoria");
+            System.out.println("4. Listar todos los accesorios");
+            System.out.println("5. Listar accesorios por tipo");
+            System.out.println("6. Buscar accesorios compatibles con consola");
+            System.out.println("0. Volver");
+
+            System.out.print("Seleccione una opción: ");
+
+            switch (scanner.nextLine()) {
+                case "1" -> registerController();
+                case "2" -> registerCable();
+                case "3" -> registerMemory();
+                case "4" -> listAllAccessories();
+                case "5" -> listAccessoriesByType();
+                case "6" -> listCompatibleAccessories();
+                case "0" -> running = false;
+                default -> System.out.println("Opción inválida.");
+            }
+        }
+    }
+
+
 }
