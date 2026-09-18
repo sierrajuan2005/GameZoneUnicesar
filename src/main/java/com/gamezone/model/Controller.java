@@ -17,8 +17,8 @@ public class Controller extends Accessory{
      * @param compatibleConsoles consoles compatible with the controller
      * @param connectionType type of connection for the controller
      */
-    public Controller(String identifier, String title, double price, int availability, List<Console> compatibleConsoles, String connectionType) {
-        super(identifier, title, price, availability, compatibleConsoles);
+    public Controller(String identifier, String title, double price, int availableQuantity, List<Console> compatibleConsoles, String connectionType) {
+        super(identifier, title, price, availableQuantity, compatibleConsoles);
         this.connectionType = connectionType;
     }
 
