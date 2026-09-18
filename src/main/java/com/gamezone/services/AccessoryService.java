@@ -58,5 +58,16 @@ public class AccessoryService {
                 .orElse(null);
     }
 
+    public void updateStock(String accessoryId, int quantity) {
+        List<Accessory> accessories = accessoryRepository.loadAll();
+        for (Accessory a : accessories) {
+            if (a.getIdentifier().equals(accessoryId)) {
+                a.setAvailableQuantity(quantity);
+                break;
+            }
+        }
+        accessoryRepository.saveAll(accessories);
+    }
+
 
 }
