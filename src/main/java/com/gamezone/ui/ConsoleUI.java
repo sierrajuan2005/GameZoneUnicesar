@@ -20,6 +20,8 @@ public class ConsoleUI {
     private final SaleService saleService;
     private final Scanner scanner;
     private final WarrantyService warrantyService;
+    private final promotionService promotionService;
+
     /**
      * Creates the console user interface.
      *
