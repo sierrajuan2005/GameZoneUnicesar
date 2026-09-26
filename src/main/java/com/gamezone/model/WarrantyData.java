@@ -10,4 +10,12 @@ public class WarrantyData {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    public WarrantyData(String type, String identifier, String productIdentifier, String saleIdentifier, LocalDate startDate, LocalDate endDate) {
+        this.type = type;
+        this.identifier = identifier;
+        this.productIdentifier = productIdentifier;
+        this.saleIdentifier = saleIdentifier;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
