@@ -145,10 +145,7 @@ public class WarrantyRepository {
             warranties.clear();
 
             for (String line : lines){
-                Warranty warranty = convertFromCsv(line);
-                if (warranty != null){
-                    warranties.add(warranty);
-                }
+                WarrantyData data = convertFromCsv(line);
             }
         }
         catch (IOException e){

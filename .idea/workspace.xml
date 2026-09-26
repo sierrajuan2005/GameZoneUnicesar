@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: load only identifiers in convertFromCsv">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/model/WarrantyData.java" afterDir="false" />
-    </list>
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="feat: import WarrantyData model into WarrantyRepository" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -128,6 +126,16 @@
     <MESSAGE value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
     <MESSAGE value="refactor: store only identifiers in convertToCsv" />
     <MESSAGE value="refactor: load only identifiers in convertFromCsv" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: load only identifiers in convertFromCsv" />
+    <MESSAGE value="feat: create WarrantyData class" />
+    <MESSAGE value="feat: add attributes to WarrantyData" />
+    <MESSAGE value="feat: add constructor to WarrantyData" />
+    <MESSAGE value="feat: add getType method to WarrantyData" />
+    <MESSAGE value="feat: add getIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getProductIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getSaleIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getStartDate method to WarrantyData" />
+    <MESSAGE value="feat: add getEndDate method to WarrantyData" />
+    <MESSAGE value="feat: import WarrantyData model into WarrantyRepository" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: import WarrantyData model into WarrantyRepository" />
   </component>
 </project>
