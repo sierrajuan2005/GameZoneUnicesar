@@ -97,29 +97,16 @@ public class WarrantyRepository {
     }
 
 
-    /**
-     * Converts a CSV line into a {@link Warranty} object.
-     *
-     * @param line CSV line containing warranty data
-     * @return warranty object, or null if type is invalid
-     */
-    private Warranty convertFromCsv(String line){
+    private WarrantyData convertFromCsv(String line){
         String[] data= line.split(";");
-        String type = data[0];
-        String identifier = data[1];
-        String productIdentifier = data[2];
-        String saleIdentifier = data[3];
-        LocalDate startDate = LocalDate.parse(data[4]);
-
-        Product product = productRepository.findByIdentifier(productIdentifier);
-        Sale sale = saleRepository.findByIdentifier(saleIdentifier);
-
-        if ("BASIC".equals(type)) {
-            return new BasicWarranty(identifier, product, sale, startDate);
-        } else if ("EXTENDED".equals(type)) {
-            return new ExtendedWarranty(identifier, product, sale, startDate);
-        }
-        return null;
+        return new WarrantyData(
+                data[0],
+                data[1],
+                data[2],
+                data[3],
+                LocalDate.parse(data[4]),
+                LocalDate.parse(data[5])
+        );
     }
 
 
