@@ -74,7 +74,10 @@ public class CategoryDiscount extends Promotion {
                 categoryTotal += product.getPrice();
             } else if(targetCategory.equals("CONSOLE") && product instanceof Console){
                 categoryTotal += product.getPrice();
+            }else if(targetCategory.equals("ACCESSORY") && product instanceof Accessory){
+                categoryTotal += product.getPrice();
             }
+            
             
         }
         return categoryTotal * (discountPercentage / 100);
