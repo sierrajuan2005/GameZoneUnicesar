@@ -26,4 +26,8 @@ public class WarrantyData {
     public String getIdentifier() {
         return identifier;
     }
+
+    public String getProductIdentifier() {
+        return productIdentifier;
+    }
 }
