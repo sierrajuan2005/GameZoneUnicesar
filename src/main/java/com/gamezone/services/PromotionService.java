@@ -90,6 +90,12 @@ public class PromotionService {
      */
     public void registerCategoryDiscount(String identifier, String name, LocalDate startDate, LocalDate endDate, double discountPercentage, String targetCategory) {
         validateUniqueId(identifier);
+
+        if(!targetCategory.equals("VIDEOGAME") && !targetCategory.equals("CONSOLE") && !targetCategory.equals("ACCESSORY")) {
+            throw new IllegalArgumentException("Invalid target category. Allowed categories: VIDEOGAME, CONSOLE, ACCESSORY.");
+        }
+
+        
         CategoryDiscount cd = new CategoryDiscount(identifier, name, startDate, endDate, discountPercentage, targetCategory);
         savePromotion(cd);
     }
