@@ -725,7 +725,7 @@ public class ConsoleUI {
             System.out.print("Discount percentage (0-100): ");
             double percentage = Double.parseDouble(scanner.nextLine());
 
-            System.out.print("Target category (VIDEOGAME/CONSOLE): ");
+            System.out.print("Target category (VIDEOGAME/CONSOLE/ACCESSORY): ");
             String targetCategory = scanner.nextLine();
 
             promotionService.registerCategoryDiscount(
