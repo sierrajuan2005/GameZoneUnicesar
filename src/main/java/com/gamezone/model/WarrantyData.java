@@ -34,4 +34,8 @@ public class WarrantyData {
     public String getSaleIdentifier() {
         return saleIdentifier;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
 }
