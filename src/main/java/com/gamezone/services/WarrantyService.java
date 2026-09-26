@@ -1,39 +1,29 @@
 package com.gamezone.services;
 
 import com.gamezone.model.*;
-import com.gamezone.persistence.WarrantyRepository;
+import com.gamezone.persistence.*;
 
+import javax.swing.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-/**
- * Service class that handles the business logic related to warranties.
- * <p>
- * This class provides methods to:
- * <ul>
- *   <li>Register and list warranties.</li>
- *   <li>Find warranties by identifier or by product and sale.</li>
- *   <li>Reload warranties from persistence.</li>
- *   <li>Assign basic and extended warranties to products.</li>
- *   <li>List active warranties and those expiring soon.</li>
- * </ul>
- * It interacts with {@link WarrantyRepository} for persistence operations.
- */
 public class WarrantyService {
 
     private final WarrantyRepository warrantyRepository;
+    private final SaleRepository saleRepository;
+    private final ProductService productService;
 
-    /**
-     * Creates a WarrantyService with the required repository.
-     *
-     * @param warrantyRepository repository used to store and retrieve warranties
-     */
-    public WarrantyService(WarrantyRepository warrantyRepository) {
+    private List<Warranty> warranties;
+
+    public WarrantyService(WarrantyRepository warrantyRepository, SaleRepository saleRepository, ProductService productService) {
         this.warrantyRepository = warrantyRepository;
+        this.saleRepository = saleRepository;
+        this.productService = productService;
+        this.warranties = new ArrayList<>();
+        reloadWarranties();
     }
-
 
     /**
      * Registers a warranty in the repository.

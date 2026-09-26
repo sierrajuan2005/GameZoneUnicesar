@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="feat: import WarrantyData model into WarrantyRepository" />
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="feat: add parseLine method to expose WarrantyData conversion">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/services/WarrantyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/services/WarrantyService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -136,6 +139,8 @@
     <MESSAGE value="feat: add getStartDate method to WarrantyData" />
     <MESSAGE value="feat: add getEndDate method to WarrantyData" />
     <MESSAGE value="feat: import WarrantyData model into WarrantyRepository" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: import WarrantyData model into WarrantyRepository" />
+    <MESSAGE value="refactor: update loadAll to return raw CSV lines only" />
+    <MESSAGE value="feat: add parseLine method to expose WarrantyData conversion" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: add parseLine method to expose WarrantyData conversion" />
   </component>
 </project>
