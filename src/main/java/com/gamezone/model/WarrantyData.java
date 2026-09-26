@@ -30,4 +30,8 @@ public class WarrantyData {
     public String getProductIdentifier() {
         return productIdentifier;
     }
+
+    public String getSaleIdentifier() {
+        return saleIdentifier;
+    }
 }
