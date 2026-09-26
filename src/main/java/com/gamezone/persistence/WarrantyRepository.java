@@ -32,19 +32,13 @@ public class WarrantyRepository {
     private static final String FILE_PATH = "data/warranties.csv";
 
     private List<Warranty> warranties;
-    private final SaleRepository saleRepository;
-    private final ProductRepository productRepository;
+
 
     /**
      * Creates a WarrantyRepository with the required repositories.
      * Loads all warranties from the CSV file into memory.
-     *
-     * @param saleRepository    repository used to retrieve sales
-     * @param productRepository repository used to retrieve products
      */
-    public WarrantyRepository(SaleRepository saleRepository, ProductRepository productRepository) {
-        this.saleRepository = saleRepository;
-        this.productRepository = productRepository;
+    public WarrantyRepository() {
         this.warranties = new ArrayList<>();
         loadAll();
     }
