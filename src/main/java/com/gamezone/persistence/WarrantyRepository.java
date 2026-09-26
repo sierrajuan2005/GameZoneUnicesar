@@ -154,6 +154,10 @@ public class WarrantyRepository {
         return warranties;
     }
 
+    public WarrantyData parseLine(String line) {
+        return convertFromCsv(line);
+    }
+
 
 
 }
