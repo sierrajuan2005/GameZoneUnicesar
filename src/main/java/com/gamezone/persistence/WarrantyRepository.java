@@ -1,6 +1,7 @@
 package com.gamezone.persistence;
 
-import com.gamezone.model.*;
+import com.gamezone.model.Warranty;
+import com.gamezone.model.WarrantyData;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,13 +15,7 @@ public class WarrantyRepository {
 
     private static final String FILE_PATH = "data/warranties.csv";
 
-    public WarrantyRepository() {
-        loadAll();
-    }
-
-
-    private String convertToCsv (Warranty w){
-
+    private String convertToCsv(Warranty w) {
         return w.getWarrantyType() + ";" +
                 w.getIdentifier() + ";" +
                 w.getProduct().getIdentifier() + ";" +
@@ -29,9 +24,8 @@ public class WarrantyRepository {
                 w.getEndDate();
     }
 
-
-    private WarrantyData convertFromCsv(String line){
-        String[] data= line.split(";");
+    private WarrantyData convertFromCsv(String line) {
+        String[] data = line.split(";");
         return new WarrantyData(
                 data[0],
                 data[1],
@@ -42,23 +36,20 @@ public class WarrantyRepository {
         );
     }
 
-
-
-    private  void saveAll(List<Warranty> warranties){
+    public void saveAll(List<Warranty> warranties) {
         Path path = Paths.get(FILE_PATH);
         List<String> lines = new ArrayList<>();
 
-        for (Warranty w : warranties){
+        for (Warranty w : warranties) {
             lines.add(convertToCsv(w));
         }
+
         try {
             Files.write(path, lines);
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException("Error saving warranties.", e);
         }
     }
-
-
 
     public List<String> loadAll() {
         Path path = Paths.get(FILE_PATH);
@@ -75,7 +66,4 @@ public class WarrantyRepository {
     public WarrantyData parseLine(String line) {
         return convertFromCsv(line);
     }
-
-
-
 }
