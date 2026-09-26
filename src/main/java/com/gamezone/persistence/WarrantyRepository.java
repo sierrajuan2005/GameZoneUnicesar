@@ -1,10 +1,6 @@
 package com.gamezone.persistence;
 
-import com.gamezone.model.BasicWarranty;
-import com.gamezone.model.ExtendedWarranty;
-import com.gamezone.model.Product;
-import com.gamezone.model.Sale;
-import com.gamezone.model.Warranty;
+import com.gamezone.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
