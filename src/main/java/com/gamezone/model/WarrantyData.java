@@ -18,4 +18,8 @@ public class WarrantyData {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    public String getType() {
+        return type;
+    }
 }
