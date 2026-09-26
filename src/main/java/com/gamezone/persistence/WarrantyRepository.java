@@ -22,15 +22,6 @@ public class WarrantyRepository {
 
     }
 
-
-    public List<Warranty> getAllWarranties(){
-
-    }
-
-    public Warranty findByIdentifier(String identifier){
-    }
-
-
     private String convertToCsv (Warranty w){
 
         return w.getWarrantyType() + ";" +
