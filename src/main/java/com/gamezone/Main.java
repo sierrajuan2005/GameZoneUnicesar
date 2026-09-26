@@ -26,13 +26,13 @@ public class Main {
         AccessoryRepository accessoryRepository = new AccessoryRepository();
         SaleRepository saleRepository = new SaleRepository();
         PromotionRepository promotionRepository = new PromotionRepository();
-        WarrantyRepository warrantyRepository = new WarrantyRepository(saleRepository, productRepository);
+        WarrantyRepository warrantyRepository = new WarrantyRepository();
 
         PersonService personService = new PersonService(personRepository);
         ProductService productService = new ProductService(productRepository);
         AccessoryService accessoryService = new AccessoryService(accessoryRepository);
         PromotionService promotionService = new PromotionService(promotionRepository);
-        WarrantyService warrantyService = new WarrantyService(warrantyRepository);
+        WarrantyService warrantyService = new WarrantyService(warrantyRepository, saleRepository, productService);
         SaleService saleService = new SaleService(saleRepository, productService, accessoryService, warrantyService, promotionService);
         ReturnRepository returnRepository = new ReturnRepository(saleService, productService);
         ReturnService returnService = new ReturnService(returnRepository, saleService, productService);

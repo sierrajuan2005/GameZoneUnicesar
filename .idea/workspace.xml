@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="feat: add parseLine method to expose WarrantyData conversion">
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/services/WarrantyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/services/WarrantyService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/Main.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,6 +141,10 @@
     <MESSAGE value="feat: import WarrantyData model into WarrantyRepository" />
     <MESSAGE value="refactor: update loadAll to return raw CSV lines only" />
     <MESSAGE value="feat: add parseLine method to expose WarrantyData conversion" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: add parseLine method to expose WarrantyData conversion" />
+    <MESSAGE value="feat: inject SaleRepository and ProductService and constructor into WarrantyService" />
+    <MESSAGE value="feat: add buildWarranty method to reconstruct Warranty from WarrantyData" />
+    <MESSAGE value="refactor: update reloadWarranties to use WarrantyData and buildWarranty" />
+    <MESSAGE value="refactor: use internal warranties list instead of repository direct access" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: use internal warranties list instead of repository direct access" />
   </component>
 </project>
