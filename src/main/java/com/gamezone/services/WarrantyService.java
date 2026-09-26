@@ -80,8 +80,16 @@ public class WarrantyService {
      *
      * @return list of warranties loaded from storage
      */
-    public List<Warranty> reloadWarranties(){
-        return warrantyRepository.loadAll();
+    public void reloadWarranties(){
+        List<String> lines = warrantyRepository.loadAll();
+        warranties.clear();
+        for (String line : lines){
+            WarrantyData data = warrantyRepository.parseLine(line);
+            Warranty warranty = buildWarranty(data);
+            if (warranty != null){
+                warranties.add(warranty);
+            }
+        }
     }
 
 
