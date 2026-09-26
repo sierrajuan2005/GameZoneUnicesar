@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/persistence/WarrantyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/persistence/WarrantyRepository.java" afterDir="false" />
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: load only identifiers in convertFromCsv">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/model/WarrantyData.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,6 +126,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
+    <MESSAGE value="refactor: store only identifiers in convertToCsv" />
+    <MESSAGE value="refactor: load only identifiers in convertFromCsv" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: load only identifiers in convertFromCsv" />
   </component>
 </project>
