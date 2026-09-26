@@ -18,9 +18,6 @@ public class WarrantyRepository {
         loadAll();
     }
 
-    public void addWarranty(Warranty warranty){
-
-    }
 
     private String convertToCsv (Warranty w){
 
