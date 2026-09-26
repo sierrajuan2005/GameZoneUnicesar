@@ -60,8 +60,16 @@ public class WarrantyRepository {
 
 
 
-    public List<Warranty> loadAll(){
+    public List<String> loadAll() {
         Path path = Paths.get(FILE_PATH);
+        try {
+            if (!Files.exists(path)) {
+                return new ArrayList<>();
+            }
+            return Files.readAllLines(path);
+        } catch (IOException e) {
+            throw new RuntimeException("Error loading warranties.", e);
+        }
     }
 
     public WarrantyData parseLine(String line) {
