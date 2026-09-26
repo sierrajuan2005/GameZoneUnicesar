@@ -14,6 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Service class that manages the business logic for warranties.
+ * <p>
+ * Responsibilities:
+ * <ul>
+ *   <li>Register warranties and persist them using {@link WarrantyRepository}.</li>
+ *   <li>Reload warranties from CSV storage.</li>
+ *   <li>Assign basic and extended warranties to products.</li>
+ *   <li>Find warranties by identifier, product, or sale.</li>
+ *   <li>List active warranties and those expiring soon.</li>
+ * </ul>
+ * This class interacts with {@link ProductService}, {@link SaleRepository}, and {@link WarrantyRepository}.
+ */
 public class WarrantyService {
 
     private final WarrantyRepository warrantyRepository;
@@ -22,6 +35,13 @@ public class WarrantyService {
 
     private List<Warranty> warranties;
 
+    /**
+     * Constructs the service with required repositories and services.
+     *
+     * @param warrantyRepository repository for warranty persistence
+     * @param saleRepository repository for sales
+     * @param productService service for products
+     */
     public WarrantyService(WarrantyRepository warrantyRepository, SaleRepository saleRepository, ProductService productService) {
         this.warrantyRepository = warrantyRepository;
         this.saleRepository = saleRepository;
@@ -30,6 +50,12 @@ public class WarrantyService {
         reloadWarranties();
     }
 
+    /**
+     * Builds a {@link Warranty} object from a {@link WarrantyData} DTO.
+     *
+     * @param data warranty data
+     * @return constructed Warranty, or null if type is invalid
+     */
     public Warranty buildWarranty(WarrantyData data) {
         Product product = productService.findByIdentifier(data.getProductIdentifier());
         Sale sale = saleRepository.findByIdentifier(data.getSaleIdentifier());
@@ -43,7 +69,7 @@ public class WarrantyService {
     }
 
     /**
-     * Registers a warranty in the repository.
+     * Registers a warranty and persists it.
      *
      * @param warranty warranty to register
      * @throws IllegalArgumentException if the warranty is null
@@ -52,20 +78,18 @@ public class WarrantyService {
         if (warranty == null){
             throw new IllegalArgumentException("Warranty cannot be null");
         }
-        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
+        warrantyRepository.saveAll(warranties);
     }
 
     /**
-     * Returns all warranties currently stored.
+     * Returns all warranties currently stored in memory.
      *
      * @return list of warranties
      */
     public List<Warranty> listWarranties(){
-
         return new ArrayList<>(warranties);
     }
-
 
     /**
      * Finds a warranty by its identifier.
@@ -84,11 +108,8 @@ public class WarrantyService {
                 .orElse(null);
     }
 
-
     /**
-     * Reloads warranties from the persistence layer.
-     *
-     * @return list of warranties loaded from storage
+     * Reloads warranties from persistence storage.
      */
     public void reloadWarranties(){
         List<String> lines = warrantyRepository.loadAll();
@@ -102,7 +123,6 @@ public class WarrantyService {
         }
     }
 
-
     /**
      * Assigns a basic warranty to a product and persists it.
      *
@@ -113,11 +133,10 @@ public class WarrantyService {
      */
     public BasicWarranty assignBasicWarranty(Product product, Sale sale, LocalDate startDate) {
         BasicWarranty warranty = new BasicWarranty(product.getIdentifier(), product, sale, startDate);
-        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
+        warrantyRepository.saveAll(warranties);
         return warranty;
     }
-
 
     /**
      * Assigns an extended warranty to a product and persists it.
@@ -129,11 +148,10 @@ public class WarrantyService {
      */
     public ExtendedWarranty assignExtendedWarranty(Product product, Sale sale, LocalDate startDate) {
         ExtendedWarranty warranty = new ExtendedWarranty(product.getIdentifier(), product, sale, startDate);
-        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
+        warrantyRepository.saveAll(warranties);
         return warranty;
     }
-
 
     /**
      * Finds a warranty by product and sale identifiers.
@@ -149,7 +167,6 @@ public class WarrantyService {
                 .findFirst()
                 .orElse(null);
     }
-
 
     /**
      * Returns all warranties that are currently active.
@@ -176,6 +193,4 @@ public class WarrantyService {
                 .filter(w -> !w.getEndDate().isBefore(today) && !w.getEndDate().isAfter(limit))
                 .collect(Collectors.toList());
     }
-
-
 }
