@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2026_10_44a__m___Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_09_2026_10_44 a_ m__[Changes]/shelved.patch" beforeDir="false" />
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/persistence/WarrantyRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/persistence/WarrantyRepository.java" afterDir="false" />
     </list>
@@ -126,5 +124,9 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
   </component>
 </project>
