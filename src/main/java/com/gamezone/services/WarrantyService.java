@@ -25,6 +25,18 @@ public class WarrantyService {
         reloadWarranties();
     }
 
+    public Warranty buildWarranty(WarrantyData data) {
+        Product product = productService.findByIdentifier(data.getProductIdentifier());
+        Sale sale = saleRepository.findByIdentifier(data.getSaleIdentifier());
+
+        if ("BASIC".equals(data.getType())) {
+            return new BasicWarranty(data.getIdentifier(), product, sale ,data.getStartDate());
+        } else if ("EXTENDED".equals(data.getType())) {
+            return new ExtendedWarranty(data.getIdentifier(), product, sale ,data.getStartDate());
+        }
+        return null;
+    }
+
     /**
      * Registers a warranty in the repository.
      *
