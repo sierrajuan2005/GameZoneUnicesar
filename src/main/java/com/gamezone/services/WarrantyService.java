@@ -52,7 +52,7 @@ public class WarrantyService {
         if (warranty == null){
             throw new IllegalArgumentException("Warranty cannot be null");
         }
-        warrantyRepository.addWarranty(warranty);
+        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
     }
 
@@ -113,7 +113,7 @@ public class WarrantyService {
      */
     public BasicWarranty assignBasicWarranty(Product product, Sale sale, LocalDate startDate) {
         BasicWarranty warranty = new BasicWarranty(product.getIdentifier(), product, sale, startDate);
-        warrantyRepository.addWarranty(warranty);
+        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
         return warranty;
     }
@@ -129,7 +129,7 @@ public class WarrantyService {
      */
     public ExtendedWarranty assignExtendedWarranty(Product product, Sale sale, LocalDate startDate) {
         ExtendedWarranty warranty = new ExtendedWarranty(product.getIdentifier(), product, sale, startDate);
-        warrantyRepository.addWarranty(warranty);
+        warrantyRepository.saveAll(warranties);
         warranties.add(warranty);
         return warranty;
     }
