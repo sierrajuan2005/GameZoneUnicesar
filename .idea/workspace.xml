@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="" />
+    <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,11 +23,23 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="develop" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ejuniorcarrillo-source&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/sierrajuan2005/GameZoneUnicesar.git&quot;,
+    &quot;accountId&quot;: &quot;3ba625c4-04d6-4c9c-bcbe-cbeebcbd5783&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4,
   &quot;fromUser&quot;: false
@@ -42,7 +57,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "fix/warranty-circular-dependency",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pc/GameZoneUnicesar",
     "node.js.detected.package.jshint": "true",
@@ -92,8 +107,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-34e2839f716b-intellij.indexing.shared.core-IU-262.9437.185" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.9437.185" />
+        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
       </set>
     </attachedChunks>
   </component>
@@ -109,5 +124,27 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refactor: remove SaleRepository and ProductRepository dependencies from WarrantyRepository" />
+    <MESSAGE value="refactor: store only identifiers in convertToCsv" />
+    <MESSAGE value="refactor: load only identifiers in convertFromCsv" />
+    <MESSAGE value="feat: create WarrantyData class" />
+    <MESSAGE value="feat: add attributes to WarrantyData" />
+    <MESSAGE value="feat: add constructor to WarrantyData" />
+    <MESSAGE value="feat: add getType method to WarrantyData" />
+    <MESSAGE value="feat: add getIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getProductIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getSaleIdentifier method to WarrantyData" />
+    <MESSAGE value="feat: add getStartDate method to WarrantyData" />
+    <MESSAGE value="feat: add getEndDate method to WarrantyData" />
+    <MESSAGE value="feat: import WarrantyData model into WarrantyRepository" />
+    <MESSAGE value="refactor: update loadAll to return raw CSV lines only" />
+    <MESSAGE value="feat: add parseLine method to expose WarrantyData conversion" />
+    <MESSAGE value="feat: inject SaleRepository and ProductService and constructor into WarrantyService" />
+    <MESSAGE value="feat: add buildWarranty method to reconstruct Warranty from WarrantyData" />
+    <MESSAGE value="refactor: update reloadWarranties to use WarrantyData and buildWarranty" />
+    <MESSAGE value="refactor: use internal warranties list instead of repository direct access" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: use internal warranties list instead of repository direct access" />
   </component>
 </project>
