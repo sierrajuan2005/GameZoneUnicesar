@@ -66,7 +66,8 @@ public class Return {
         receipt.append("Returned Products:\n");
         if (returnedProducts != null) {
             for (Product product : returnedProducts) {
-                receipt.append("- ").append(product.getTitle()).append(": $").append(product.getPrice()).append("\n");
+                receipt.append("- ").append(product.getTitle())
+                        .append(": $").append(product.getPrice()).append("\n");
             }
         }
         receipt.append("Reason for Return: ").append(reason).append("\n");
