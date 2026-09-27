@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Service responsible for managing product and accessory returns.
  * Handles eligibility checks, inventory restoration, sale updates,
- * and monthly financial balance calculations.
+ * warranty cancellation, and monthly financial balance calculations.
  */
 public class ReturnService {
 
@@ -23,7 +23,6 @@ public class ReturnService {
     private final AccessoryService accessoryService;
     private final WarrantyService warrantyService;
 
-
     /**
      * Constructs a ReturnService with required dependencies.
      *
@@ -31,6 +30,7 @@ public class ReturnService {
      * @param saleService service for managing sales
      * @param productService service for managing products
      * @param accessoryService service for managing accessories
+     * @param warrantyService service for managing warranties
      */
     public ReturnService(ReturnRepository returnRepository, SaleService saleService, ProductService productService, AccessoryService accessoryService, WarrantyService warrantyService) {
         this.returnRepository = returnRepository;
@@ -42,12 +42,14 @@ public class ReturnService {
 
     /**
      * Registers a return for a given sale and products.
-     * Restores stock depending on product type and persists the return.
+     * Restores stock depending on product type, cancels warranties,
+     * calculates refund amount including warranty reimbursement,
+     * and persists the return.
      *
      * @param identifier sale identifier
      * @param productIds list of product identifiers to return
      * @param reason reason for the return
-     * @return created Return record
+     * @return created Return record with refund amount
      */
     public Return registerReturn(String identifier, List<String> productIds, String reason) {
         Sale sale = saleService.findSaleById(identifier);
