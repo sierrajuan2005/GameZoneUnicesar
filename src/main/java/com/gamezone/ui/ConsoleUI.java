@@ -691,7 +691,18 @@ public class ConsoleUI {
 
         printReturns(returnService.viewReturnsBySale(saleId));
     }
-
+    /**
+     * Displays the monthly financial report for a given month and year.
+     * <p>
+     * This method prompts the user to enter a month and year,
+     * then calculates and displays:
+     * <ul>
+     *   <li>Total sales for the period</li>
+     *   <li>Total returns for the period</li>
+     *   <li>Net balance (sales - returns)</li>
+     * </ul>
+     * It also handles invalid numeric input and invalid month/year values.
+     */
     private void showMonthlyBalance() {
         try {
             System.out.print("Month (1-12): ");
@@ -700,13 +711,17 @@ public class ConsoleUI {
             System.out.print("Year: ");
             int year = Integer.parseInt(scanner.nextLine());
 
+            double totalSales = returnService.calculateMonthlySales(month, year);
+            double totalReturns = returnService.calculateMonthlyReturns(month, year);
             double balance = returnService.generateMonthlyBalance(month, year);
 
-            System.out.println("Net balance for " + month + "/" + year + ": $" + balance);
+            System.out.println("Monthly Report (" + month + "/" + year + ")");
+            System.out.println("Total Sales: $" + totalSales);
+            System.out.println("Total Returns: $" + totalReturns);
+            System.out.println("Net Balance: $" + balance);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: month and year must be valid numeric values.");
-
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }

@@ -126,6 +126,35 @@ public class ReturnService {
     }
 
     /**
+     * Calculates the total sales for a given month and year.
+     *
+     * @param month month number (1-12)
+     * @param year year number
+     * @return total sales amount
+     */
+    public double calculateMonthlySales(int month, int year) {
+        return saleService.listSales().stream()
+                .filter(sale -> sale.getDate().getMonthValue() == month && sale.getDate().getYear() == year)
+                .mapToDouble(Sale::calculateTotal)
+                .sum();
+    }
+
+    /**
+     * Calculates the total returns for a given month and year.
+     *
+     * @param month month number (1-12)
+     * @param year year number
+     * @return total returns amount
+     */
+    public double calculateMonthlyReturns(int month, int year) {
+        return returnRepository.loadAll().stream()
+                .filter(returnRecord -> returnRecord.getReturnDate().getMonthValue() == month
+                        && returnRecord.getReturnDate().getYear() == year)
+                .mapToDouble(Return::getRefundAmount)
+                .sum();
+    }
+
+    /**
      * Generates monthly balance by subtracting returns from sales.
      *
      * @param month month number (1-12)
@@ -139,22 +168,6 @@ public class ReturnService {
         if (year < 1) {
             throw new IllegalArgumentException("Year must be greater than zero.");
         }
-
-        double totalSales = 0.0;
-        double totalReturns = 0.0;
-
-        for (Sale sale : saleService.listSales()) {
-            if (sale.getDate().getMonthValue() == month && sale.getDate().getYear() == year) {
-                totalSales += sale.calculateTotal();
-            }
-        }
-
-        for (Return returnRecord : returnRepository.loadAll()) {
-            if (returnRecord.getReturnDate().getMonthValue() == month && returnRecord.getReturnDate().getYear() == year) {
-                totalReturns += returnRecord.getRefundAmount();
-            }
-        }
-
-        return totalSales - totalReturns;
+        return calculateMonthlySales(month, year) - calculateMonthlyReturns(month, year);
     }
 }
