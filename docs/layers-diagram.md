@@ -60,3 +60,12 @@ classDef ui fill:#eef2ff,stroke:#818cf8,stroke-width:2px
 classDef service fill:#f0fdfa,stroke:#2dd4bf,stroke-width:2px
 classDef persistence fill:#fff7ed,stroke:#fb923c,stroke-width:2px
 classDef model fill:#f5f3ff,stroke:#a78bfa,stroke-width:2px
+
+Add one line per new/changed class in each layer:
+
+model: Accessory, Controller, Cable, Memory, Promotion, PercentageDiscount, CategoryDiscount, BulkPurchaseDiscount, Warranty, BasicWarranty, ExtendedWarranty, Return
+persistence: AccessoryRepository, PromotionRepository, WarrantyRepository (now dependency-free), WarrantyRecord, ReturnRepository
+service: AccessoryService, PromotionService, WarrantyService (now depends on SaleRepository + ProductService), ReturnService
+ui: ConsoleMenu's new submenus (accessories, promotions, warranties, returns)
+
+Add a short paragraph noting the two intentional exceptions to the persistence→model-only rule (ReturnRepository→services, as required by Requirement 3), referencing docs/integrated-class-diagram.md for the full picture.

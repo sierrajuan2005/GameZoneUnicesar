@@ -303,3 +303,20 @@ chore:
 # Team
 
 See [`TEAM.md`](TEAM.md) for the complete team information, assigned roles, and class distribution.
+
+
+Accessory Management
+
+Record controllers, cables, and memory cards, each with its own attributes.
+Record compatibility with specific consoles.
+View the complete inventory by type, or the accessories compatible with a specific console.
+Accessories can be sold together with video games and consoles in a single transaction.
+
+Integrated System
+
+A sale can combine products and accessories; the system automatically applies the best available promotion, generates warranties for consoles, and calculates a final total that includes discounts and extended warranties.
+Returns replenish the corresponding inventory (product or accessory), calculate a refund proportional to the original discount, and void any associated warranty if a console is returned.
+The monthly balance sheet breaks down total sales, total returns, and the net balance.
+Update to the package tree in README.md
+
+Add to model/: Accessory, Controller, Cable, Memory, Promotion (+3 subclasses), Warranty (+2 subclasses), Return Add to persistence/: AccessoryRepository, PromotionRepository, WarrantyRepository, WarrantyRecord, ReturnRepository Add to services/: AccessoryService, PromotionService, WarrantyService, ReturnService
