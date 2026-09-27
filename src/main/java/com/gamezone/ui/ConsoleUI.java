@@ -313,41 +313,49 @@ public class ConsoleUI {
             return;
         }
 
-        List<String> productIdsWithExtendedWarranty = askExtendedWarranties(products);
+        List<String> productIdsWithExtendedWarranty =
+                askExtendedWarranties(products);
+
         String saleId = "SALE-" + System.currentTimeMillis();
 
-        Sale sale = new Sale(saleId, LocalDate.now(), customer, seller, products);
+        Sale sale = new Sale(
+                saleId,
+                LocalDate.now(),
+                customer,
+                seller,
+                products
+        );
 
         try {
-            saleService.registerSale(sale, productIdsWithExtendedWarranty);
+            saleService.registerSale(
+                    sale,
+                    productIdsWithExtendedWarranty
+            );
 
-            double extendedWarrantyCost = 0.0;
-
-            for (Product product : products) {
-                if (productIdsWithExtendedWarranty.contains(product.getIdentifier())) {
-                    extendedWarrantyCost += product.getPrice() * 0.10;
-                }
-            }
-
-            System.out.println("Sale registered successfully. Total: "
-                    + (sale.calculateTotal() + extendedWarrantyCost));
+            System.out.println("\nSale registered successfully.");
+            System.out.println(sale.generateReceipt());
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            System.out.println("The sale could not be registered: " + e.getMessage());
+            System.out.println(
+                    "The sale could not be registered: "
+                            + e.getMessage()
+            );
         }
     }
-
     private List<String> askExtendedWarranties(List<Product> products) {
         List<String> selected = new ArrayList<>();
 
         for (Product product : products) {
+
             if (!(product instanceof Console)) {
                 continue;
             }
 
-            System.out.print("Would you like to add an extended warranty for "
-                    + product.getTitle()
-                    + " (additional cost of 10%)? (y/n): ");
+            System.out.print(
+                    "Would you like to add an extended warranty for "
+                            + product.getTitle()
+                            + " (additional cost of 10%)? (y/n): "
+            );
 
             String answer = scanner.nextLine();
 

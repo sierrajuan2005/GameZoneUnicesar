@@ -5,7 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/ui/ConsoleUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/ui/ConsoleUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/gamezone/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/gamezone/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/gamezone/persistence/WarrantyRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/gamezone/persistence/WarrantyRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/gamezone/services/WarrantyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/gamezone/services/WarrantyService.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +53,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Run",
+    "Application.Main.executor": "Debug",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
