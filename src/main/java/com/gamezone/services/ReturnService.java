@@ -157,4 +157,12 @@ public class ReturnService {
 
         return totalSales - totalReturns;
     }
+
+    public double calculateMonthlySales(int month, int year) {
+        return saleService.listSales().stream()
+                .filter(sale -> sale.getDate().getMonthValue() == month && sale.getDate().getYear() == year)
+                .mapToDouble(Sale::calculateTotal)
+                .sum();
+    }
+
 }
