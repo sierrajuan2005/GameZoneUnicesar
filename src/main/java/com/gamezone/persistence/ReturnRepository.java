@@ -132,6 +132,9 @@ public class ReturnRepository {
             String[] pIds = data[5].split(",");
             for (String pId : pIds) {
                 Product product = productService.findByIdentifier(pId);
+                if (product == null) {
+                    product = accessoryService.findById(pId);
+                }
                 if (product != null) {
                     returnedProducts.add(product);
                 }
@@ -140,5 +143,4 @@ public class ReturnRepository {
 
         return new Return(identifier, returnDate, sale, returnedProducts, reason);
     }
-
 }
