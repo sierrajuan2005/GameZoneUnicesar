@@ -3,6 +3,7 @@ package com.gamezone.persistence;
 import com.gamezone.model.Product;
 import com.gamezone.model.Return;
 import com.gamezone.model.Sale;
+import com.gamezone.services.AccessoryService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
 
@@ -23,6 +24,7 @@ public class ReturnRepository {
     private static final String FILE_PATH = "data/returns.csv";
     private final SaleService saleService;
     private final ProductService productService;
+    private final AccessoryService accessoryService;
 
     /*
      * Constructs a ReturnRepository with required service dependencies.
@@ -30,9 +32,10 @@ public class ReturnRepository {
      * @param saleService    service used to reconstruct original sales
      * @param productService service used to reconstruct returned products
      */
-    public ReturnRepository(SaleService saleService, ProductService productService) {
+    public ReturnRepository(SaleService saleService, ProductService productService,  AccessoryService accessoryService) {
         this.saleService = saleService;
         this.productService = productService;
+        this.accessoryService = accessoryService;
     }
 
     /*
