@@ -41,10 +41,22 @@ public class Return {
         return refundAmount;
     }
 
+
+
     public double calculateRefundAmount() {
+        double subtotal = originalSale.calculateTotal();
+        double discount = originalSale.getDiscountAmount();
+
+        double discountFactor = 1.0;
+
+        if(subtotal > 0) {
+            discountFactor = (subtotal - discount) / subtotal;
+        }
+
         double total = 0.0;
+        
         for (Product product : returnedProducts) {
-            total += product.getPrice();
+            total += product.getPrice() * discountFactor;
         }
         this.refundAmount = total;
         return refundAmount;
@@ -56,19 +68,42 @@ public class Return {
      * @return a formatted string containing return details and refund summary
      */
     public String generateReturnReceipt() {
+        double subtotal = originalSale.calculateTotal();
+        double discount = originalSale.getDiscountAmount();
+
+        double discountFactor = 1.0;
+
+        if (subtotal > 0) {
+            discountFactor = (subtotal - discount) / subtotal;
+        }
+
         StringBuilder receipt = new StringBuilder();
+
         receipt.append("Return Receipt\n");
         receipt.append("Identifier: ").append(identifier).append("\n");
         receipt.append("Return Date: ").append(returnDate).append("\n");
         receipt.append("Original Sale ID: ")
                 .append(originalSale != null ? originalSale.getIdentifier() : "")
                 .append("\n");
+
         receipt.append("Returned Products:\n");
+
         if (returnedProducts != null) {
             for (Product product : returnedProducts) {
-                receipt.append("- ").append(product.getTitle()).append(": $").append(product.getPrice()).append("\n");
+
+                double listPrice = product.getPrice();
+                double proportionalDiscount = listPrice * (1 - discountFactor);
+                double refund = listPrice * discountFactor;
+
+                receipt.append("- ").append(product.getTitle()).append("\n");
+                receipt.append("  List price: $").append(listPrice).append("\n");
+                receipt.append("  Proportional discount: $")
+                    .append(proportionalDiscount).append("\n");
+                receipt.append("  Refund amount: $")
+                    .append(refund).append("\n");
             }
         }
+
         receipt.append("Reason for Return: ").append(reason).append("\n");
         receipt.append("Total Refund Amount: $").append(refundAmount).append("\n");
 
