@@ -88,3 +88,204 @@ Reason for use: Preparing the Pull Request and documenting the implemented funct
 Problem encountered: I needed to organize the Pull Request description and clearly explain the changes and tests performed in the project.
 Prompt used: "Ayúdame a hacer el PR."
 Solution and decision: The AI helped me structure the Pull Request description, including the implemented functionality, the changes made to the different layers, and the tests performed. I documented tests such as compiling the project, running Main, registering products and people, creating sales, and verifying that stock was correctly decreased.
+
+
+# AI Usage Log — Leader
+
+## Entry 1
+
+**Date:** September 26, 2026
+**Time:** 7:00 Pm 
+**Tool:** ChatGPT
+**Phase and branch:** A3 — `refactor/unified-sale-registration`
+
+**Objective:**
+Handle products and accessories within the same sale.
+
+**Query:**
+
+> A sale can now contain products and accessories. How can I handle both types of items in the same flow without duplicating the entire validation process?
+
+**Response:**
+The AI suggested resolving each item by checking its type and using the corresponding service to validate stock and update the inventory.
+
+**Decision:**
+The approach was implemented to maintain a single sales flow and delegate inventory management according to the item type.
+
+**Related commit:**
+`refactor: unify sale registration flow`
+
+---
+
+## Entry 2
+
+**Date:** September 26, 2026
+**Time:** 7:17 pm
+**Tool:** ChatGPT
+**Phase and branch:** A3 — `refactor/unified-sale-registration`
+
+**Objective:**
+Verify how the promotion should be applied in the new flow.
+
+**Query:**
+
+> After resolving all the products and calculating the subtotal, I need to use `findBestPromotionFor(sale)`. Does it make sense to apply the discount before calculating the warranties?
+
+**Response:**
+Yes. The AI explained that the promotion should be calculated using the items' subtotal, and the cost of extended warranties should be added afterward.
+
+**Decision:**
+This order was maintained so that the warranties would not affect the base used to calculate the discount.
+
+**Related commit:**
+`refactor: unify sale registration flow`
+
+---
+
+## Entry 3
+
+**Date:** September 26, 2026
+**Time:** 8:00
+**Tool:** ChatGPT
+**Phase and branch:** A3 — `refactor/unified-sale-registration`
+
+**Objective:**
+Integrate basic and extended warranties without affecting the total calculation.
+
+**Query:**
+
+> Consoles generate a basic warranty, and some of them can have an extended warranty. How should this fit into the flow after applying the promotion?
+
+**Response:**
+The AI indicated that warranties should be generated after calculating the discount and that only the additional cost of extended warranties should be added to the final total.
+
+**Decision:**
+The proposal was accepted and the final calculation was reorganized according to this sequence.
+
+**Related commit:**
+`refactor: unify sale registration flow`
+
+---
+
+## Entry 4
+
+**Date:** September 27, 2026
+**Time:** 10:00 P.M
+**Tool:** ChatGPT
+**Phase and branch:** A3 — `refactor/unified-sale-registration`
+
+**Objective:**
+Update the receipt to represent the new integrated sales flow.
+
+**Query:**
+
+> `Sale.generateReceipt()` currently shows the basic sale information. Now that we have discounts and extended warranties, what information should it include so that the receipt represents the actual final amount?
+
+**Response:**
+The AI recommended displaying the subtotal, applied promotion and discount, extended warranty cost, and final total.
+
+**Decision:**
+`generateReceipt()` was modified to include these values.
+
+**Related commit:**
+`refactor: unify sale registration flow`
+
+---
+
+## Entry 5
+
+**Date:** September 27, 2026
+**Time:** 8:56 P.M
+**Tool:** ChatGPT
+**Phase and branch:** A3 — `refactor/unified-sale-registration`
+
+**Objective:**
+Adapt the sales menu to the new integrated flow.
+
+**Query:**
+
+> The sales menu currently works mainly with products. How should I modify it so that it also allows users to select accessories and asks about an extended warranty when appropriate?
+
+**Response:**
+The AI recommended keeping the interaction in `ConsoleMenu`, allowing both types of items to be selected and asking about an extended warranty only for consoles.
+
+**Decision:**
+The approach was accepted and the menu flow was modified without moving business logic into the interface.
+
+**Related commit:**
+`refactor: unify sale registration flow`
+
+---
+
+## Entry 6
+
+**Date:** September 27, 2026
+**Time:** 1:15 P.M
+**Tool:** ChatGPT
+**Phase and branch:** A8 — `docs/integration-documentation`
+
+**Objective:**
+Review the information required for the integrated class diagram.
+
+**Query:**
+
+> For `integrated-class-diagram.md`, I need to represent the four modules together. What should I review to make sure the dependencies between UI, service, persistence, and model remain consistent?
+
+**Response:**
+The AI recommended checking the dependencies between the four layers and representing the relationships of each module within a single structure.
+
+**Decision:**
+This review was used to build the integrated Mermaid diagram.
+
+**Related commit:**
+`docs: update integrated class diagram`
+
+---
+
+## Entry 7
+
+**Date:** September 27, 2026
+**Time:** 2:37 P.M
+**Tool:** ChatGPT
+**Phase and branch:** A9 — `develop`
+
+**Objective:**
+Perform the final review before publishing the integrated version.
+
+**Query:**
+
+> All the integration adjustments have been merged. As the team leader, what should I verify in `develop` before opening the Pull Request to `main`?
+
+**Response:**
+The AI recommended verifying the complete sales and returns flow, the functionality of the four modules, the tests, and that no integration errors remained.
+
+**Decision:**
+This review was used as the final verification before preparing the PR.
+
+**Related commit:**
+N/A
+
+---
+
+## Entry 11
+
+**Date:** September 27, 2026
+**Time:** 1:17 p.m.
+**Tool:** ChatGPT
+**Phase and branch:** A9 — `develop`
+
+**Objective:**
+Prepare the integrated version for publication.
+
+**Query:**
+
+> After verifying `develop`, what is the correct workflow to publish the integrated version while following the Git rules defined in the requirement?
+
+**Response:**
+The AI indicated that a Pull Request should be opened from `develop` to `main`, reviewed and approved by another team member, and then merged.
+
+**Decision:**
+The established workflow was followed and the Pull Request from `develop` to `main` was prepared.
+
+**Related commit:**
+N/A
