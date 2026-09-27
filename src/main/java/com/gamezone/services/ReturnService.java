@@ -21,6 +21,8 @@ public class ReturnService {
     private final SaleService saleService;
     private final ProductService productService;
     private final AccessoryService accessoryService;
+    private final WarrantyService warrantyService;
+
 
     /**
      * Constructs a ReturnService with required dependencies.
@@ -30,12 +32,12 @@ public class ReturnService {
      * @param productService service for managing products
      * @param accessoryService service for managing accessories
      */
-    public ReturnService(ReturnRepository returnRepository, SaleService saleService,
-                         ProductService productService, AccessoryService accessoryService) {
+    public ReturnService(ReturnRepository returnRepository, SaleService saleService, ProductService productService, AccessoryService accessoryService, WarrantyService warrantyService) {
         this.returnRepository = returnRepository;
         this.saleService = saleService;
         this.productService = productService;
         this.accessoryService = accessoryService;
+        this.warrantyService = warrantyService;
     }
 
     /**
