@@ -1,5 +1,6 @@
 package com.gamezone.services;
 
+import com.gamezone.model.Accessory;
 import com.gamezone.model.Product;
 import com.gamezone.model.Return;
 import com.gamezone.model.Sale;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public class ReturnService {
 
+    private final AccessoryService accessoryService;
     private final ReturnRepository returnRepository;
     private final SaleService saleService;
     private final ProductService productService;
@@ -26,10 +28,11 @@ public class ReturnService {
      * @param saleService       service used to retrieve and validate sale data
      * @param productService   service used to manage product information and inventory stock
      */
-    public ReturnService(ReturnRepository returnRepository, SaleService saleService, ProductService productService) {
+    public ReturnService(ReturnRepository returnRepository, SaleService saleService, ProductService productService,  AccessoryService accessoryService) {
         this.returnRepository = returnRepository;
         this.saleService = saleService;
         this.productService = productService;
+        this.accessoryService = accessoryService;
     }
 
     /*
