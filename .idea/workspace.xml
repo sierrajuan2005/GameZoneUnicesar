@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/ui/ConsoleUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/ui/ConsoleUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/ai-usage/leader-ai-log.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/ai-usage/leader-ai-log.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +57,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "refactor/unified-sale-registration",
+    "git-widget-placeholder": "docs/integration-documentation",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pc/GameZoneUnicesar",
     "node.js.detected.package.jshint": "true",
