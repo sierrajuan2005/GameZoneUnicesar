@@ -313,41 +313,49 @@ public class ConsoleUI {
             return;
         }
 
-        List<String> productIdsWithExtendedWarranty = askExtendedWarranties(products);
+        List<String> productIdsWithExtendedWarranty =
+                askExtendedWarranties(products);
+
         String saleId = "SALE-" + System.currentTimeMillis();
 
-        Sale sale = new Sale(saleId, LocalDate.now(), customer, seller, products);
+        Sale sale = new Sale(
+                saleId,
+                LocalDate.now(),
+                customer,
+                seller,
+                products
+        );
 
         try {
-            saleService.registerSale(sale, productIdsWithExtendedWarranty);
+            saleService.registerSale(
+                    sale,
+                    productIdsWithExtendedWarranty
+            );
 
-            double extendedWarrantyCost = 0.0;
-
-            for (Product product : products) {
-                if (productIdsWithExtendedWarranty.contains(product.getIdentifier())) {
-                    extendedWarrantyCost += product.getPrice() * 0.10;
-                }
-            }
-
-            System.out.println("Sale registered successfully. Total: "
-                    + (sale.calculateTotal() + extendedWarrantyCost));
+            System.out.println("\nSale registered successfully.");
+            System.out.println(sale.generateReceipt());
 
         } catch (IllegalArgumentException | IllegalStateException e) {
-            System.out.println("The sale could not be registered: " + e.getMessage());
+            System.out.println(
+                    "The sale could not be registered: "
+                            + e.getMessage()
+            );
         }
     }
-
     private List<String> askExtendedWarranties(List<Product> products) {
         List<String> selected = new ArrayList<>();
 
         for (Product product : products) {
+
             if (!(product instanceof Console)) {
                 continue;
             }
 
-            System.out.print("Would you like to add an extended warranty for "
-                    + product.getTitle()
-                    + " (additional cost of 10%)? (y/n): ");
+            System.out.print(
+                    "Would you like to add an extended warranty for "
+                            + product.getTitle()
+                            + " (additional cost of 10%)? (y/n): "
+            );
 
             String answer = scanner.nextLine();
 
@@ -389,23 +397,86 @@ public class ConsoleUI {
 
     private List<Product> selectProducts() {
         List<Product> selectedProducts = new ArrayList<>();
-        List<Product> availableProducts = productService.listProducts();
+
+        List<Product> availableProducts =
+                productService.listProducts();
+
+        List<Accessory> availableAccessories =
+                accessoryService.listAllAccessories();
+
+        System.out.println("\n=== AVAILABLE PRODUCTS ===");
+
+        for (Product product : availableProducts) {
+            System.out.println(
+                    product.getIdentifier()
+                            + " | "
+                            + product.getDescription()
+                            + " | Stock: "
+                            + product.getAvailableQuantity()
+            );
+        }
+
+        System.out.println("\n=== AVAILABLE ACCESSORIES ===");
+
+        for (Accessory accessory : availableAccessories) {
+            System.out.println(
+                    accessory.getIdentifier()
+                            + " | "
+                            + accessory.getDescription()
+                            + " | Stock: "
+                            + accessory.getAvailableQuantity()
+            );
+        }
+
+        System.out.println(
+                "\nEnter product or accessory identifiers one at a time. "
+                        + "Leave empty to finish."
+        );
+
         String identifier;
 
-        System.out.println("Enter product identifiers one at a time. Leave empty to finish.");
-
         do {
-            System.out.print("Product identifier (empty to finish): ");
+            System.out.print(
+                    "Product/accessory identifier (empty to finish): "
+            );
+
             identifier = scanner.nextLine();
 
             if (!identifier.isBlank()) {
-                Product product = findProductById(availableProducts, identifier);
+
+                Product product =
+                        findProductById(
+                                availableProducts,
+                                identifier
+                        );
 
                 if (product != null) {
+
                     selectedProducts.add(product);
-                    System.out.println("Added: " + product.getDescription());
+
+                    System.out.println(
+                            "Added: " + product.getDescription()
+                    );
+
                 } else {
-                    System.out.println("No product found with that identifier.");
+
+                    Accessory accessory =
+                            accessoryService.findById(identifier);
+
+                    if (accessory != null) {
+
+                        selectedProducts.add(accessory);
+
+                        System.out.println(
+                                "Added: " + accessory.getDescription()
+                        );
+
+                    } else {
+
+                        System.out.println(
+                                "No product or accessory found with that identifier."
+                        );
+                    }
                 }
             }
 
@@ -620,7 +691,18 @@ public class ConsoleUI {
 
         printReturns(returnService.viewReturnsBySale(saleId));
     }
-
+    /**
+     * Displays the monthly financial report for a given month and year.
+     * <p>
+     * This method prompts the user to enter a month and year,
+     * then calculates and displays:
+     * <ul>
+     *   <li>Total sales for the period</li>
+     *   <li>Total returns for the period</li>
+     *   <li>Net balance (sales - returns)</li>
+     * </ul>
+     * It also handles invalid numeric input and invalid month/year values.
+     */
     private void showMonthlyBalance() {
         try {
             System.out.print("Month (1-12): ");
@@ -629,13 +711,17 @@ public class ConsoleUI {
             System.out.print("Year: ");
             int year = Integer.parseInt(scanner.nextLine());
 
+            double totalSales = returnService.calculateMonthlySales(month, year);
+            double totalReturns = returnService.calculateMonthlyReturns(month, year);
             double balance = returnService.generateMonthlyBalance(month, year);
 
-            System.out.println("Net balance for " + month + "/" + year + ": $" + balance);
+            System.out.println("Monthly Report (" + month + "/" + year + ")");
+            System.out.println("Total Sales: $" + totalSales);
+            System.out.println("Total Returns: $" + totalReturns);
+            System.out.println("Net Balance: $" + balance);
 
         } catch (NumberFormatException e) {
             System.out.println("Error: month and year must be valid numeric values.");
-
         } catch (IllegalArgumentException e) {
             System.out.println("Error: " + e.getMessage());
         }

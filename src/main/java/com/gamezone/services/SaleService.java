@@ -44,10 +44,13 @@ public class SaleService {
      * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
      */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
+
         List<Product> soldProducts = sale.getProducts();
 
         if (soldProducts == null || soldProducts.isEmpty()) {
-            throw new IllegalArgumentException("A sale must contain at least one product.");
+            throw new IllegalArgumentException(
+                    "A sale must contain at least one product."
+            );
         }
 
         List<Product> storedProducts = productService.listProducts();
@@ -58,7 +61,10 @@ public class SaleService {
             if (soldProduct instanceof Accessory) {
 
                 Accessory storedAccessory =
-                        findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+                        findAccessoryById(
+                                storedAccessories,
+                                soldProduct.getIdentifier()
+                        );
 
                 if (storedAccessory.getAvailableQuantity() < 1) {
                     throw new IllegalStateException(
@@ -70,7 +76,10 @@ public class SaleService {
             } else {
 
                 Product storedProduct =
-                        findProductById(storedProducts, soldProduct.getIdentifier());
+                        findProductById(
+                                storedProducts,
+                                soldProduct.getIdentifier()
+                        );
 
                 if (storedProduct.getAvailableQuantity() < 1) {
                     throw new IllegalStateException(
@@ -81,12 +90,29 @@ public class SaleService {
             }
         }
 
+        double subtotal = sale.calculateSubtotal();
+
+        applyBestPromotion(sale);
+
+        double extendedWarrantyCost =
+                assignWarranties(
+                        sale,
+                        productIdsWithExtendedWarranty
+                );
+
+        sale.setExtendedWarrantyCost(extendedWarrantyCost);
+
+        sale.calculateFinalTotal();
+
         for (Product soldProduct : soldProducts) {
 
             if (soldProduct instanceof Accessory) {
 
                 Accessory storedAccessory =
-                        findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+                        findAccessoryById(
+                                storedAccessories,
+                                soldProduct.getIdentifier()
+                        );
 
                 int newQuantity =
                         storedAccessory.getAvailableQuantity() - 1;
@@ -99,7 +125,10 @@ public class SaleService {
             } else {
 
                 Product storedProduct =
-                        findProductById(storedProducts, soldProduct.getIdentifier());
+                        findProductById(
+                                storedProducts,
+                                soldProduct.getIdentifier()
+                        );
 
                 int newQuantity =
                         storedProduct.getAvailableQuantity() - 1;
@@ -111,12 +140,8 @@ public class SaleService {
             }
         }
 
-        applyBestPromotion(sale);
-
         sale.getCustomer().addToPurchaseHistory(sale);
         saleRepository.save(sale);
-
-        assignWarranties(sale, productIdsWithExtendedWarranty);
     }
 
     /**
@@ -127,16 +152,27 @@ public class SaleService {
      * @param sale sale to evaluate and update
      */
     private void applyBestPromotion(Sale sale) {
-        Promotion bestPromotion = promotionService.findBestPromotionFor(sale);
+
+        Promotion bestPromotion =
+                promotionService.findBestPromotionFor(sale);
 
         if (bestPromotion != null) {
-            double discount = bestPromotion.calculateDiscount(sale);
+
+            double discount =
+                    bestPromotion.calculateDiscount(sale);
+
             sale.setAppliedPromotionName(bestPromotion.getName());
             sale.setDiscountAmount(discount);
+
+        } else {
+
+            sale.setAppliedPromotionName(null);
+            sale.setDiscountAmount(0.0);
         }
     }
 
-    private void assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
+    private double assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
+        double extendedWarrantyCost = 0.0;
         List<String> extendedWarrantyIds = productIdsWithExtendedWarranty == null
                 ? new ArrayList<>()
                 : productIdsWithExtendedWarranty;
@@ -149,9 +185,17 @@ public class SaleService {
             warrantyService.assignBasicWarranty(product, sale, sale.getDate());
 
             if (extendedWarrantyIds.contains(product.getIdentifier())) {
-                warrantyService.assignExtendedWarranty(product, sale, sale.getDate());
+                ExtendedWarranty warranty =
+                        warrantyService.assignExtendedWarranty(
+                                product,
+                                sale,
+                                sale.getDate()
+                        );
+
+                extendedWarrantyCost += warranty.getAdditionalCost();
             }
         }
+        return extendedWarrantyCost;
     }
 
     /**
