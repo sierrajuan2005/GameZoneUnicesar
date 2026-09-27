@@ -63,13 +63,20 @@ public class ReturnService {
                 throw new IllegalArgumentException("The product does not belong to the specified sale.");
             }
             productsToReturn.add(product);
-            productService.restoreStock(productId, 1);
+
+            if (product instanceof Accessory accessory) {
+                accessoryService.restoreStock(accessory.getIdentifier(), 1);
+                sale.getProducts().removeIf(p -> p.getIdentifier().equals(productId));
+            } else {
+                productService.restoreStock(productId, 1);
+            }
         }
 
         Return r = new Return(identifier + "-RET", LocalDate.now(), sale, productsToReturn, reason);
         List<Return> allReturns = returnRepository.loadAll();
         allReturns.add(r);
         returnRepository.saveAll(allReturns);
+
         return r;
     }
 
