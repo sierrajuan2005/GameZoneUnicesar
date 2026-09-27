@@ -59,12 +59,15 @@ public class ReturnService {
         }
 
         List<Product> productsToReturn = new ArrayList<>();
+        double refundAmount = 0.0;
+
         for (String productId : productIds) {
             Product product = productService.findByIdentifier(productId);
             if (product == null || sale.getProducts().stream()
                     .noneMatch(p -> p.getIdentifier().equals(productId))) {
                 throw new IllegalArgumentException("The product does not belong to the specified sale.");
             }
+
             productsToReturn.add(product);
 
             if (product instanceof Accessory accessory) {
@@ -73,9 +76,13 @@ public class ReturnService {
             } else {
                 productService.restoreStock(productId, 1);
             }
+
+            double warrantyRefund = warrantyService.cancelWarranties(productId, identifier);
+            refundAmount += warrantyRefund;
+            refundAmount += product.getPrice();
         }
 
-        Return r = new Return(identifier + "-RET", LocalDate.now(), sale, productsToReturn, reason);
+        Return r = new Return(identifier + "-RET", LocalDate.now(), sale, productsToReturn, reason, refundAmount);
         List<Return> allReturns = returnRepository.loadAll();
         allReturns.add(r);
         returnRepository.saveAll(allReturns);
