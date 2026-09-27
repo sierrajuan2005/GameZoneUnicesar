@@ -11,7 +11,7 @@ public class Return {
     private String reason;
     private double refundAmount;
 
-    public Return(String identifier, LocalDate returnDate, Sale originalSale, List<Product> returnedProducts, String reason) {
+    public Return(String identifier, LocalDate returnDate, Sale originalSale, List<Product> returnedProducts, String reason, double refundAmount) {
         this.identifier = identifier;
         this.returnDate = returnDate;
         this.originalSale = originalSale;
