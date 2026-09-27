@@ -3,9 +3,9 @@ package com.gamezone.persistence;
 import com.gamezone.model.Product;
 import com.gamezone.model.Return;
 import com.gamezone.model.Sale;
-import com.gamezone.services.AccessoryService;
 import com.gamezone.services.ProductService;
 import com.gamezone.services.SaleService;
+import com.gamezone.services.AccessoryService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,9 +15,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Repository class responsible for persisting and loading {@link Return} records
  * to and from a CSV file storage.
+ * Supports reconstruction of both products and accessories using the corresponding services.
  */
 public class ReturnRepository {
 
@@ -26,19 +27,20 @@ public class ReturnRepository {
     private final ProductService productService;
     private final AccessoryService accessoryService;
 
-    /*
+    /**
      * Constructs a ReturnRepository with required service dependencies.
      *
-     * @param saleService    service used to reconstruct original sales
+     * @param saleService service used to reconstruct original sales
      * @param productService service used to reconstruct returned products
+     * @param accessoryService service used to reconstruct returned accessories
      */
-    public ReturnRepository(SaleService saleService, ProductService productService,  AccessoryService accessoryService) {
+    public ReturnRepository(SaleService saleService, ProductService productService, AccessoryService accessoryService) {
         this.saleService = saleService;
         this.productService = productService;
         this.accessoryService = accessoryService;
     }
 
-    /*
+    /**
      * Saves all given return records to the CSV file.
      *
      * @param returns list of {@link Return} objects to persist
@@ -59,10 +61,10 @@ public class ReturnRepository {
         }
     }
 
-    /*
+    /**
      * Loads all return records from the CSV file.
      *
-     * @return list of loaded {@link Return} objects, or an empty list if the file does not exist
+     * @return list of loaded {@link Return} objects, or empty list if file does not exist
      * @throws RuntimeException if an I/O error occurs during loading
      */
     public List<Return> loadAll() {
@@ -87,11 +89,11 @@ public class ReturnRepository {
         return returns;
     }
 
-    /*
+    /**
      * Converts a {@link Return} object into a CSV-formatted string line.
      *
-     * @param r the return entity to serialize
-     * @return CSV formatted string representing the return
+     * @param r return object to convert
+     * @return CSV string representation of the return
      */
     private String convertToCsv(Return r) {
         StringBuilder sb = new StringBuilder();
@@ -112,8 +114,9 @@ public class ReturnRepository {
         return sb.toString();
     }
 
-    /*
+    /**
      * Reconstructs a {@link Return} object from a single CSV line.
+     * Supports both products and accessories.
      *
      * @param line CSV text line containing return data
      * @return deserialized {@link Return} instance, or {@code null} if line format is invalid
