@@ -152,12 +152,22 @@ public class SaleService {
      * @param sale sale to evaluate and update
      */
     private void applyBestPromotion(Sale sale) {
-        Promotion bestPromotion = promotionService.findBestPromotionFor(sale);
+
+        Promotion bestPromotion =
+                promotionService.findBestPromotionFor(sale);
 
         if (bestPromotion != null) {
-            double discount = bestPromotion.calculateDiscount(sale);
+
+            double discount =
+                    bestPromotion.calculateDiscount(sale);
+
             sale.setAppliedPromotionName(bestPromotion.getName());
             sale.setDiscountAmount(discount);
+
+        } else {
+
+            sale.setAppliedPromotionName(null);
+            sale.setDiscountAmount(0.0);
         }
     }
 

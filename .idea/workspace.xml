@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
