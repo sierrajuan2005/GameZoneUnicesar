@@ -1,21 +1,23 @@
 package com.gamezone.services;
 
-import com.gamezone.model.*;
+import com.gamezone.model.Accessory;
+import com.gamezone.model.Console;
+import com.gamezone.model.Controller;
+import com.gamezone.model.Cable;
+import com.gamezone.model.Memory;
 import com.gamezone.persistence.AccessoryRepository;
 
 import java.util.List;
 
-/*
- * Service layer for managing accessories in the system.
- * Provides methods to register, query, and update accessory data,
- * delegating persistence operations to {@link AccessoryRepository}.
+/**
+ * Service layer for managing accessories.
+ * Provides registration, querying, and stock management operations.
  */
 public class AccessoryService {
 
-    /* Repository for accessory persistence. */
     private final AccessoryRepository accessoryRepository;
 
-    /*
+    /**
      * Constructs the service with the given repository.
      *
      * @param accessoryRepository repository instance for persistence
@@ -24,7 +26,7 @@ public class AccessoryService {
         this.accessoryRepository = accessoryRepository;
     }
 
-    /*
+    /**
      * Registers a new controller accessory.
      *
      * @param id unique identifier
@@ -42,7 +44,7 @@ public class AccessoryService {
         accessoryRepository.saveAll(accessories);
     }
 
-    /*
+    /**
      * Registers a new cable accessory.
      *
      * @param id unique identifier
@@ -61,7 +63,7 @@ public class AccessoryService {
         accessoryRepository.saveAll(accessories);
     }
 
-    /*
+    /**
      * Registers a new memory accessory.
      *
      * @param id unique identifier
@@ -80,7 +82,7 @@ public class AccessoryService {
         accessoryRepository.saveAll(accessories);
     }
 
-    /*
+    /**
      * Lists all accessories.
      *
      * @return list of all accessories
@@ -89,7 +91,7 @@ public class AccessoryService {
         return accessoryRepository.loadAll();
     }
 
-    /*
+    /**
      * Lists accessories filtered by type.
      *
      * @param type accessory type (Controller, Cable, Memory)
@@ -101,7 +103,7 @@ public class AccessoryService {
                 .toList();
     }
 
-    /*
+    /**
      * Finds accessories compatible with a given console.
      *
      * @param consoleId identifier of the console
@@ -114,7 +116,7 @@ public class AccessoryService {
                 .toList();
     }
 
-    /*
+    /**
      * Finds an accessory by its identifier.
      *
      * @param id accessory identifier
@@ -127,7 +129,7 @@ public class AccessoryService {
                 .orElse(null);
     }
 
-    /*
+    /**
      * Updates the stock quantity of an accessory.
      *
      * @param accessoryId accessory identifier
@@ -144,6 +146,12 @@ public class AccessoryService {
         accessoryRepository.saveAll(accessories);
     }
 
+    /**
+     * Restores stock by incrementing the available quantity of an accessory.
+     *
+     * @param accessoryId identifier of the accessory
+     * @param quantity amount to restore
+     */
     public void restoreStock(String accessoryId, int quantity) {
         List<Accessory> accessories = accessoryRepository.loadAll();
         for (Accessory a : accessories) {
