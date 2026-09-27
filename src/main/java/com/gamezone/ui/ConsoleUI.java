@@ -397,23 +397,86 @@ public class ConsoleUI {
 
     private List<Product> selectProducts() {
         List<Product> selectedProducts = new ArrayList<>();
-        List<Product> availableProducts = productService.listProducts();
+
+        List<Product> availableProducts =
+                productService.listProducts();
+
+        List<Accessory> availableAccessories =
+                accessoryService.listAllAccessories();
+
+        System.out.println("\n=== AVAILABLE PRODUCTS ===");
+
+        for (Product product : availableProducts) {
+            System.out.println(
+                    product.getIdentifier()
+                            + " | "
+                            + product.getDescription()
+                            + " | Stock: "
+                            + product.getAvailableQuantity()
+            );
+        }
+
+        System.out.println("\n=== AVAILABLE ACCESSORIES ===");
+
+        for (Accessory accessory : availableAccessories) {
+            System.out.println(
+                    accessory.getIdentifier()
+                            + " | "
+                            + accessory.getDescription()
+                            + " | Stock: "
+                            + accessory.getAvailableQuantity()
+            );
+        }
+
+        System.out.println(
+                "\nEnter product or accessory identifiers one at a time. "
+                        + "Leave empty to finish."
+        );
+
         String identifier;
 
-        System.out.println("Enter product identifiers one at a time. Leave empty to finish.");
-
         do {
-            System.out.print("Product identifier (empty to finish): ");
+            System.out.print(
+                    "Product/accessory identifier (empty to finish): "
+            );
+
             identifier = scanner.nextLine();
 
             if (!identifier.isBlank()) {
-                Product product = findProductById(availableProducts, identifier);
+
+                Product product =
+                        findProductById(
+                                availableProducts,
+                                identifier
+                        );
 
                 if (product != null) {
+
                     selectedProducts.add(product);
-                    System.out.println("Added: " + product.getDescription());
+
+                    System.out.println(
+                            "Added: " + product.getDescription()
+                    );
+
                 } else {
-                    System.out.println("No product found with that identifier.");
+
+                    Accessory accessory =
+                            accessoryService.findById(identifier);
+
+                    if (accessory != null) {
+
+                        selectedProducts.add(accessory);
+
+                        System.out.println(
+                                "Added: " + accessory.getDescription()
+                        );
+
+                    } else {
+
+                        System.out.println(
+                                "No product or accessory found with that identifier."
+                        );
+                    }
                 }
             }
 
