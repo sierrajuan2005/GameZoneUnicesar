@@ -143,4 +143,15 @@ public class AccessoryService {
         }
         accessoryRepository.saveAll(accessories);
     }
+
+    public void restoreStock(String accessoryId, int quantity) {
+        List<Accessory> accessories = accessoryRepository.loadAll();
+        for (Accessory a : accessories) {
+            if (a.getIdentifier().equals(accessoryId)) {
+                a.setAvailableQuantity(a.getAvailableQuantity() + quantity);
+                break;
+            }
+        }
+        accessoryRepository.saveAll(accessories);
+    }
 }
