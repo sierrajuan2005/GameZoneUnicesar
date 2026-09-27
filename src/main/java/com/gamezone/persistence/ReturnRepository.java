@@ -123,15 +123,16 @@ public class ReturnRepository {
      */
     private Return convertFromCsv(String line) {
         String[] data = line.split(";", -1);
-        if (data.length < 5) return null;
+        if (data.length < 6) return null;
 
         String identifier = data[0];
         LocalDate returnDate = LocalDate.parse(data[1]);
         Sale sale = saleService.findSaleById(data[2]);
         String reason = data[3];
+        double refundAmount = Double.parseDouble(data[4]);
 
         List<Product> returnedProducts = new ArrayList<>();
-        if (data.length >= 6 && !data[5].isBlank()) {
+        if (!data[5].isBlank()) {
             String[] pIds = data[5].split(",");
             for (String pId : pIds) {
                 Product product = productService.findByIdentifier(pId);
@@ -144,6 +145,6 @@ public class ReturnRepository {
             }
         }
 
-        return new Return(identifier, returnDate, sale, returnedProducts, reason);
+        return new Return(identifier, returnDate, sale, returnedProducts, reason, refundAmount);
     }
 }
