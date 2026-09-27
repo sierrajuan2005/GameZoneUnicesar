@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  *   <li>Assign basic and extended warranties to products.</li>
  *   <li>Find warranties by identifier, product, or sale.</li>
  *   <li>List active warranties and those expiring soon.</li>
+ *   <li>Cancel warranties when products are returned.</li>
  * </ul>
  * This class interacts with {@link ProductService}, {@link SaleRepository}, and {@link WarrantyRepository}.
  */
@@ -192,5 +193,36 @@ public class WarrantyService {
         return warranties.stream()
                 .filter(w -> !w.getEndDate().isBefore(today) && !w.getEndDate().isAfter(limit))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Cancels warranties for a given product in a specific sale.
+     * <p>
+     * Removes the warranty from the internal list and persistence,
+     * and returns the refundable cost:
+     * <ul>
+     *   <li>0 for basic warranty</li>
+     *   <li>Additional cost for extended warranty</li>
+     * </ul>
+     *
+     * @param productId identifier of the product
+     * @param saleId identifier of the sale
+     * @return refundable cost of the cancelled warranty
+     */
+    public double cancelWarranties(String productId, String saleId) {
+        Warranty warranty = findWarrantyByProduct(productId, saleId);
+        if (warranty == null) {
+            return 0.0;
+        }
+
+        double refund = 0.0;
+        if (warranty instanceof ExtendedWarranty) {
+            refund = ((ExtendedWarranty) warranty).getAdditionalCost();
+        }
+
+        warranties.remove(warranty);
+        warrantyRepository.saveAll(warranties);
+
+        return refund;
     }
 }

@@ -19,6 +19,7 @@ import java.util.List;
  * Repository class responsible for persisting and loading {@link Return} records
  * to and from a CSV file storage.
  * Supports reconstruction of both products and accessories using the corresponding services.
+ * Now includes persistence of refundAmount as part of A7 changes.
  */
 public class ReturnRepository {
 
@@ -42,6 +43,7 @@ public class ReturnRepository {
 
     /**
      * Saves all given return records to the CSV file.
+     * Each record includes identifier, returnDate, saleId, reason, refundAmount, and productIds.
      *
      * @param returns list of {@link Return} objects to persist
      * @throws RuntimeException if an I/O error occurs during saving
@@ -63,6 +65,7 @@ public class ReturnRepository {
 
     /**
      * Loads all return records from the CSV file.
+     * Each line must contain identifier, returnDate, saleId, reason, refundAmount, and productIds.
      *
      * @return list of loaded {@link Return} objects, or empty list if file does not exist
      * @throws RuntimeException if an I/O error occurs during loading
@@ -91,6 +94,7 @@ public class ReturnRepository {
 
     /**
      * Converts a {@link Return} object into a CSV-formatted string line.
+     * Format: identifier;returnDate;saleId;reason;refundAmount;productIds
      *
      * @param r return object to convert
      * @return CSV string representation of the return
@@ -116,22 +120,23 @@ public class ReturnRepository {
 
     /**
      * Reconstructs a {@link Return} object from a single CSV line.
-     * Supports both products and accessories.
+     * Format: identifier;returnDate;saleId;reason;refundAmount;productIds
      *
      * @param line CSV text line containing return data
      * @return deserialized {@link Return} instance, or {@code null} if line format is invalid
      */
     private Return convertFromCsv(String line) {
         String[] data = line.split(";", -1);
-        if (data.length < 5) return null;
+        if (data.length < 6) return null;
 
         String identifier = data[0];
         LocalDate returnDate = LocalDate.parse(data[1]);
         Sale sale = saleService.findSaleById(data[2]);
         String reason = data[3];
+        double refundAmount = Double.parseDouble(data[4]);
 
         List<Product> returnedProducts = new ArrayList<>();
-        if (data.length >= 6 && !data[5].isBlank()) {
+        if (!data[5].isBlank()) {
             String[] pIds = data[5].split(",");
             for (String pId : pIds) {
                 Product product = productService.findByIdentifier(pId);
@@ -144,6 +149,6 @@ public class ReturnRepository {
             }
         }
 
-        return new Return(identifier, returnDate, sale, returnedProducts, reason);
+        return new Return(identifier, returnDate, sale, returnedProducts, reason, refundAmount);
     }
 }
