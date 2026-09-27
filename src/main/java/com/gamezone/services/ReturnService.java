@@ -165,4 +165,12 @@ public class ReturnService {
                 .sum();
     }
 
+    public double calculateMonthlyReturns(int month, int year) {
+        return returnRepository.loadAll().stream()
+                .filter(returnRecord -> returnRecord.getReturnDate().getMonthValue() == month
+                        && returnRecord.getReturnDate().getYear() == year)
+                .mapToDouble(Return::getRefundAmount)
+                .sum();
+    }
+
 }
