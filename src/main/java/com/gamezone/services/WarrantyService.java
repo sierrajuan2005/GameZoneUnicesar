@@ -193,4 +193,21 @@ public class WarrantyService {
                 .filter(w -> !w.getEndDate().isBefore(today) && !w.getEndDate().isAfter(limit))
                 .collect(Collectors.toList());
     }
+
+    public double cancelWarranties(String productId, String saleId) {
+        Warranty warranty = findWarrantyByProduct(productId, saleId);
+        if (warranty == null) {
+            return 0.0;
+        }
+
+        double refund = 0.0;
+        if (warranty instanceof ExtendedWarranty) {
+            refund = ((ExtendedWarranty) warranty).getAdditionalCost();
+        }
+
+        warranties.remove(warranty);
+        warrantyRepository.saveAll(warranties);
+
+        return refund;
+    }
 }
