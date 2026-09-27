@@ -17,6 +17,7 @@ public class Sale {
 
     private String appliedPromotionName;
     private double discountAmount;
+    private double extendedWarrantyCost;
 
     /**
      * Creates a new sale.
@@ -28,13 +29,16 @@ public class Sale {
      */
 
     public Sale(String identifier, LocalDate date, Customer customer, Seller seller, List<Product> products) {
+
         this.identifier = identifier;
         this.date = date;
         this.customer = customer;
         this.seller = seller;
         this.products = products;
-        this.appliedPromotionName = appliedPromotionName;
-        this.discountAmount = discountAmount;
+
+        this.appliedPromotionName = null;
+        this.discountAmount = 0.0;
+        this.extendedWarrantyCost = 0.0;
     }
 
     public String getIdentifier() {
@@ -94,6 +98,14 @@ public class Sale {
         this.discountAmount = discountAmount;
     }
 
+    public double getExtendedWarrantyCost() {
+        return extendedWarrantyCost;
+    }
+
+    public void setExtendedWarrantyCost(double extendedWarrantyCost) {
+        this.extendedWarrantyCost = extendedWarrantyCost;
+    }
+
     /**
      * Adds a product to the sale.
      *
@@ -108,14 +120,22 @@ public class Sale {
      *
      * @return total price
      */
-    public double calculateTotal() {
-        double total = 0.0;
+    public double calculateSubtotal() {
+        double subtotal = 0.0;
 
         for (Product product : products) {
-            total += product.getPrice();
+            subtotal += product.getPrice();
         }
 
-        return total;
+        return subtotal;
+    }
+
+    public double calculateTotal() {
+        return calculateSubtotal();
+    }
+
+    public double calculateFinalTotal() {
+        return calculateSubtotal() - discountAmount + extendedWarrantyCost;
     }
     /**
      * Builds a formatted, human-readable receipt in Spanish, showing
@@ -125,25 +145,34 @@ public class Sale {
      * @return the formatted receipt text
      */
     public String generateReceipt() {
-        double subtotal = calculateTotal();
-        double finalTotal = subtotal - discountAmount;
+        double subtotal = calculateSubtotal();
+        double finalTotal = calculateFinalTotal();
 
         StringBuilder receipt = new StringBuilder();
+
         receipt.append("Recibo de venta\n");
         receipt.append("Identificador: ").append(identifier).append("\n");
         receipt.append("Subtotal: $").append(subtotal).append("\n");
 
         if (appliedPromotionName != null && discountAmount > 0) {
-            receipt.append("Descuento aplicado (").append(appliedPromotionName).append("): -$")
-                    .append(discountAmount).append("\n");
+            receipt.append("Descuento aplicado (")
+                    .append(appliedPromotionName)
+                    .append("): -$")
+                    .append(discountAmount)
+                    .append("\n");
         } else {
             receipt.append("Descuento aplicado: ninguno\n");
         }
 
-        receipt.append("Total final: $").append(finalTotal);
+        receipt.append("Costo garantías extendidas: $")
+                .append(extendedWarrantyCost)
+                .append("\n");
+
+        receipt.append("Total final: $")
+                .append(finalTotal);
+
         return receipt.toString();
     }
-
 
     public boolean canBeReturned(){
         LocalDate currentDate = LocalDate.now();
