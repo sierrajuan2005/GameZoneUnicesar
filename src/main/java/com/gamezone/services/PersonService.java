@@ -1,5 +1,6 @@
 package com.gamezone.services;
 
+import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.Person;
 import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
@@ -50,15 +51,13 @@ public class PersonService {
         return personRepository.getPeople();
     }
 
-    /**
-     * Finds a person by identification.
-     *
-     * @param identification unique identifier
-     * @return matching person or null
-     */
-    public Person findPersonByIdentification(String identification){
 
-        return personRepository.findByIdentification(identification);
+    public Person findPersonByIdentification(String identification){
+        Person person = personRepository.findByIdentification(identification);
+        if (person == null){
+            throw new ResourceNotFoundException("Person", identification);
+        }
+        return person;
     }
 
     /**
