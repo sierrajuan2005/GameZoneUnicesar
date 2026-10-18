@@ -1,5 +1,7 @@
 package com.gamezone.services;
 import com.gamezone.exceptions.BusinessRuleException;
+import com.gamezone.exceptions.InvalidDataException;
+import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.Product;
 import com.gamezone.persistence.ProductRepository;
 import com.gamezone.validation.ProductValidator;
@@ -73,17 +75,12 @@ public class ProductService{
     }
 
 
-     /*
-    Updates the stock quantity of a product
-    @param product product whose stock will be updated
-    @param quantity new stock quantity
-    @throws IllegalArgumentException if the quantity is negative or the product does not exist
-     */
+
     public void updateStock(Product product, int quantity) {
 
         if (quantity < 0) {
-            throw new IllegalArgumentException(
-                    "Stock quantity cannot be negative."
+            throw new InvalidDataException(
+                    "quantity", "Stock quantity cannot be negative."
             );
         }
 
@@ -102,9 +99,7 @@ public class ProductService{
         }
 
         if (!found) {
-            throw new IllegalArgumentException(
-                    "Product not found."
-            );
+            throw new ResourceNotFoundException("Product", product.getIdentifier());
         }
 
         productRepository.saveAll(products);
