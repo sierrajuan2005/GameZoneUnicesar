@@ -1,16 +1,16 @@
 package com.gamezone.services;
 
-import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.Person;
 import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
+import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.validation.PersonValidator;
 
 import java.util.List;
 
 /**
  * Service layer for Person operations.
- * Delegates actions to PersonRepository.
+ * Delegates actions to PersonRepository and validations to PersonValidator.
  */
 public class PersonService {
 
@@ -26,12 +26,18 @@ public class PersonService {
         this.personRepository = new PersonRepository();
     }
 
-
-    public void addPerson(Person person){
+    /**
+     * Adds a person.
+     *
+     * @param person person to add
+     * @throws com.gamezone.exceptions.InvalidDataException if person data is invalid
+     * @throws com.gamezone.exceptions.BusinessRuleException if a person with the same ID already exists
+     */
+    public void addPerson(Person person) {
         PersonValidator.validatePersonData(
-                person.getIdentification() ,
-                person.getName() ,
-                person.getEmail() ,
+                person.getIdentification(),
+                person.getName(),
+                person.getEmail(),
                 person.getPhone()
         );
 
@@ -46,24 +52,35 @@ public class PersonService {
      *
      * @return list of persons
      */
-    public List<Person> getAllPeople(){
-
+    public List<Person> getAllPeople() {
         return personRepository.getPeople();
     }
 
-
-    public Person findPersonByIdentification(String identification){
+    /**
+     * Finds a person by identification.
+     *
+     * @param identification unique identifier
+     * @return matching person
+     * @throws ResourceNotFoundException if no person is found
+     */
+    public Person findPersonByIdentification(String identification) {
         Person person = personRepository.findByIdentification(identification);
-        if (person == null){
+        if (person == null) {
             throw new ResourceNotFoundException("Person", identification);
         }
         return person;
     }
 
-
+    /**
+     * Removes a person by identification.
+     *
+     * @param identification unique ID of the person
+     * @return true if removed
+     * @throws ResourceNotFoundException if no person is found
+     */
     public boolean removePerson(String identification) {
         Person person = personRepository.findByIdentification(identification);
-        if (person == null){
+        if (person == null) {
             throw new ResourceNotFoundException("Person", identification);
         }
         return personRepository.removePerson(identification);
