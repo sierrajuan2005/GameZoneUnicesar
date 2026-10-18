@@ -3,6 +3,7 @@ package com.gamezone.services;
 import com.gamezone.model.Person;
 import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
+import com.gamezone.validation.PersonValidator;
 
 import java.util.List;
 
@@ -24,12 +25,17 @@ public class PersonService {
         this.personRepository = new PersonRepository();
     }
 
-    /**
-     * Adds a person.
-     *
-     * @param person person to add
-     */
+
     public void addPerson(Person person){
+        PersonValidator.validatePersonData(
+                person.getIdentification() ,
+                person.getName() ,
+                person.getEmail() ,
+                person.getPhone()
+        );
+
+        List<Person> existing = personRepository.getPeople();
+        PersonValidator.validateUniquePerson(existing, person.getIdentification());
 
         personRepository.addPerson(person);
     }
