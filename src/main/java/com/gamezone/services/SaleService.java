@@ -51,7 +51,7 @@ public class SaleService {
 
         List<Product> soldProducts = sale.getProducts();
         List<Product> storedProducts = sale.getProducts();
-        List<Accessory> storedAccessories = accessoryService.listAllAccessories();
+        List<Accessory> storedAccessories = accessoryService.listAllAccesories();
 
         for (Product soldProduct : soldProducts) {
             if (soldProduct instanceof Accessory) {
