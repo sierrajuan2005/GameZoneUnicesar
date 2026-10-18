@@ -1,6 +1,8 @@
 package com.gamezone.services;
+import com.gamezone.exceptions.BusinessRuleException;
 import com.gamezone.model.Product;
 import com.gamezone.persistence.ProductRepository;
+import com.gamezone.validation.ProductValidator;
 
 import java.util.List;
 
@@ -19,17 +21,20 @@ public class ProductService{
     }
 
 
-    /*Registers a new product.
-    @param product product to register
-    @throws IllegalArgumentException if the product identifier already exists
-     */
+
     public void registerProduct(Product product) {
 
         List<Product> products = productRepository.loadAll();
 
+        ProductValidator.validateProductData(
+                product.getIdentifier() ,
+                product.getTitle() ,
+                product.getAvailableQuantity()
+        );
+
         for (Product storedProduct : products) {
             if (storedProduct.getIdentifier().equals(product.getIdentifier())) {
-                throw new IllegalArgumentException(
+                throw new BusinessRuleException(
                     "A product with this identifier already exists."
                 );
             }
