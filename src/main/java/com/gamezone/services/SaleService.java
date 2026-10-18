@@ -198,20 +198,15 @@ public class SaleService {
     }
 
 
-    private Accessory findAccessoryById(
-            List<Accessory> accessories,
-            String identifier) {
-
+    private Accessory findAccessoryById(List<Accessory> accessories, String identifier) {
         for (Accessory accessory : accessories) {
             if (accessory.getIdentifier().equals(identifier)) {
                 return accessory;
             }
         }
-
-        throw new IllegalArgumentException(
-                "Accessory not found: " + identifier
-        );
+        throw new ResourceNotFoundException("Accessory", identifier);
     }
+
 
     /**
      * Searches for a sale using its unique identifier.
