@@ -1,5 +1,6 @@
 package com.gamezone.services;
 import com.gamezone.exceptions.BusinessRuleException;
+import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
 import com.gamezone.validation.SaleValidator;
@@ -193,9 +194,9 @@ public class SaleService {
                 return product;
             }
         }
-
-        throw new IllegalArgumentException("Product not found: " + identifier);
+        throw new ResourceNotFoundException("Product", identifier);
     }
+
 
     private Accessory findAccessoryById(
             List<Accessory> accessories,
