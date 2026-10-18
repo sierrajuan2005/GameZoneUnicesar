@@ -1,6 +1,9 @@
 package com.gamezone.services;
+import com.gamezone.exceptions.BusinessRuleException;
 import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
+import com.gamezone.validation.SaleValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,8 +47,25 @@ public class SaleService {
      * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
      */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
+        SaleValidator.validateSaleData(sale);
 
         List<Product> soldProducts = sale.getProducts();
+        List<Product> storedProducts = sale.getProducts();
+        List<Accessory> storedAccessories = accessoryService.listAllAccessories();
+
+        for (Product soldProduct : soldProducts) {
+            if (soldProduct instanceof Accessory) {
+                Accessory storedAccessory = findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+                if (storedAccessory.getAvailableQuanriry() < 1) {
+                    throw new BusinessRuleException("Insufficient stock for accessory: " + storedAccessory.getTitle());
+                }
+            }else {
+                Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
+                if (storedProduct.getAvailableQuantity() < 1){
+                    throw new BusinessRuleException("Insufficient stock for product: " + storedProduct.getTitle());
+                }
+            }
+        }
 
         if (soldProducts == null || soldProducts.isEmpty()) {
             throw new IllegalArgumentException(
