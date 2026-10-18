@@ -38,125 +38,49 @@ public class SaleService {
         this.promotionService = promotionService;
     }
 
-    /**
-     * Registers a sale, updates the stock of the sold products,
-     * generates warranties where applicable, applies the best
-     * available promotion to the sale, and persists everything.
-     *
-     * @param sale sale to register
-     * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
-     */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         SaleValidator.validateSaleData(sale);
 
         List<Product> soldProducts = sale.getProducts();
-        List<Product> storedProducts = sale.getProducts();
-        List<Accessory> storedAccessories = accessoryService.listAllAccesories();
+        List<Product> storedProducts = productService.listProducts();
+        List<Accessory> storedAccessories = accessoryService.listAllAccessories();
+
+        // Validar que la venta tenga productos
+        if (soldProducts == null || soldProducts.isEmpty()) {
+            throw new BusinessRuleException("A sale must contain at least one product.");
+        }
 
         for (Product soldProduct : soldProducts) {
             if (soldProduct instanceof Accessory) {
                 Accessory storedAccessory = findAccessoryById(storedAccessories, soldProduct.getIdentifier());
-                if (storedAccessory.getAvailableQuanriry() < 1) {
+                if (storedAccessory.getAvailableQuantity() < 1) {
                     throw new BusinessRuleException("Insufficient stock for accessory: " + storedAccessory.getTitle());
                 }
-            }else {
+            } else {
                 Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-                if (storedProduct.getAvailableQuantity() < 1){
+                if (storedProduct.getAvailableQuantity() < 1) {
                     throw new BusinessRuleException("Insufficient stock for product: " + storedProduct.getTitle());
                 }
             }
         }
 
-        if (soldProducts == null || soldProducts.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "A sale must contain at least one product."
-            );
-        }
-
-        List<Product> storedProducts = productService.listProducts();
-        List<Accessory> storedAccessories = accessoryService.listAllAccessories();
-
-        for (Product soldProduct : soldProducts) {
-
-            if (soldProduct instanceof Accessory) {
-
-                Accessory storedAccessory =
-                        findAccessoryById(
-                                storedAccessories,
-                                soldProduct.getIdentifier()
-                        );
-
-                if (storedAccessory.getAvailableQuantity() < 1) {
-                    throw new IllegalStateException(
-                            "Insufficient stock for accessory: "
-                                    + storedAccessory.getTitle()
-                    );
-                }
-
-            } else {
-
-                Product storedProduct =
-                        findProductById(
-                                storedProducts,
-                                soldProduct.getIdentifier()
-                        );
-
-                if (storedProduct.getAvailableQuantity() < 1) {
-                    throw new IllegalStateException(
-                            "Insufficient stock for product: "
-                                    + storedProduct.getTitle()
-                    );
-                }
-            }
-        }
-
         double subtotal = sale.calculateSubtotal();
-
         applyBestPromotion(sale);
 
-        double extendedWarrantyCost =
-                assignWarranties(
-                        sale,
-                        productIdsWithExtendedWarranty
-                );
-
+        double extendedWarrantyCost = assignWarranties(sale, productIdsWithExtendedWarranty);
         sale.setExtendedWarrantyCost(extendedWarrantyCost);
 
         sale.calculateFinalTotal();
 
         for (Product soldProduct : soldProducts) {
-
             if (soldProduct instanceof Accessory) {
-
-                Accessory storedAccessory =
-                        findAccessoryById(
-                                storedAccessories,
-                                soldProduct.getIdentifier()
-                        );
-
-                int newQuantity =
-                        storedAccessory.getAvailableQuantity() - 1;
-
-                accessoryService.updateStock(
-                        storedAccessory.getIdentifier(),
-                        newQuantity
-                );
-
+                Accessory storedAccessory = findAccessoryById(storedAccessories, soldProduct.getIdentifier());
+                int newQuantity = storedAccessory.getAvailableQuantity() - 1;
+                accessoryService.updateStock(storedAccessory.getIdentifier(), newQuantity);
             } else {
-
-                Product storedProduct =
-                        findProductById(
-                                storedProducts,
-                                soldProduct.getIdentifier()
-                        );
-
-                int newQuantity =
-                        storedProduct.getAvailableQuantity() - 1;
-
-                productService.updateStock(
-                        storedProduct,
-                        newQuantity
-                );
+                Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
+                int newQuantity = storedProduct.getAvailableQuantity() - 1;
+                productService.updateStock(storedProduct, newQuantity);
             }
         }
 
