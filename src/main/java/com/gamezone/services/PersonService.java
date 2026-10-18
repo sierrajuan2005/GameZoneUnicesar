@@ -60,13 +60,12 @@ public class PersonService {
         return person;
     }
 
-    /**
-     * Removes a person by identification.
-     *
-     * @param identification unique ID of the person
-     * @return true if removed, false otherwise
-     */
+
     public boolean removePerson(String identification) {
+        Person person = personRepository.findByIdentification(identification);
+        if (person == null){
+            throw new ResourceNotFoundException("Person", identification);
+        }
         return personRepository.removePerson(identification);
     }
 
