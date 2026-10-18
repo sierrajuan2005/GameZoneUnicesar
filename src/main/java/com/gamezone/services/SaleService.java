@@ -220,7 +220,7 @@ public class SaleService {
                 return sale;
             }
         }
-
-        return null;
+        throw new ResourceNotFoundException("Sale", saleId);
     }
+
 }
