@@ -52,10 +52,7 @@ public class ProductRepository{
         }
     }
 
-    /*
-    Loads all products from the CSV file.
-    @return list of stored products
-     */
+
     public List<Product> loadAll(){
         Path path = Paths.get(FILE_PATH);
         List<Product> products = new ArrayList<>();
@@ -74,7 +71,7 @@ public class ProductRepository{
                 }
             }
         }catch (IOException e){
-            throw new RuntimeException("Error loading products. ",e);
+            throw new PersistenceException("Error loading products.", e);
         }
         return products;
     }
