@@ -60,7 +60,8 @@ public class ProductRepository {
             }
             Files.write(path, lines);
         } catch (IOException e) {
-            throw new PersistenceException("Error saving products.", e);
+            throw new PersistenceException(
+                    "Error writing file " + FILE_PATH + " (write operation) while saving products.", e);
         }
     }
 
@@ -88,7 +89,8 @@ public class ProductRepository {
                 }
             }
         } catch (IOException e) {
-            throw new PersistenceException("Error loading products.", e);
+            throw new PersistenceException(
+                    "Error reading file " + FILE_PATH + " (read operation) while loading products.", e);
         }
         return products;
     }
@@ -123,7 +125,9 @@ public class ProductRepository {
                     + console.getGeneration();
         }
 
-        throw new PersistenceException("Unsupported product type.");
+        throw new PersistenceException(
+                "Unsupported product type '" + product.getClass().getSimpleName()
+                        + "' (write operation on " + FILE_PATH + ").", null);
     }
 
     /**
@@ -161,7 +165,9 @@ public class ProductRepository {
             );
         }
 
-        throw new PersistenceException("Unknown product type: " + type);
+        throw new PersistenceException(
+                "Unknown product type '" + type + "' found in " + FILE_PATH
+                        + " (read operation).", null);
     }
 
     /**

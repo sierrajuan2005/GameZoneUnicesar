@@ -1,9 +1,10 @@
 package com.gamezone.services;
 
+import com.gamezone.exceptions.ResourceNotFoundException;
+import com.gamezone.model.Customer;
 import com.gamezone.model.Person;
 import com.gamezone.model.Seller;
 import com.gamezone.persistence.PersonRepository;
-import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.validation.PersonValidator;
 
 import java.util.List;
@@ -28,16 +29,19 @@ public class PersonService {
 
     /**
      * Adds a person.
+     * Only customers have an email; for other roles the email is passed as null.
      *
      * @param person person to add
      * @throws com.gamezone.exceptions.InvalidDataException if person data is invalid
      * @throws com.gamezone.exceptions.BusinessRuleException if a person with the same ID already exists
      */
     public void addPerson(Person person) {
+        String email = (person instanceof Customer customer) ? customer.getEmail() : null;
+
         PersonValidator.validatePersonData(
                 person.getIdentification(),
                 person.getName(),
-                person.getEmail(),
+                email,
                 person.getPhone()
         );
 
