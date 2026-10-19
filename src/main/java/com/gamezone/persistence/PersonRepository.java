@@ -31,9 +31,10 @@ public class PersonRepository {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error saving persons", e);
+            throw new PersistenceException("Error saving persons", e);
         }
     }
+
 
     /**
      * Loads all persons from the CSV file.
