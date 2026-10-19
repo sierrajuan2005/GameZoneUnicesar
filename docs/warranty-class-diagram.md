@@ -1,123 +1,93 @@
+# Diagrama de Clases - Garantías
+
+```mermaid
 classDiagram
-
-    %% =========================
-    %% PRODUCT
-    %% =========================
-
-    class Product {
-        <<abstract>>
-        -String identifier
-        -String title
-        -double price
-        -int availableQuantity
-        +String getIdentifier()
-        +String getTitle()
-        +double getPrice()
-        +int getAvailableQuantity()
-        +String getDescription()
-    }
-
-    %% =========================
-    %% WARRANTY HIERARCHY
-    %% =========================
 
     class Warranty {
         <<abstract>>
         -String identifier
-        -String name
-        -int durationMonths
-        -String coverage
-        +Warranty(String identifier, String name, int durationMonths, String coverage)
+        -Product product
+        -Sale sale
+        -LocalDate startDate
+        -LocalDate endDate
+        +Warranty(String identifier, Product product, Sale sale, LocalDate startDate)
         +String getIdentifier()
-        +String getName()
-        +int getDurationMonths()
-        +String getCoverage()
-        +void setName(String name)
-        +void setDurationMonths(int durationMonths)
-        +void setCoverage(String coverage)
-        +abstract boolean isValid()
+        +Product getProduct()
+        +Sale getSale()
+        +LocalDate getStartDate()
+        +LocalDate getEndDate()
+        +int getDurationInMonths()*
+        +String getWarrantyType()*
+        +double getAdditionalCost()*
+        +boolean isActive(LocalDate currentDate)
+        +String generateWarrantyCertificate()
     }
 
     class BasicWarranty {
-        -boolean coversManufacturingDefects
-        +BasicWarranty(String identifier, String name, int durationMonths, String coverage, boolean coversManufacturingDefects)
-        +boolean isCoversManufacturingDefects()
-        +void setCoversManufacturingDefects(boolean coversManufacturingDefects)
-        +boolean isValid()
+        +BasicWarranty(String identifier, Product product, Sale sale, LocalDate startDate)
+        +int getDurationInMonths()
+        +String getWarrantyType()
+        +double getAdditionalCost()
     }
 
     class ExtendedWarranty {
-        -double additionalCost
-        -boolean coversAccidentalDamage
-        +ExtendedWarranty(String identifier, String name, int durationMonths, String coverage, double additionalCost, boolean coversAccidentalDamage)
+        +ExtendedWarranty(String identifier, Product product, Sale sale, LocalDate startDate)
+        +int getDurationInMonths()
+        +String getWarrantyType()
         +double getAdditionalCost()
-        +boolean isCoversAccidentalDamage()
-        +void setAdditionalCost(double additionalCost)
-        +void setCoversAccidentalDamage(boolean coversAccidentalDamage)
-        +boolean isValid()
     }
-
-    %% =========================
-    %% SALE
-    %% =========================
-
-    class Sale {
-        -LocalDate date
-        -List~Product~ products
-        +void addProduct(Product product)
-        +List~Product~ getProducts()
-        +double calculateTotal()
-    }
-
-    %% =========================
-    %% PERSISTENCE
-    %% =========================
 
     class WarrantyRepository {
         -String FILE_PATH
-        +WarrantyRepository()
+        -List~Warranty~ warranties
+        -SaleRepository saleRepository
+        -ProductRepository productRepository
+        +WarrantyRepository(SaleRepository saleRepository, ProductRepository productRepository)
+        +void addWarranty(Warranty warranty)
+        +List~Warranty~ getAllWarranties()
+        +Warranty findByIdentifier(String identifier)
         +List~Warranty~ loadAll()
-        +void saveAll(List~Warranty~ warranties)
-        +Optional~Warranty~ findById(String identifier)
+        -String convertToCsv(Warranty warranty)
+        -Warranty convertFromCsv(String line)
+        -void saveAll(List~Warranty~ warranties)
     }
-
-    %% =========================
-    %% SERVICE
-    %% =========================
 
     class WarrantyService {
         -WarrantyRepository warrantyRepository
         +WarrantyService(WarrantyRepository warrantyRepository)
         +void registerWarranty(Warranty warranty)
-        +List~Warranty~ listAllWarranties()
-        +Optional~Warranty~ findWarrantyById(String identifier)
+        +List~Warranty~ listWarranties()
+        +Warranty findWarrantyByIdentifier(String identifier)
+        +List~Warranty~ reloadWarranties()
+        +BasicWarranty assignBasicWarranty(Product product, Sale sale, LocalDate startDate)
+        +ExtendedWarranty assignExtendedWarranty(Product product, Sale sale, LocalDate startDate)
+        +Warranty findWarrantyByProduct(String productIdentifier, String saleIdentifier)
+        +List~Warranty~ listActiveWarranties()
+        +List~Warranty~ listWarrantiesExpiringSoon(int daysAhead)
     }
 
-    %% =========================
-    %% SALE SERVICE
-    %% =========================
-
-    class SaleService {
-        -WarrantyService warrantyService
-        +SaleService(WarrantyService warrantyService)
-        +void registerSale(Sale sale)
+    class Product {
+        <<abstract>>
     }
 
-    %% =========================
-    %% RELATIONSHIPS
-    %% =========================
+    class Sale {
+    }
+
+    class SaleRepository {
+    }
+
+    class ProductRepository {
+    }
 
     Warranty <|-- BasicWarranty
     Warranty <|-- ExtendedWarranty
 
-    Sale "1" --> "1..*" Product : contains
+    Warranty --> Product : product
+    Warranty --> Sale : sale
 
-    Product "1" --> "0..1" Warranty : has warranty
-
-    WarrantyRepository --> Warranty : persists
+    WarrantyRepository --> Warranty : manages
+    WarrantyRepository --> SaleRepository : uses
+    WarrantyRepository --> ProductRepository : uses
 
     WarrantyService --> WarrantyRepository : uses
     WarrantyService --> Warranty : manages
-
-    SaleService --> Sale : registers
-    SaleService --> WarrantyService : manages warranties

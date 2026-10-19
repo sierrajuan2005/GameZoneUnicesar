@@ -1,8 +1,7 @@
-classDiagram
+# Diagrama de Clases
 
-    %% =========================
-    %% PRODUCT
-    %% =========================
+```mermaid
+classDiagram
 
     class Product {
         <<abstract>>
@@ -22,10 +21,6 @@ classDiagram
         +String getDescription()
     }
 
-    %% =========================
-    %% ACCESSORY HIERARCHY
-    %% =========================
-
     class Accessory {
         <<abstract>>
         -List~Console~ compatibleConsoles
@@ -43,17 +38,6 @@ classDiagram
         +String getDescription()
     }
 
-    class Cable {
-        -double length
-        -String connectorType
-        +Cable(String identifier, String title, double price, int availableQuantity, List~Console~ compatibleConsoles, double length, String connectorType)
-        +double getLength()
-        +void setLength(double length)
-        +String getConnectorType()
-        +void setConnectorType(String connectorType)
-        +String getDescription()
-    }
-
     class Memory {
         -int capacity
         -String memoryType
@@ -65,78 +49,59 @@ classDiagram
         +String getDescription()
     }
 
-    %% =========================
-    %% CONSOLE
-    %% =========================
-
-    class Console {
-        -String identifier
-        -String title
-        -double price
-        -int availableQuantity
+    class Cable {
+        -double length
+        -String connectorType
+        +Cable(String identifier, String title, double price, int availableQuantity, List~Console~ compatibleConsoles, double length, String connectorType)
+        +double getLength()
+        +void setLength(double length)
+        +String getConnectorType()
+        +void setConnectorType(String connectorType)
+        +String getDescription()
     }
 
-    %% =========================
-    %% PERSISTENCE
-    %% =========================
+    class Console {
+        -String brand
+        -String model
+        -String generation
+        +Console(String identifier, String title, double price, int availableQuantity, String brand, String model, String generation)
+        +String getBrand()
+        +void setBrand(String brand)
+        +String getModel()
+        +void setModel(String model)
+        +String getGeneration()
+        +void setGeneration(String generation)
+        +String getDescription()
+    }
 
     class AccessoryRepository {
         -String FILE_PATH
         +AccessoryRepository()
-        +List~Accessory~ loadAll()
         +void saveAll(List~Accessory~ accessories)
-        +Optional~Accessory~ findById(String identifier)
+        +List~Accessory~ loadAll()
     }
-
-    %% =========================
-    %% SERVICE
-    %% =========================
 
     class AccessoryService {
         -AccessoryRepository accessoryRepository
         +AccessoryService(AccessoryRepository accessoryRepository)
-        +void registerController(Controller controller)
-        +void registerCable(Cable cable)
-        +void registerMemory(Memory memory)
+        +void registerController(String id, String title, double price, int availability, List~Console~ consoles, String connectionType)
+        +void registerCable(String id, String title, double price, int availability, List~Console~ consoles, double length, String connectorType)
+        +void registerMemory(String id, String title, double price, int availability, List~Console~ consoles, int capacity, String memoryType)
         +List~Accessory~ listAllAccessories()
         +List~Accessory~ listAccessoriesByType(String type)
-        +List~Accessory~ findAccessoriesCompatibleWith(Console console)
-        +void updateStock(String identifier, int quantity)
+        +List~Accessory~ findAccessoriesCompatibleWith(String consoleId)
+        +Accessory findById(String id)
+        +void updateStock(String accessoryId, int quantity)
     }
-
-    %% =========================
-    %% SALE
-    %% =========================
-
-    class Sale {
-        -LocalDate date
-        -List~Product~ products
-        +void addProduct(Product product)
-        +double calculateTotal()
-        +boolean canBeReturned()
-    }
-
-    class SaleService {
-        +void registerSale(Sale sale)
-    }
-
-    %% =========================
-    %% RELATIONSHIPS
-    %% =========================
 
     Product <|-- Accessory
+    Product <|-- Console
 
     Accessory <|-- Controller
-    Accessory <|-- Cable
     Accessory <|-- Memory
+    Accessory <|-- Cable
 
     Accessory "0..*" --> "0..*" Console : compatible with
 
-    AccessoryRepository --> Accessory : stores
-
     AccessoryService --> AccessoryRepository : uses
-    AccessoryService --> Accessory : manages
-
-    Sale "1" --> "1..*" Product : contains
-
-    SaleService --> Sale : manages
+    AccessoryRepository --> Accessory : persists

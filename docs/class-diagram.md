@@ -1,236 +1,386 @@
-# Diagrama de Clases
+# Diagrama General de Clases - GameZoneUnicesar
 
 ```mermaid
----
-config:
-  layout: dagre
----
 classDiagram
-    direction TB
 
-    %% =========================
-    %% DOMAIN
-    %% =========================
+%% =========================================================
+%% ====================== MODEL =============================
+%% =========================================================
 
-    namespace Domain {
+class Person {
+    <<abstract>>
+    -String name
+    -String identification
+    -String phone
+    +getName()
+    +getIdentification()
+    +getPhone()
+}
 
-        class Person {
-            <<abstract>>
-            -name: String
-            -identification: String
-            -phone: String
-            +getName(): String
-            +setName(name: String): void
-            +getIdentification(): String
-            +setIdentification(identification: String): void
-            +getPhone(): String
-            +setPhone(phone: String): void
-        }
+class Customer {
+    -String email
+    +Customer(String name, String identification, String phone, String email)
+    +getEmail()
+}
 
-        class Customer {
-            -email: String
-            -purchaseHistory: List~Sale~
-            +getEmail(): String
-            +setEmail(email: String): void
-            +getPurchaseHistory(): List~Sale~
-            +addToPurchaseHistory(sale: Sale): void
-        }
+class Seller {
+    -String employeeCode
+    -String workShift
+    +Seller(String name, String identification, String phone, String employeeCode, String workShift)
+    +getEmployeeCode()
+    +getWorkShift()
+}
 
-        class Seller {
-            -employeeCode: String
-            -workShift: String
-            +getEmployeeCode(): String
-            +setEmployeeCode(employeeCode: String): void
-            +getWorkShift(): String
-            +setWorkShift(workShift: String): void
-        }
+Person <|-- Customer
+Person <|-- Seller
 
-        class Product {
-            <<abstract>>
-            -identifier: String
-            -title: String
-            -price: double
-            -availableQuantity: int
-            +getIdentifier(): String
-            +setIdentifier(identifier: String): void
-            +getTitle(): String
-            +setTitle(title: String): void
-            +getPrice(): double
-            +setPrice(price: double): void
-            +getAvailableQuantity(): int
-            +setAvailableQuantity(availableQuantity: int): void
-            +getDescription(): String
-        }
 
-        class VideoGame {
-            -platform: String
-            -genre: String
-            -ageRating: String
-            +getPlatform(): String
-            +setPlatform(platform: String): void
-            +getGenre(): String
-            +setGenre(genre: String): void
-            +getAgeRating(): String
-            +setAgeRating(ageRating: String): void
-            +getDescription(): String
-        }
+class Product {
+    <<abstract>>
+    -String identifier
+    -String title
+    -double price
+    -int availableQuantity
+    +getIdentifier()
+    +getTitle()
+    +getPrice()
+    +getAvailableQuantity()
+    +setAvailableQuantity(int)
+    +getDescription()*
+}
 
-        class Console {
-            -brand: String
-            -model: String
-            -generation: String
-            +getBrand(): String
-            +setBrand(brand: String): void
-            +getModel(): String
-            +setModel(model: String): void
-            +getGeneration(): String
-            +setGeneration(generation: String): void
-            +getDescription(): String
-        }
+class VideoGame {
+    -String platform
+    -String genre
+    -String ageRating
+}
 
-        class Sale {
-            -date: LocalDate
-            -customer: Customer
-            -seller: Seller
-            -products: List~Product~
-            +getDate(): LocalDate
-            +setDate(date: LocalDate): void
-            +getCustomer(): Customer
-            +setCustomer(customer: Customer): void
-            +getSeller(): Seller
-            +setSeller(seller: Seller): void
-            +getProducts(): List~Product~
-            +addProduct(product: Product): void
-            +calculateTotal(): double
-        }
-    }
+class Console {
+    -String brand
+    -String model
+    -String generation
+    +Console(String identifier, String title, double price, int availableQuantity, String brand, String model, String generation)
+    +getBrand()
+    +setBrand(String)
+    +getModel()
+    +setModel(String)
+    +getGeneration()
+    +setGeneration(String)
+    +getDescription()
+}
 
-    %% =========================
-    %% PERSISTENCE
-    %% =========================
+Product <|-- VideoGame
+Product <|-- Console
 
-    namespace Persistence {
 
-        class PersonRepository {
-            +save(person: Person): void
-            +load(): List~Person~
-            +saveAll(people: List~Person~): void
-            +loadAll(): List~Person~
-        }
+class Accessory {
+    <<abstract>>
+    -List~Console~ compatibleConsoles
+}
 
-        class ProductRepository {
-            +save(product: Product): void
-            +load(): List~Product~
-            +saveAll(products: List~Product~): void
-            +loadAll(): List~Product~
-        }
+class Controller {
+    -String connectionType
+    +Controller(...)
+    +getConnectionType()
+    +setConnectionType(String)
+    +getDescription()
+}
 
-        class SaleRepository {
-            +save(sale: Sale): void
-            +load(): List~Sale~
-            +saveAll(sales: List~Sale~): void
-            +loadAll(): List~Sale~
-        }
-    }
+class Cable {
+    -double length
+    -String connectorType
+    +Cable(...)
+    +getLength()
+    +setLength(double)
+    +getConnectorType()
+    +setConnectorType(String)
+    +getDescription()
+}
 
-    %% =========================
-    %% SERVICES
-    %% =========================
+class Memory {
+    -int capacity
+    -String memoryType
+    +Memory(...)
+    +getCapacity()
+    +setCapacity(int)
+    +getMemoryType()
+    +setMemoryType(String)
+    +getDescription()
+}
 
-    namespace Services {
+Product <|-- Accessory
+Accessory <|-- Controller
+Accessory <|-- Cable
+Accessory <|-- Memory
 
-        class PersonService {
-            -personRepository: PersonRepository
-            +registerCustomer(customer: Customer): void
-            +registerSeller(seller: Seller): void
-            +listCustomers(): List~Customer~
-            +listSellers(): List~Seller~
-        }
+Accessory --> "0..*" Console : compatible with
 
-        class ProductService {
-            -productRepository: ProductRepository
-            +registerProduct(product: Product): void
-            +listProducts(): List~Product~
-            +updateStock(product: Product, quantity: int): void
-        }
 
-        class SaleService {
-            -saleRepository: SaleRepository
-            +registerSale(sale: Sale): void
-            +listSales(): List~Sale~
-            +getCustomerPurchaseHistory(customer: Customer): List~Sale~
-            +getSellerSalesHistory(seller: Seller): List~Sale~
-        }
-    }
+class Sale {
+    -String identifier
+    -LocalDate date
+    -Customer customer
+    -Seller seller
+    -List~Product~ products
+    +calculateTotal()
+    +generateReceipt()
+}
 
-    %% =========================
-    %% USER INTERFACE
-    %% =========================
+Sale --> "1" Customer : customer
+Sale --> "1" Seller : seller
+Sale --> "1..*" Product : products
 
-    namespace UserInterface {
 
-        class ConsoleUI {
-            -personService: PersonService
-            -productService: ProductService
-            -saleService: SaleService
-            +showMainMenu(): void
-            +showPersonMenu(): void
-            +showProductMenu(): void
-            +showSaleMenu(): void
-            +start(): void
-        }
-    }
+class Warranty {
+    <<abstract>>
+    -String identifier
+    -Product product
+    -Sale sale
+    -LocalDate startDate
+    -LocalDate endDate
+    +getIdentifier()
+    +getProduct()
+    +getSale()
+    +getStartDate()
+    +getEndDate()
+    +getDurationInMonths()*
+    +generateWarrantyCertificate()
+}
 
-    %% =========================
-    %% MAIN
-    %% =========================
+class BasicWarranty {
+}
 
-    class Main {
-        +main(args: String[]): void
-    }
+class ExtendedWarranty {
+}
 
-    %% =========================
-    %% INHERITANCE
-    %% =========================
+Warranty <|-- BasicWarranty
+Warranty <|-- ExtendedWarranty
 
-    Person <|-- Customer
-    Person <|-- Seller
+Warranty --> "1" Product : product
+Warranty --> "1" Sale : sale
 
-    Product <|-- VideoGame
-    Product <|-- Console
 
-    %% =========================
-    %% SALE ASSOCIATIONS
-    %% =========================
+class Return {
+    -Sale sale
+    -List~Product~ products
+    -String reason
+    +generateReturnReceipt()
+}
 
-    Sale "1" --> "1" Customer : customer
-    Sale "1" --> "1" Seller : seller
-    Sale "1" --> "1..*" Product : products
+Return --> "1" Sale : sale
+Return --> "1..*" Product : returned products
 
-    %% =========================
-    %% LAYER DEPENDENCIES
-    %% =========================
 
-    PersonRepository ..> Person
-    ProductRepository ..> Product
-    SaleRepository ..> Sale
+class Promotion {
+    <<abstract>>
+    -String identifier
+    -String name
+    -LocalDate startDate
+    -LocalDate endDate
+}
 
-    PersonService ..> PersonRepository
-    PersonService ..> Customer
-    PersonService ..> Seller
+class PercentageDiscount {
+    -double discountPercentage
+}
 
-    ProductService ..> ProductRepository
-    ProductService ..> Product
+class CategoryDiscount {
+    -double discountPercentage
+    -String targetCategory
+}
 
-    SaleService ..> SaleRepository
-    SaleService ..> Sale
-    SaleService ..> Product
-    SaleService ..> Customer
-    SaleService ..> Seller
+class BulkPurchaseDiscount {
+    -int minimumQuantity
+    -double discountPercentage
+}
 
-    ConsoleUI ..> PersonService
-    ConsoleUI ..> ProductService
-    ConsoleUI ..> SaleService
+Promotion <|-- PercentageDiscount
+Promotion <|-- CategoryDiscount
+Promotion <|-- BulkPurchaseDiscount
 
-    Main ..> ConsoleUI
-```
+
+%% =========================================================
+%% =================== PERSISTENCE =========================
+%% =========================================================
+
+class PersonRepository {
+    -String FILE_PATH
+    +saveAll(List~Person~)
+    +loadAll()
+    +addPerson(Person)
+    +getPeople()
+    +findByIdentification(String)
+    +removePerson(String)
+}
+
+class ProductRepository {
+}
+
+class AccessoryRepository {
+    -String FILE_PATH
+    +saveAll(List~Accessory~)
+    +loadAll()
+}
+
+class SaleRepository {
+}
+
+class WarrantyRepository {
+}
+
+class ReturnRepository {
+}
+
+class PromotionRepository {
+    -String FILE_PATH
+    +saveAll(List~Promotion~)
+    +loadAll()
+}
+
+PersonRepository ..> Person : persists
+PersonRepository ..> Customer : creates
+PersonRepository ..> Seller : creates
+
+AccessoryRepository ..> Accessory : persists
+AccessoryRepository ..> Controller : creates
+AccessoryRepository ..> Cable : creates
+AccessoryRepository ..> Memory : creates
+
+PromotionRepository ..> Promotion : persists
+PromotionRepository ..> PercentageDiscount : creates
+PromotionRepository ..> CategoryDiscount : creates
+PromotionRepository ..> BulkPurchaseDiscount : creates
+
+ProductRepository ..> Product : persists
+SaleRepository ..> Sale : persists
+WarrantyRepository ..> Warranty : persists
+ReturnRepository ..> Return : persists
+
+
+%% =========================================================
+%% ====================== SERVICES ==========================
+%% =========================================================
+
+class PersonService {
+    -PersonRepository personRepository
+    +PersonService(PersonRepository)
+    +PersonService()
+    +addPerson(Person)
+    +getAllPeople()
+    +findPersonByIdentification(String)
+    +removePerson(String)
+    +preloadSellers(PersonService)
+}
+
+class ProductService {
+    -ProductRepository productRepository
+}
+
+class AccessoryService {
+    -AccessoryRepository accessoryRepository
+    +AccessoryService(AccessoryRepository)
+    +registerController(...)
+    +registerCable(...)
+    +registerMemory(...)
+    +listAllAccessories()
+    +listAccessoriesByType(String)
+    +findAccessoriesCompatibleWith(String)
+    +findById(String)
+    +updateStock(String, int)
+}
+
+class SaleService {
+    -SaleRepository saleRepository
+    -ProductService productService
+    -AccessoryService accessoryService
+    -WarrantyService warrantyService
+    -PromotionService promotionService
+}
+
+class WarrantyService {
+    -WarrantyRepository warrantyRepository
+}
+
+class ReturnService {
+    -ReturnRepository returnRepository
+    -SaleService saleService
+    -ProductService productService
+}
+
+class PromotionService {
+    -PromotionRepository promotionRepository
+}
+
+PersonService --> PersonRepository
+ProductService --> ProductRepository
+AccessoryService --> AccessoryRepository
+SaleService --> SaleRepository
+SaleService --> ProductService
+SaleService --> AccessoryService
+SaleService --> WarrantyService
+SaleService --> PromotionService
+WarrantyService --> WarrantyRepository
+ReturnService --> ReturnRepository
+ReturnService --> SaleService
+ReturnService --> ProductService
+PromotionService --> PromotionRepository
+
+
+%% =========================================================
+%% ======================== UI ==============================
+%% =========================================================
+
+class ConsoleUI {
+    -PersonService personService
+    -ProductService productService
+    -SaleService saleService
+    -WarrantyService warrantyService
+    -ReturnService returnService
+    -PromotionService promotionService
+    -AccessoryService accessoryService
+    -Scanner scanner
+
+    +ConsoleUI(...)
+    +start()
+    +showMainMenu()
+    +showProductMenu()
+    +showPersonMenu()
+    +showSaleMenu()
+    +showWarrantyMenu()
+    +showReturnMenu()
+    +showPromotionMenu()
+}
+
+ConsoleUI --> PersonService
+ConsoleUI --> ProductService
+ConsoleUI --> AccessoryService
+ConsoleUI --> SaleService
+ConsoleUI --> WarrantyService
+ConsoleUI --> ReturnService
+ConsoleUI --> PromotionService
+
+
+%% =========================================================
+%% ======================== MAIN =============================
+%% =========================================================
+
+class Main {
+    +main(String[])
+    -preloadSellers(PersonService)
+}
+
+Main ..> PersonRepository
+Main ..> ProductRepository
+Main ..> AccessoryRepository
+Main ..> SaleRepository
+Main ..> PromotionRepository
+Main ..> WarrantyRepository
+Main ..> ReturnRepository
+
+Main ..> PersonService
+Main ..> ProductService
+Main ..> AccessoryService
+Main ..> SaleService
+Main ..> PromotionService
+Main ..> WarrantyService
+Main ..> ReturnService
+Main ..> ConsoleUI
