@@ -104,7 +104,7 @@ public class ProductRepository{
                     + console.getGeneration();
         }
 
-        throw new IllegalArgumentException("Unsupported product type.");
+        throw new PersistenceException("Unsupported product type.");
     }
 
     /*
