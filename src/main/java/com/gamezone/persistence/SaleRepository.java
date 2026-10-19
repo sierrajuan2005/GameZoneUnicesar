@@ -1,4 +1,5 @@
 package com.gamezone.persistence;
+
 import com.gamezone.exceptions.PersistenceException;
 import com.gamezone.model.Console;
 import com.gamezone.model.Customer;
@@ -17,21 +18,40 @@ import java.util.List;
 
 /**
  * Repository responsible for saving and loading sales from a text file.
+ * All persistence errors are wrapped in {@link PersistenceException}.
  */
 public class SaleRepository {
 
     private static final String FILE_PATH = "data/sales.txt";
 
+    /**
+     * Saves a sale to the text file.
+     *
+     * @param sale sale to save
+     * @throws PersistenceException if saving fails
+     */
     public void save(Sale sale) {
         List<Sale> sales = loadAll();
         sales.add(sale);
         saveAll(sales);
     }
 
+    /**
+     * Loads all stored sales.
+     *
+     * @return list of sales
+     * @throws PersistenceException if loading fails
+     */
     public List<Sale> load() {
         return loadAll();
     }
 
+    /**
+     * Saves all sales to the text file.
+     *
+     * @param sales list of sales to save
+     * @throws PersistenceException if saving fails
+     */
     public void saveAll(List<Sale> sales) {
         Path path = Paths.get(FILE_PATH);
 
@@ -50,6 +70,12 @@ public class SaleRepository {
         }
     }
 
+    /**
+     * Loads all sales from the text file.
+     *
+     * @return list of sales
+     * @throws PersistenceException if loading fails
+     */
     public List<Sale> loadAll() {
         Path path = Paths.get(FILE_PATH);
         List<Sale> sales = new ArrayList<>();
@@ -75,14 +101,12 @@ public class SaleRepository {
         return sales;
     }
 
-    /*
-    Line format: id;date;customerName;customerId;customerPhone;customerEmail;
-    sellerName;sellerId;sellerPhone;employeeCode;workShift;products;
-    appliedPromotionName;discountAmount
-    The last two fields were added for the promotion module. An empty
-    appliedPromotionName means no promotion was applied to that sale.
+    /**
+     * Converts a sale into CSV format.
+     *
+     * @param sale sale to convert
+     * @return CSV representation of the sale
      */
-
     private String convertToCsv(Sale sale) {
         Customer customer = sale.getCustomer();
         Seller seller = sale.getSeller();
@@ -104,8 +128,13 @@ public class SaleRepository {
                 + sale.getDiscountAmount();
     }
 
+    /**
+     * Converts a CSV line into a Sale object.
+     *
+     * @param line CSV line representing a sale
+     * @return converted sale
+     */
     private Sale convertFromCsv(String line) {
-
         String[] data = line.split(";", -1);
 
         String identifier = data[0];
@@ -146,8 +175,14 @@ public class SaleRepository {
         return products;
     }
 
+    /**
+     * Converts a product into CSV format.
+     *
+     * @param product product to convert
+     * @return CSV representation of the product
+     * @throws PersistenceException if product type is unsupported
+     */
     private String convertProductToCsv(Product product) {
-
         if (product instanceof VideoGame videoGame) {
             return "VIDEO_GAME,"
                     + videoGame.getIdentifier() + ","
@@ -171,11 +206,16 @@ public class SaleRepository {
         }
 
         throw new PersistenceException("Unsupported product type.");
-
     }
 
+    /**
+     * Converts a CSV line into a Product object.
+     *
+     * @param data CSV line representing a product
+     * @return converted product
+     * @throws PersistenceException if product type is unknown
+     */
     private Product convertProductFromCsv(String data) {
-
         String[] fields = data.split(",");
         String type = fields[0];
 
@@ -196,6 +236,13 @@ public class SaleRepository {
         throw new PersistenceException("Unknown product type: " + type);
     }
 
+    /**
+     * Finds a sale by its identifier.
+     *
+     * @param identifier unique ID of the sale
+     * @return sale if found, null otherwise
+     * @throws PersistenceException if loading fails
+     */
     public Sale findByIdentifier(String identifier) {
         List<Sale> sales = load();
         for (Sale sale : sales) {
