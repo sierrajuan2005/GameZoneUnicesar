@@ -1,8 +1,10 @@
 package com.gamezone.services;
+
 import com.gamezone.exceptions.BusinessRuleException;
 import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
+import com.gamezone.validation.ProductValidator;
 import com.gamezone.validation.SaleValidator;
 
 import java.util.ArrayList;
@@ -10,20 +12,22 @@ import java.util.List;
 
 /**
  * Handles the business logic related to sales.
+ * Delegates persistence to SaleRepository and validations to SaleValidator/ProductValidator.
  */
 public class SaleService {
 
-    private SaleRepository saleRepository;
-    private ProductService productService;
-    private WarrantyService warrantyService;
-    private PromotionService promotionService;
-    private AccessoryService accessoryService;
+    private final SaleRepository saleRepository;
+    private final ProductService productService;
+    private final WarrantyService warrantyService;
+    private final PromotionService promotionService;
+    private final AccessoryService accessoryService;
 
     /**
      * Creates a SaleService with the required repositories and services.
      *
      * @param saleRepository   repository used to store sales
      * @param productService   service used to manage products and stock
+     * @param accessoryService service used to manage accessories
      * @param warrantyService  service used to generate warranties for consoles
      * @param promotionService service used to find the best applicable promotion
      */
@@ -39,6 +43,16 @@ public class SaleService {
         this.promotionService = promotionService;
     }
 
+    /**
+     * Registers a sale, updates the stock of the sold products,
+     * generates warranties where applicable, applies the best
+     * available promotion to the sale, and persists everything.
+     *
+     * @param sale sale to register
+     * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
+     * @throws BusinessRuleException if sale data is invalid or stock is insufficient
+     * @throws ResourceNotFoundException if a product or accessory is not found
+     */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
         SaleValidator.validateSaleData(sale);
 
@@ -46,7 +60,6 @@ public class SaleService {
         List<Product> storedProducts = productService.listProducts();
         List<Accessory> storedAccessories = accessoryService.listAllAccessories();
 
-        // Validar que la venta tenga productos
         if (soldProducts == null || soldProducts.isEmpty()) {
             throw new BusinessRuleException("A sale must contain at least one product.");
         }
@@ -54,23 +67,17 @@ public class SaleService {
         for (Product soldProduct : soldProducts) {
             if (soldProduct instanceof Accessory) {
                 Accessory storedAccessory = findAccessoryById(storedAccessories, soldProduct.getIdentifier());
-                if (storedAccessory.getAvailableQuantity() < 1) {
-                    throw new BusinessRuleException("Insufficient stock for accessory: " + storedAccessory.getTitle());
-                }
+                ProductValidator.validateStockAvailability(storedAccessory.getAvailableQuantity(), storedAccessory.getTitle());
             } else {
                 Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-                if (storedProduct.getAvailableQuantity() < 1) {
-                    throw new BusinessRuleException("Insufficient stock for product: " + storedProduct.getTitle());
-                }
+                ProductValidator.validateStockAvailability(storedProduct.getAvailableQuantity(), storedProduct.getTitle());
             }
         }
 
         double subtotal = sale.calculateSubtotal();
         applyBestPromotion(sale);
-
         double extendedWarrantyCost = assignWarranties(sale, productIdsWithExtendedWarranty);
         sale.setExtendedWarrantyCost(extendedWarrantyCost);
-
         sale.calculateFinalTotal();
 
         for (Product soldProduct : soldProducts) {
@@ -91,31 +98,30 @@ public class SaleService {
 
     /**
      * Finds the best active promotion for the sale, if any, and
-     * assigns its name and discount amount to the sale. If no
-     * promotion applies, the sale keeps no discount.
+     * assigns its name and discount amount to the sale.
      *
      * @param sale sale to evaluate and update
      */
     private void applyBestPromotion(Sale sale) {
-
-        Promotion bestPromotion =
-                promotionService.findBestPromotionFor(sale);
+        Promotion bestPromotion = promotionService.findBestPromotionFor(sale);
 
         if (bestPromotion != null) {
-
-            double discount =
-                    bestPromotion.calculateDiscount(sale);
-
+            double discount = bestPromotion.calculateDiscount(sale);
             sale.setAppliedPromotionName(bestPromotion.getName());
             sale.setDiscountAmount(discount);
-
         } else {
-
             sale.setAppliedPromotionName(null);
             sale.setDiscountAmount(0.0);
         }
     }
 
+    /**
+     * Assigns warranties to consoles in the sale.
+     *
+     * @param sale sale to process
+     * @param productIdsWithExtendedWarranty list of product IDs with extended warranty
+     * @return total cost of extended warranties
+     */
     private double assignWarranties(Sale sale, List<String> productIdsWithExtendedWarranty) {
         double extendedWarrantyCost = 0.0;
         List<String> extendedWarrantyIds = productIdsWithExtendedWarranty == null
@@ -130,13 +136,7 @@ public class SaleService {
             warrantyService.assignBasicWarranty(product, sale, sale.getDate());
 
             if (extendedWarrantyIds.contains(product.getIdentifier())) {
-                ExtendedWarranty warranty =
-                        warrantyService.assignExtendedWarranty(
-                                product,
-                                sale,
-                                sale.getDate()
-                        );
-
+                ExtendedWarranty warranty = warrantyService.assignExtendedWarranty(product, sale, sale.getDate());
                 extendedWarrantyCost += warranty.getAdditionalCost();
             }
         }
@@ -160,13 +160,11 @@ public class SaleService {
      */
     public List<Sale> getCustomerPurchaseHistory(Customer customer) {
         List<Sale> history = new ArrayList<>();
-
         for (Sale sale : saleRepository.load()) {
             if (sale.getCustomer().getIdentification().equals(customer.getIdentification())) {
                 history.add(sale);
             }
         }
-
         return history;
     }
 
@@ -178,16 +176,22 @@ public class SaleService {
      */
     public List<Sale> getSellerSalesHistory(Seller seller) {
         List<Sale> history = new ArrayList<>();
-
         for (Sale sale : saleRepository.load()) {
             if (sale.getSeller().getIdentification().equals(seller.getIdentification())) {
                 history.add(sale);
             }
         }
-
         return history;
     }
 
+    /**
+     * Finds a product by its identifier.
+     *
+     * @param products list of products to search
+     * @param identifier product identifier
+     * @return matching product
+     * @throws ResourceNotFoundException if product is not found
+     */
     private Product findProductById(List<Product> products, String identifier) {
         for (Product product : products) {
             if (product.getIdentifier().equals(identifier)) {
@@ -197,7 +201,14 @@ public class SaleService {
         throw new ResourceNotFoundException("Product", identifier);
     }
 
-
+    /**
+     * Finds an accessory by its identifier.
+     *
+     * @param accessories list of accessories to search
+     * @param identifier accessory identifier
+     * @return matching accessory
+     * @throws ResourceNotFoundException if accessory is not found
+     */
     private Accessory findAccessoryById(List<Accessory> accessories, String identifier) {
         for (Accessory accessory : accessories) {
             if (accessory.getIdentifier().equals(identifier)) {
@@ -207,12 +218,12 @@ public class SaleService {
         throw new ResourceNotFoundException("Accessory", identifier);
     }
 
-
     /**
      * Searches for a sale using its unique identifier.
      *
      * @param saleId the identifier of the sale to search for
-     * @return the sale that matches the given identifier, or {@code null} if no sale is found
+     * @return the sale that matches the given identifier
+     * @throws ResourceNotFoundException if no sale is found
      */
     public Sale findSaleById(String saleId) {
         for (Sale sale : saleRepository.load()) {
@@ -222,5 +233,4 @@ public class SaleService {
         }
         throw new ResourceNotFoundException("Sale", saleId);
     }
-
 }
