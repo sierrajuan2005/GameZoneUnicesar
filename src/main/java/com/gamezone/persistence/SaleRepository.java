@@ -45,7 +45,7 @@ public class SaleRepository {
             Files.write(path, lines);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error saving sales.", e);
+            throw new PersistenceException("Error saving sales.", e);
         }
     }
 
