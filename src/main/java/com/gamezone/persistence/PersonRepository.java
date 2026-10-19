@@ -62,11 +62,12 @@ public class PersonRepository {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Error loading persons", e);
+            throw new PersistenceException("Error loading persons", e);
         }
 
         return persons;
     }
+
 
     /**
      * Adds a new person to the repository and persists changes.
