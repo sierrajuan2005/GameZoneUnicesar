@@ -68,7 +68,7 @@ public class SaleRepository {
             }
 
         } catch (IOException e) {
-            throw new RuntimeException("Error loading sales.", e);
+            throw new PersistenceException("Error loading sales.", e);
         }
 
         return sales;
