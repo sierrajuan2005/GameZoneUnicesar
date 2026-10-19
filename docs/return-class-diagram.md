@@ -1,104 +1,78 @@
+# Diagrama de Clases - Devoluciones
+
+```mermaid
 classDiagram
 
-    %% =========================
-    %% PRODUCT
-    %% =========================
-
-    class Product {
-        <<abstract>>
-        -String identifier
-        -String title
-        -double price
-        -int availableQuantity
-        +String getIdentifier()
-        +String getTitle()
-        +double getPrice()
-        +int getAvailableQuantity()
-        +String getDescription()
-    }
-
-    %% =========================
-    %% SALE
-    %% =========================
-
-    class Sale {
-        -LocalDate date
-        -List~Product~ products
-        +void addProduct(Product product)
-        +List~Product~ getProducts()
-        +double calculateTotal()
-        +boolean canBeReturned()
-    }
-
-    %% =========================
-    %% RETURN
-    %% =========================
-
     class Return {
+        -String identifier
         -LocalDate returnDate
         -Sale originalSale
         -List~Product~ returnedProducts
         -String reason
         -double refundAmount
-        +Return(LocalDate returnDate, Sale originalSale, List~Product~ returnedProducts, String reason)
+        +Return(String identifier, LocalDate returnDate, Sale originalSale, List~Product~ returnedProducts, String reason)
+        +String getIdentifier()
+        +LocalDate getReturnDate()
+        +Sale getOriginalSale()
+        +List~Product~ getReturnedProducts()
+        +String getReason()
+        +double getRefundAmount()
         +double calculateRefundAmount()
         +String generateReturnReceipt()
     }
 
-    %% =========================
-    %% PERSISTENCE
-    %% =========================
-
     class ReturnRepository {
         -String FILE_PATH
-        +ReturnRepository()
-        +List~Return~ loadAll()
+        -SaleService saleService
+        -ProductService productService
+        +ReturnRepository(SaleService saleService, ProductService productService)
         +void saveAll(List~Return~ returns)
+        +List~Return~ loadAll()
+        -String convertToCsv(Return r)
+        -Return convertFromCsv(String line)
     }
-
-    %% =========================
-    %% SERVICE
-    %% =========================
 
     class ReturnService {
         -ReturnRepository returnRepository
-        +ReturnService(ReturnRepository returnRepository)
-        +void registerReturn(Return returnItem)
-        +List~Return~ listAllReturns()
-        +double calculateMonthlyReturnBalance(int month, int year)
+        -SaleService saleService
+        -ProductService productService
+        +ReturnService(ReturnRepository returnRepository, SaleService saleService, ProductService productService)
+        +Return registerReturn(String identifier, List~String~ productIds, String reason)
+        +List~Return~ viewAllReturns()
+        +List~Return~ viewReturnsByCustomer(String customerId)
+        +List~Return~ viewReturnsBySale(String saleId)
+        +double generateMonthlyBalance(int month, int year)
     }
 
-    %% =========================
-    %% PRODUCT SERVICE
-    %% =========================
+    class SaleService {
+        -SaleRepository saleRepository
+        -ProductService productService
+        -AccessoryService accessoryService
+        -WarrantyService warrantyService
+        -PromotionService promotionService
+        +Sale findSaleById(String saleId)
+        +List~Sale~ listSales()
+    }
 
     class ProductService {
-        +void restoreStock(Product product, int quantity)
+        -ProductRepository productRepository
+        +Product findByIdentifier(String identifier)
+        +void updateStock(Product product, int quantity)
+        +void restoreStock(String productId, int quantity)
+        +List~Product~ listProducts()
     }
 
-    %% =========================
-    %% MENU
-    %% =========================
-
-    class ConsoleMenu {
-        +void showReturnMenu()
-    }
-
-    %% =========================
-    %% RELATIONSHIPS
-    %% =========================
-
-    Sale "1" --> "1..*" Product : contains
-
-    Return "1" --> "1" Sale : original sale
-    Return "1" --> "1..*" Product : returned products
+    Return --> Sale : originalSale
+    Return --> Product : returnedProducts
 
     ReturnRepository --> Return : persists
+    ReturnRepository --> SaleService : uses
+    ReturnRepository --> ProductService : uses
 
     ReturnService --> ReturnRepository : uses
-    ReturnService --> Return : manages
+    ReturnService --> SaleService : uses
+    ReturnService --> ProductService : uses
+    ReturnService --> Return : creates
 
-    ReturnService --> Sale : validates return
-    ReturnService --> ProductService : restores stock
-
-    ConsoleMenu --> ReturnService : manages returns
+    ReturnService ..> Sale : validates
+    ReturnService ..> Product : restores stock
