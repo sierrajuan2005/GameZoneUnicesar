@@ -144,7 +144,7 @@ public class ProductRepository{
             );
         }
 
-        throw new IllegalArgumentException("Unknown product type: " + type);
+        throw new PersistenceException("Unknown product type: " + type);
     }
 
     /**
