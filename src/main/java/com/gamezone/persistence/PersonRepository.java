@@ -1,5 +1,6 @@
 package com.gamezone.persistence;
 
+import com.gamezone.exceptions.PersistenceException;
 import com.gamezone.model.Customer;
 import com.gamezone.model.Person;
 import com.gamezone.model.Seller;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * Repository class for managing Person entities.
  * Provides persistence to a CSV file and methods to save and load data.
+ * All persistence errors are wrapped in {@link PersistenceException}.
  */
 public class PersonRepository {
 
@@ -20,6 +22,7 @@ public class PersonRepository {
      * Saves all persons to the CSV file.
      *
      * @param persons list of persons to persist
+     * @throws PersistenceException if saving fails due to I/O errors
      */
     public void saveAll(List<Person> persons) {
         try (PrintWriter writer = new PrintWriter(new FileWriter(FILE_PATH))) {
@@ -35,11 +38,11 @@ public class PersonRepository {
         }
     }
 
-
     /**
      * Loads all persons from the CSV file.
      *
      * @return list of persons, empty if file does not exist
+     * @throws PersistenceException if loading fails due to I/O errors
      */
     public List<Person> loadAll() {
         List<Person> persons = new ArrayList<>();
@@ -68,11 +71,11 @@ public class PersonRepository {
         return persons;
     }
 
-
     /**
      * Adds a new person to the repository and persists changes.
      *
      * @param person person to add
+     * @throws PersistenceException if saving fails
      */
     public void addPerson(Person person) {
         List<Person> persons = loadAll();
@@ -84,6 +87,7 @@ public class PersonRepository {
      * Retrieves all persons from the repository.
      *
      * @return list of persons
+     * @throws PersistenceException if loading fails
      */
     public List<Person> getPeople() {
         return loadAll();
@@ -94,6 +98,7 @@ public class PersonRepository {
      *
      * @param identification unique ID of the person
      * @return person if found, null otherwise
+     * @throws PersistenceException if loading fails
      */
     public Person findByIdentification(String identification) {
         return loadAll().stream()
@@ -107,6 +112,7 @@ public class PersonRepository {
      *
      * @param identification unique ID of the person to remove
      * @return true if the person was removed, false if not found
+     * @throws PersistenceException if saving fails
      */
     public boolean removePerson(String identification) {
         List<Person> persons = loadAll();
@@ -117,4 +123,3 @@ public class PersonRepository {
         return removed;
     }
 }
-
