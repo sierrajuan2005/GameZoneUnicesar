@@ -193,7 +193,7 @@ public class SaleRepository {
             );
         }
 
-        throw new IllegalArgumentException("Unknown product type: " + type);
+        throw new PersistenceException("Unknown product type: " + type);
     }
 
     public Sale findByIdentifier(String identifier) {
