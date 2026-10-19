@@ -1,4 +1,5 @@
 package com.gamezone.persistence;
+
 import com.gamezone.exceptions.PersistenceException;
 import com.gamezone.model.Product;
 import com.gamezone.model.Console;
@@ -11,77 +12,95 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Handles product persistence using a CSV file.
+/**
+ * Handles product persistence using a CSV file.
+ * Provides methods to save, load, and search products.
+ * All persistence errors are wrapped in {@link PersistenceException}.
  */
-
-public class ProductRepository{
+public class ProductRepository {
 
     private static final String FILE_PATH = "data/products.csv";
 
-    /*
-    Saves a product to the CSV file.
-    @param product product to save
+    /**
+     * Saves a product to the CSV file.
+     *
+     * @param product product to save
+     * @throws PersistenceException if saving fails
      */
-    public void save(Product product){
+    public void save(Product product) {
         List<Product> products = loadAll();
         products.add(product);
         saveAll(products);
     }
 
-    /*
-    Loads all stored products.
-    @return list of products
+    /**
+     * Loads all stored products.
+     *
+     * @return list of products
+     * @throws PersistenceException if loading fails
      */
-    public List<Product> load(){
+    public List<Product> load() {
         return loadAll();
     }
 
-    public void saveAll(List<Product> products){
+    /**
+     * Saves all products to the CSV file.
+     *
+     * @param products list of products to save
+     * @throws PersistenceException if saving fails
+     */
+    public void saveAll(List<Product> products) {
         Path path = Paths.get(FILE_PATH);
-        try{
+        try {
             Files.createDirectories(path.getParent());
             List<String> lines = new ArrayList<>();
 
-            for(Product product : products){
+            for (Product product : products) {
                 lines.add(convertToCsv(product));
             }
             Files.write(path, lines);
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new PersistenceException("Error saving products.", e);
         }
     }
 
-
-    public List<Product> loadAll(){
+    /**
+     * Loads all products from the CSV file.
+     *
+     * @return list of stored products
+     * @throws PersistenceException if loading fails
+     */
+    public List<Product> loadAll() {
         Path path = Paths.get(FILE_PATH);
         List<Product> products = new ArrayList<>();
 
-        if(!Files.exists(path)){
+        if (!Files.exists(path)) {
             return products;
         }
 
-        try{
-            List<String> lines=Files.readAllLines(path);
+        try {
+            List<String> lines = Files.readAllLines(path);
 
-            for(String line: lines){
-                if(!line.isBlank()){
+            for (String line : lines) {
+                if (!line.isBlank()) {
                     Product product = convertFromCsv(line);
                     products.add(product);
                 }
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             throw new PersistenceException("Error loading products.", e);
         }
         return products;
     }
 
-    /*Converts a product into CSV format.
-    @param product product to convert
-    @return CSV representation of the product
+    /**
+     * Converts a product into CSV format.
+     *
+     * @param product product to convert
+     * @return CSV representation of the product
+     * @throws PersistenceException if product type is unsupported
      */
     private String convertToCsv(Product product) {
-
         if (product instanceof VideoGame videoGame) {
             return "VIDEO_GAME;"
                     + videoGame.getIdentifier() + ";"
@@ -107,19 +126,18 @@ public class ProductRepository{
         throw new PersistenceException("Unsupported product type.");
     }
 
-    /*
-    Converts a CSV line into a product object.
-    @param line CSV line representing a product
-    @return converted product
+    /**
+     * Converts a CSV line into a product object.
+     *
+     * @param line CSV line representing a product
+     * @return converted product
+     * @throws PersistenceException if product type is unknown
      */
     private Product convertFromCsv(String line) {
-
         String[] data = line.split(";");
-
         String type = data[0];
 
         if (type.equals("VIDEO_GAME")) {
-
             return new VideoGame(
                     data[1],
                     data[2],
@@ -132,7 +150,6 @@ public class ProductRepository{
         }
 
         if (type.equals("CONSOLE")) {
-
             return new Console(
                     data[1],
                     data[2],
