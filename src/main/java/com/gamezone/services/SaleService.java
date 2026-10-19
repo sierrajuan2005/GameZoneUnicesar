@@ -1,6 +1,7 @@
 package com.gamezone.services;
 
 import com.gamezone.exceptions.BusinessRuleException;
+import com.gamezone.exceptions.InvalidDataException;
 import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.*;
 import com.gamezone.persistence.SaleRepository;
@@ -50,27 +51,24 @@ public class SaleService {
      *
      * @param sale sale to register
      * @param productIdsWithExtendedWarranty identifiers of the products that should also receive an extended warranty
-     * @throws BusinessRuleException if sale data is invalid or stock is insufficient
+     * @throws BusinessRuleException if the sale has no customer, seller or products, or stock is insufficient
+     * @throws InvalidDataException if the sale data is invalid
      * @throws ResourceNotFoundException if a product or accessory is not found
      */
     public void registerSale(Sale sale, List<String> productIdsWithExtendedWarranty) {
-        SaleValidator.validateSaleData(sale);
+        SaleValidator.validateSaleData(sale.getCustomer(), sale.getSeller(), sale.getProducts());
 
         List<Product> soldProducts = sale.getProducts();
         List<Product> storedProducts = productService.listProducts();
         List<Accessory> storedAccessories = accessoryService.listAllAccessories();
 
-        if (soldProducts == null || soldProducts.isEmpty()) {
-            throw new BusinessRuleException("A sale must contain at least one product.");
-        }
-
         for (Product soldProduct : soldProducts) {
             if (soldProduct instanceof Accessory) {
                 Accessory storedAccessory = findAccessoryById(storedAccessories, soldProduct.getIdentifier());
-                ProductValidator.validateStockAvailability(storedAccessory.getAvailableQuantity(), storedAccessory.getTitle());
+                ProductValidator.validateStockAvailability(storedAccessory, 1);
             } else {
                 Product storedProduct = findProductById(storedProducts, soldProduct.getIdentifier());
-                ProductValidator.validateStockAvailability(storedProduct.getAvailableQuantity(), storedProduct.getTitle());
+                ProductValidator.validateStockAvailability(storedProduct, 1);
             }
         }
 

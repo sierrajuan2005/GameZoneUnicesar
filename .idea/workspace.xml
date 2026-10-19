@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c6685426-27f5-4fa5-ac5f-435ce998df25" name="Changes" comment="refactor: use internal warranties list instead of repository direct access">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/ai-usage/leader-ai-log.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/ai-usage/leader-ai-log.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/gamezone/services/SaleService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +23,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="feature/exception-handling" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -37,7 +37,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/sierrajuan2005/GameZoneUnicesar.git&quot;,
-    &quot;accountId&quot;: &quot;3ba625c4-04d6-4c9c-bcbe-cbeebcbd5783&quot;
+    &quot;accountId&quot;: &quot;0ef5f6ba-99ad-4550-adff-7bc171b1ad6a&quot;
   }
 }</component>
   <component name="ProjectColorInfo">{
@@ -51,13 +51,13 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "docs/integration-documentation",
+    "git-widget-placeholder": "develop",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/pc/GameZoneUnicesar",
     "node.js.detected.package.jshint": "true",
@@ -107,8 +107,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10968.63" />
-        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10968.63" />
+        <option value="bundled-jdk-30f59d01ecdd-a203e0a19954-intellij.indexing.shared.core-IU-262.10315.125" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-IU-262.10315.125" />
       </set>
     </attachedChunks>
   </component>
