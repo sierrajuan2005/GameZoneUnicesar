@@ -1,4 +1,5 @@
 package com.gamezone.persistence;
+import com.gamezone.exceptions.PersistenceException;
 import com.gamezone.model.Product;
 import com.gamezone.model.Console;
 import com.gamezone.model.VideoGame;
@@ -36,23 +37,18 @@ public class ProductRepository{
         return loadAll();
     }
 
-
-    /*
-    Saves all products to the CSV file.
-    @param products list of products to save
-     */
     public void saveAll(List<Product> products){
         Path path = Paths.get(FILE_PATH);
         try{
             Files.createDirectories(path.getParent());
             List<String> lines = new ArrayList<>();
-            
+
             for(Product product : products){
                 lines.add(convertToCsv(product));
             }
             Files.write(path, lines);
         } catch (IOException e){
-            throw new RuntimeException("Error saving products.", e);
+            throw new PersistenceException("Error saving products.", e);
         }
     }
 
