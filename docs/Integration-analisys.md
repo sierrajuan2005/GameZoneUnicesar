@@ -1,4 +1,4 @@
-# Integration Analysis — Requirement 6
+# Integration Analysis — Requirement 5
 
 This document describes each integration adjustment (A1–A7) applied
 to merge the four independently-validated modules (accessories,
