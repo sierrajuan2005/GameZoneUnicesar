@@ -1,8 +1,8 @@
 # GameZone Unicesar
 
-Information system for managing a video game and console store located in the university district of Valledupar. The system supports the management of products, accessories, customers, sellers, sales, returns, and promotions, with data persistence between executions.
+Information system for managing a video game and console store located in the university district of Valledupar. The system supports the management of products, accessories, customers, sellers, sales, returns, promotions, and warranties, with data persistence between executions.
 
-Project developed as part of the Object-Oriented Programming workshop, applying a layered architecture consisting of **model, persistence, service, and user interface** layers.
+Project developed as part of the Object-Oriented Programming workshop, applying a layered architecture consisting of **model, persistence, service, and user interface** layers, complemented by a cross-cutting **exceptions** layer and a **validation** layer.
 
 ---
 
@@ -57,6 +57,22 @@ Project developed as part of the Object-Oriented Programming workshop, applying 
 * View all registered promotions.
 * View only currently active promotions.
 
+## Warranty Management
+
+* Warranties are generated automatically for consoles when a sale is registered.
+* An extended warranty can be added to a console at the moment of the sale, with an additional cost of 10%.
+* Check the warranty of a product within a specific sale.
+* List all registered warranties.
+* List active warranties.
+* List warranties that are about to expire within a given number of days.
+* Warranties associated with a console are voided when that console is returned.
+
+## Integrated System
+
+* A sale can combine products and accessories; the system automatically applies the best available promotion, generates warranties for consoles, and calculates a final total that includes discounts and extended warranties.
+* Returns replenish the corresponding inventory (product or accessory), calculate a refund proportional to the original discount, and void any associated warranty if a console is returned.
+* The monthly balance sheet breaks down total sales, total returns, and the net balance.
+
 ---
 
 # Accessory Management
@@ -103,6 +119,8 @@ The `AccessoryService` provides the following operations:
 * Find accessories compatible with a specific console.
 * Search accessories by identifier.
 * Update accessory stock.
+
+Accessories can be sold together with video games and consoles in a single transaction.
 
 ## Console Compatibility
 
@@ -155,13 +173,13 @@ The main data files are stored inside the `data/` directory:
 data/
 ├── products.csv
 ├── people.csv
-├── sales.csv
+├── sales.txt
 ├── returns.csv
 ├── promotions.csv
 └── accessories.csv
 ```
 
-Repositories are responsible for reading and writing persistent data, while services contain the corresponding business rules.
+Repositories are responsible for reading and writing persistent data, while services contain the corresponding business rules. Repositories wrap any I/O error in a `PersistenceException`.
 
 ---
 
@@ -172,11 +190,13 @@ The project follows a layered architecture with the following dependency directi
 ```text
 User Interface
        ↓
-   Services
+   Services  ──→  Validation
        ↓
   Persistence
        ↓
      Model
+
+Exceptions: cross-cutting layer, usable from any layer.
 ```
 
 The main project structure is:
@@ -184,6 +204,13 @@ The main project structure is:
 ```text
 src/main/java/com/gamezone/
 
+├── exceptions/
+│   ├── GameZoneException
+│   ├── ResourceNotFoundException
+│   ├── BusinessRuleException
+│   ├── InvalidDataException
+│   └── PersistenceException
+│
 ├── model/
 │   ├── Person
 │   ├── Customer
@@ -197,7 +224,8 @@ src/main/java/com/gamezone/
 │   ├── Memory
 │   ├── Sale
 │   ├── Return
-│   └── Promotion
+│   ├── Promotion (+ subclasses)
+│   └── Warranty (+ subclasses)
 │
 ├── persistence/
 │   ├── PersonRepository
@@ -205,7 +233,9 @@ src/main/java/com/gamezone/
 │   ├── SaleRepository
 │   ├── ReturnRepository
 │   ├── PromotionRepository
-│   └── AccessoryRepository
+│   ├── AccessoryRepository
+│   ├── WarrantyRepository
+│   └── WarrantyRecord
 │
 ├── services/
 │   ├── PersonService
@@ -219,6 +249,11 @@ src/main/java/com/gamezone/
 ├── ui/
 │   └── ConsoleUI
 │
+├── validation/
+│   ├── ProductValidator
+│   ├── PersonValidator
+│   └── SaleValidator
+│
 └── Main.java
 ```
 
@@ -230,7 +265,85 @@ The **persistence layer** handles file-based data storage.
 
 The **UI layer** is responsible for interaction with the user through the console.
 
+The **validation layer** concentrates the verification of data and business rules.
+
+The **exceptions layer** defines the custom exception hierarchy used across the system.
+
 This structure promotes code reuse, separation of responsibilities, maintainability, and clear dependency management.
+
+---
+
+# Exception Handling and Validation Layer
+
+This layer was added in Requirement 6. Its goal is to separate validation
+logic from business logic and to tell the user clearly what went wrong,
+instead of showing the same generic error for every failure.
+
+## Packages
+
+| Package | Responsibility |
+|---|---|
+| `com.gamezone.exceptions` | Custom exception hierarchy. It is a cross-cutting layer: any other layer can use it. |
+| `com.gamezone.validation` | Validators that check data and business rules and throw the custom exceptions. |
+
+## Exception hierarchy
+
+`GameZoneException` is the root class. It extends `RuntimeException` and stores
+an error code. Four specialized subclasses extend it:
+
+| Exception | Thrown when | Example |
+|---|---|---|
+| `ResourceNotFoundException` | A requested resource does not exist | Searching a sale or customer with an unknown identifier |
+| `BusinessRuleException` | A business rule is violated | Insufficient stock, duplicated person, sale without products |
+| `InvalidDataException` | An input value has an invalid format or range | Negative price, empty title, malformed email |
+| `PersistenceException` | Reading or writing a file fails | Missing or unreadable data file |
+
+`PersistenceException` always keeps the original cause, so no traceability is lost.
+
+## Validators
+
+Each functional module has a validator with static methods:
+
+- `ProductValidator`: product data, stock availability, product existence.
+- `PersonValidator`: person data, person existence, unique identifier.
+- `SaleValidator`: sale data (customer, seller, products), sale existence.
+
+Services call the validators before running any business operation. Validators
+never call services or repositories and contain no file access logic.
+
+## How the layers work together
+
+```text
+ConsoleUI  ->  Service  ->  Validator  (throws GameZoneException subclasses)
+                  |
+                  +------>  Repository (wraps IOException in PersistenceException)
+```
+
+- **Services** delegate validation to the validators and throw typed exceptions
+  instead of `IllegalArgumentException`.
+- **Repositories** catch `IOException` internally and rethrow it as
+  `PersistenceException`, including the file name and the operation
+  (read or write) in the message.
+- **ConsoleUI** catches each exception type separately and shows a different
+  message to the user. The user never sees a technical message or a stack trace.
+
+Dependency direction: `ui -> service -> persistence -> model`. The `validation`
+layer sits between `service` and `model`, and `exceptions` can be used from any layer.
+
+## Messages shown to the user
+
+| Exception | Message (in Spanish) |
+|---|---|
+| `ResourceNotFoundException` | `No se encontró el recurso solicitado: <detalle>` |
+| `BusinessRuleException` | `No se puede completar la operación: <detalle>` |
+| `InvalidDataException` | `Los datos ingresados no son válidos: <detalle>` |
+| `PersistenceException` | `Ocurrió un problema al acceder a los datos del sistema. Contacte al administrador.` |
+
+## Behavior preserved
+
+This change does not add or modify any menu operation. The existing operations
+work the same way for valid input. Only the quality of the error messages
+changes.
 
 ---
 
@@ -303,20 +416,3 @@ chore:
 # Team
 
 See [`TEAM.md`](TEAM.md) for the complete team information, assigned roles, and class distribution.
-
-
-Accessory Management
-
-Record controllers, cables, and memory cards, each with its own attributes.
-Record compatibility with specific consoles.
-View the complete inventory by type, or the accessories compatible with a specific console.
-Accessories can be sold together with video games and consoles in a single transaction.
-
-Integrated System
-
-A sale can combine products and accessories; the system automatically applies the best available promotion, generates warranties for consoles, and calculates a final total that includes discounts and extended warranties.
-Returns replenish the corresponding inventory (product or accessory), calculate a refund proportional to the original discount, and void any associated warranty if a console is returned.
-The monthly balance sheet breaks down total sales, total returns, and the net balance.
-Update to the package tree in README.md
-
-Add to model/: Accessory, Controller, Cable, Memory, Promotion (+3 subclasses), Warranty (+2 subclasses), Return Add to persistence/: AccessoryRepository, PromotionRepository, WarrantyRepository, WarrantyRecord, ReturnRepository Add to services/: AccessoryService, PromotionService, WarrantyService, ReturnService
