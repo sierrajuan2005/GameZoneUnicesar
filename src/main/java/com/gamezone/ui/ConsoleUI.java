@@ -6,7 +6,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+import com.gamezone.exceptions.BusinessRuleException;
+import com.gamezone.exceptions.GameZoneException;
+import com.gamezone.exceptions.InvalidDataException;
+import com.gamezone.exceptions.PersistenceException;
+import com.gamezone.exceptions.ResourceNotFoundException;
 /**
  * Provides the console interface for interacting with the GameZone system.
  */
@@ -49,16 +53,28 @@ public class ConsoleUI {
         while (running) {
             showMainMenu();
 
-            switch (scanner.nextLine()) {
-                case "1" -> showProductMenu();
-                case "2" -> showPersonMenu();
-                case "3" -> showSaleMenu();
-                case "4" -> showAccessoryMenu();
-                case "5" -> showWarrantyMenu();
-                case "6" -> showReturnMenu();
-                case "7" -> showPromotionMenu();
-                case "0" -> running = false;
-                default -> System.out.println("Invalid option.");
+            try {
+                switch (scanner.nextLine()) {
+                    case "1" -> showProductMenu();
+                    case "2" -> showPersonMenu();
+                    case "3" -> showSaleMenu();
+                    case "4" -> showAccessoryMenu();
+                    case "5" -> showWarrantyMenu();
+                    case "6" -> showReturnMenu();
+                    case "7" -> showPromotionMenu();
+                    case "0" -> running = false;
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (ResourceNotFoundException e) {
+                System.out.println("No se encontró el recurso solicitado: " + e.getMessage());
+            } catch (BusinessRuleException e) {
+                System.out.println("No se puede completar la operación: " + e.getMessage());
+            } catch (InvalidDataException e) {
+                System.out.println("Los datos ingresados no son válidos: " + e.getMessage());
+            } catch (PersistenceException e) {
+                System.out.println("Ocurrió un problema al acceder a los datos del sistema. Contacte al administrador.");
+            } catch (GameZoneException e) {
+                System.out.println("Ocurrió un error en la operación: " + e.getMessage());
             }
         }
 
