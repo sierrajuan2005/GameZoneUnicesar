@@ -1,4 +1,10 @@
 package com.gamezone.ui;
+
+import com.gamezone.exceptions.BusinessRuleException;
+import com.gamezone.exceptions.GameZoneException;
+import com.gamezone.exceptions.InvalidDataException;
+import com.gamezone.exceptions.PersistenceException;
+import com.gamezone.exceptions.ResourceNotFoundException;
 import com.gamezone.model.*;
 import com.gamezone.services.*;
 
@@ -9,6 +15,8 @@ import java.util.Scanner;
 
 /**
  * Provides the console interface for interacting with the GameZone system.
+ * Custom exceptions thrown by the lower layers are caught by type in the menu
+ * loops and translated into differentiated messages for the user.
  */
 public class ConsoleUI {
 
@@ -26,7 +34,11 @@ public class ConsoleUI {
      *
      * @param personService service used to manage customers and sellers
      * @param productService service used to manage products
+     * @param accessoryService service used to manage accessories
      * @param saleService service used to manage sales
+     * @param warrantyService service used to manage warranties
+     * @param returnService service used to manage returns
+     * @param promotionService service used to manage promotions
      */
     public ConsoleUI(PersonService personService, ProductService productService, AccessoryService accessoryService, SaleService saleService,
                      WarrantyService warrantyService, ReturnService returnService, PromotionService promotionService)  {
@@ -42,6 +54,8 @@ public class ConsoleUI {
 
     /**
      * Starts the main menu of the application.
+     * Every custom exception raised by an operation is caught here by its
+     * specific type, so the user never sees a technical message or a stack trace.
      */
     public void start() {
         boolean running = true;
@@ -49,16 +63,30 @@ public class ConsoleUI {
         while (running) {
             showMainMenu();
 
-            switch (scanner.nextLine()) {
-                case "1" -> showProductMenu();
-                case "2" -> showPersonMenu();
-                case "3" -> showSaleMenu();
-                case "4" -> showAccessoryMenu();
-                case "5" -> showWarrantyMenu();
-                case "6" -> showReturnMenu();
-                case "7" -> showPromotionMenu();
-                case "0" -> running = false;
-                default -> System.out.println("Invalid option.");
+            try {
+                switch (scanner.nextLine()) {
+                    case "1" -> showProductMenu();
+                    case "2" -> showPersonMenu();
+                    case "3" -> showSaleMenu();
+                    case "4" -> showAccessoryMenu();
+                    case "5" -> showWarrantyMenu();
+                    case "6" -> showReturnMenu();
+                    case "7" -> showPromotionMenu();
+                    case "0" -> running = false;
+                    default -> System.out.println("Invalid option.");
+                }
+            } catch (ResourceNotFoundException e) {
+                System.out.println("No se encontró el recurso solicitado: " + e.getMessage());
+            } catch (BusinessRuleException e) {
+                System.out.println("No se puede completar la operación: " + e.getMessage());
+            } catch (InvalidDataException e) {
+                System.out.println("Los datos ingresados no son válidos: " + e.getMessage());
+            } catch (PersistenceException e) {
+                // Technical details are never shown to the user
+                System.out.println("Ocurrió un problema al acceder a los datos del sistema. Contacte al administrador.");
+            } catch (GameZoneException e) {
+                // Safety net for any custom exception not handled above
+                System.out.println("Ocurrió un error en la operación: " + e.getMessage());
             }
         }
 
@@ -128,8 +156,6 @@ public class ConsoleUI {
 
         } catch (NumberFormatException e) {
             System.out.println("Error: price and quantity must be valid numbers.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -163,8 +189,6 @@ public class ConsoleUI {
 
         } catch (NumberFormatException e) {
             System.out.println("Error: price and quantity must be valid numbers.");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
         }
     }
 
@@ -202,27 +226,22 @@ public class ConsoleUI {
     }
 
     private void registerCustomer() {
-        try {
-            System.out.print("Name: ");
-            String name = scanner.nextLine();
+        System.out.print("Name: ");
+        String name = scanner.nextLine();
 
-            System.out.print("Identification: ");
-            String identification = scanner.nextLine();
+        System.out.print("Identification: ");
+        String identification = scanner.nextLine();
 
-            System.out.print("Phone: ");
-            String phone = scanner.nextLine();
+        System.out.print("Phone: ");
+        String phone = scanner.nextLine();
 
-            System.out.print("Email: ");
-            String email = scanner.nextLine();
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
 
-            Customer customer = new Customer(name, identification, phone, email);
-            personService.addPerson(customer);
+        Customer customer = new Customer(name, identification, phone, email);
+        personService.addPerson(customer);
 
-            System.out.println("Customer registered successfully.");
-
-        } catch (IllegalArgumentException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
+        System.out.println("Customer registered successfully.");
     }
 
     private void listCustomers() {
@@ -285,11 +304,8 @@ public class ConsoleUI {
         System.out.print("Sale ID: ");
         String saleId = scanner.nextLine();
 
+        // findSaleById throws ResourceNotFoundException when the sale does not exist
         Sale sale = saleService.findSaleById(saleId);
-        if (sale == null) {
-            System.out.println("No sale was found with that ID.");
-            return;
-        }
         System.out.println(sale.generateReceipt());
     }
 
@@ -342,6 +358,7 @@ public class ConsoleUI {
             );
         }
     }
+
     private List<String> askExtendedWarranties(List<Product> products) {
         List<String> selected = new ArrayList<>();
 
@@ -629,12 +646,8 @@ public class ConsoleUI {
         System.out.print("Sale identifier: ");
         String saleId = scanner.nextLine();
 
+        // findSaleById throws ResourceNotFoundException when the sale does not exist
         Sale sale = saleService.findSaleById(saleId);
-
-        if (sale == null) {
-            System.out.println("No sale was found with that identifier.");
-            return;
-        }
 
         System.out.println("Products in the sale:");
 
@@ -691,6 +704,7 @@ public class ConsoleUI {
 
         printReturns(returnService.viewReturnsBySale(saleId));
     }
+
     /**
      * Displays the monthly financial report for a given month and year.
      * <p>
@@ -789,6 +803,9 @@ public class ConsoleUI {
         } catch (NumberFormatException e) {
             System.out.println("Error: the percentage must be a valid numeric value.");
 
+        } catch (GameZoneException e) {
+            throw e; // handled by the typed catch blocks in start()
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -822,6 +839,9 @@ public class ConsoleUI {
 
         } catch (NumberFormatException e) {
             System.out.println("Error: the percentage must be a valid numeric value.");
+
+        } catch (GameZoneException e) {
+            throw e; // handled by the typed catch blocks in start()
 
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -857,6 +877,9 @@ public class ConsoleUI {
         } catch (NumberFormatException e) {
             System.out.println("Error: quantity and percentage must be valid numeric values.");
 
+        } catch (GameZoneException e) {
+            throw e; // handled by the typed catch blocks in start()
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
@@ -886,7 +909,11 @@ public class ConsoleUI {
         }
     }
 
-
+    /**
+     * Shows the accessory submenu and handles its options.
+     * It has its own loop, so it also catches the custom exceptions by type
+     * to keep the user inside this submenu when an error occurs.
+     */
     private void showAccessoryMenu() {
         boolean running = true;
 
@@ -902,15 +929,29 @@ public class ConsoleUI {
 
             System.out.print("Seleccione una opción: ");
 
-            switch (scanner.nextLine()) {
-                case "1" -> registerController();
-                case "2" -> registerCable();
-                case "3" -> registerMemory();
-                case "4" -> listAllAccessories();
-                case "5" -> listAccessoriesByType();
-                case "6" -> listCompatibleAccessories();
-                case "0" -> running = false;
-                default -> System.out.println("Opción inválida.");
+            try {
+                switch (scanner.nextLine()) {
+                    case "1" -> registerController();
+                    case "2" -> registerCable();
+                    case "3" -> registerMemory();
+                    case "4" -> listAllAccessories();
+                    case "5" -> listAccessoriesByType();
+                    case "6" -> listCompatibleAccessories();
+                    case "0" -> running = false;
+                    default -> System.out.println("Opción inválida.");
+                }
+            } catch (ResourceNotFoundException e) {
+                System.out.println("No se encontró el recurso solicitado: " + e.getMessage());
+            } catch (BusinessRuleException e) {
+                System.out.println("No se puede completar la operación: " + e.getMessage());
+            } catch (InvalidDataException e) {
+                System.out.println("Los datos ingresados no son válidos: " + e.getMessage());
+            } catch (PersistenceException e) {
+                // Technical details are never shown to the user
+                System.out.println("Ocurrió un problema al acceder a los datos del sistema. Contacte al administrador.");
+            } catch (GameZoneException e) {
+                // Safety net for any custom exception not handled above
+                System.out.println("Ocurrió un error en la operación: " + e.getMessage());
             }
         }
     }
