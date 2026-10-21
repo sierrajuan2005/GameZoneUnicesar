@@ -907,26 +907,30 @@ public class ConsoleUI {
         boolean running = true;
 
         while (running) {
-            System.out.println("\n=== GESTIÓN DE ACCESORIOS ===");
-            System.out.println("1. Registrar controlador");
-            System.out.println("2. Registrar cable");
-            System.out.println("3. Registrar memoria");
-            System.out.println("4. Listar todos los accesorios");
-            System.out.println("5. Listar accesorios por tipo");
-            System.out.println("6. Buscar accesorios compatibles con consola");
-            System.out.println("0. Volver");
-
+            // ... los System.out.println del menú, sin cambios ...
             System.out.print("Seleccione una opción: ");
 
-            switch (scanner.nextLine()) {
-                case "1" -> registerController();
-                case "2" -> registerCable();
-                case "3" -> registerMemory();
-                case "4" -> listAllAccessories();
-                case "5" -> listAccessoriesByType();
-                case "6" -> listCompatibleAccessories();
-                case "0" -> running = false;
-                default -> System.out.println("Opción inválida.");
+            try {
+                switch (scanner.nextLine()) {
+                    case "1" -> registerController();
+                    case "2" -> registerCable();
+                    case "3" -> registerMemory();
+                    case "4" -> listAllAccessories();
+                    case "5" -> listAccessoriesByType();
+                    case "6" -> listCompatibleAccessories();
+                    case "0" -> running = false;
+                    default -> System.out.println("Opción inválida.");
+                }
+            } catch (ResourceNotFoundException e) {
+                System.out.println("No se encontró el recurso solicitado: " + e.getMessage());
+            } catch (BusinessRuleException e) {
+                System.out.println("No se puede completar la operación: " + e.getMessage());
+            } catch (InvalidDataException e) {
+                System.out.println("Los datos ingresados no son válidos: " + e.getMessage());
+            } catch (PersistenceException e) {
+                System.out.println("Ocurrió un problema al acceder a los datos del sistema. Contacte al administrador.");
+            } catch (GameZoneException e) {
+                System.out.println("Ocurrió un error en la operación: " + e.getMessage());
             }
         }
     }
