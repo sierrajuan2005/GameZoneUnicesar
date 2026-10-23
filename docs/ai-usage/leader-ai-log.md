@@ -289,3 +289,40 @@ The established workflow was followed and the Pull Request from `develop` to `ma
 
 **Related commit:**
 N/A
+
+
+
+
+
+
+## Phase 1: Audit
+
+**Tool used:** Claude (Anthropic), through the chat interface.
+
+| # | Activity | How AI was used | Result obtained | What I did with the result |
+|---|---|---|---|---|
+| 1 | Understanding the GRASP criteria | I asked general questions about the nine GRASP patterns and how they apply to object-oriented design. | Explanations of the patterns, examples, and criteria for distinguishing between violation, correct, and not applicable. | I compared the explanations with the class notes and used them as a reference when preparing the audit. |
+| 2 | Understanding `Sale` responsibilities | I asked conceptual questions about the responsibilities of a sale-related class and their relationship with GRASP. | Explanations of responsibility assignment and the principles used to evaluate object-oriented designs. | I used these explanations as a reference while independently reviewing the project. |
+| 3 | Understanding repository responsibilities | I asked about the purpose of repository classes, separation of responsibilities, and file-handling concepts in software design. | General explanations of repository responsibilities and separation of concerns. | I applied these concepts during my own review of the project structure. |
+| 4 | Understanding service responsibilities | I asked how GRASP patterns apply to service classes and how business logic can be distributed among objects. | Explanations about service responsibilities, dependency management, and business logic. | I used the explanations as conceptual guidance while reviewing the project independently. |
+| 5 | Understanding interface responsibilities | I asked about the responsibilities of a console interface and its relationship with other application layers. | Explanations about cohesion, decision-making, and separation of responsibilities. | I compared these concepts with the project structure during my own review. |
+| 6 | Understanding dependencies and object creation | I asked general questions about object creation, dependencies between layers, and responsibility assignment in GRASP. | Examples and explanations of these design concepts. | I used the guidance to support my understanding of the relationships between application components. |
+| 7 | Report organization | I asked for help organizing audit findings and explaining their relationship with GRASP patterns. | Suggestions for structuring the report and presenting design observations clearly. | I adapted the structure to the project and verified the supporting evidence myself. |
+| 8 | Guiding questions | I asked for explanations of the concepts needed to answer the guiding questions. | Conceptual explanations and suggestions for organizing the answers. | I rewrote answers 1, 3, and 5 in simpler language, kept answers 2 and 4 technically precise, and checked that the 31 operations matched the menus. |
+
+## Verification Performed by Me
+
+- I reviewed the relevant classes and methods directly in the IDE.
+- I compared `ProductRepository` and `SaleRepository` to examine their responsibilities.
+- I reviewed the roles of `SaleService`, `ConsoleUI`, `Main`, and `ProductService`.
+- I compared my observations with the project structure and the distribution of responsibilities among team members.
+- I verified the code lines and commit hash used as evidence in the report.
+- I reviewed the menu operations to check that they matched the regression testing strategy.
+
+## Findings I Rejected or Modified
+
+The explanations provided by AI were treated as conceptual guidance rather than final conclusions. I evaluated the responsibility of `canBeReturned()` in relation to Developer 1's contribution. I also checked possible functional defects and observations involving multiple classes independently before deciding whether to include them in the report.
+
+## Notes
+
+AI was used to clarify GRASP concepts, answer general questions about responsibility assignment, and help organize the audit documentation. No project source code was provided to the AI for analysis. The review of the repository, selection of findings, verification of evidence, and preparation of the final report were carried out independently.
