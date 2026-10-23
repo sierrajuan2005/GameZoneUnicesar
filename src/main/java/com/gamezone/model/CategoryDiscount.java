@@ -66,17 +66,16 @@ public class CategoryDiscount extends Promotion {
     @return discount amount
     */
 
-    @Override 
-    public double calculateDiscount(Sale sale){
-        double categoryTotal=0.0;
-        for(Product product : sale.getProducts()){
-            if(targetCategory.equals("VIDEOGAME") && product instanceof VideoGame){
-                categoryTotal += product.getPrice();
-            } else if(targetCategory.equals("CONSOLE") && product instanceof Console){
+    @Override
+    public double calculateDiscount(Sale sale) {
+        double categoryTotal = 0.0;
+
+        for (Product product : sale.getProducts()) {
+            if (product.belongsToCategory(targetCategory)) {
                 categoryTotal += product.getPrice();
             }
-            
         }
+
         return categoryTotal * (discountPercentage / 100);
     }
 }
