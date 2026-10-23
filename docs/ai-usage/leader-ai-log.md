@@ -289,3 +289,41 @@ The established workflow was followed and the Pull Request from `develop` to `ma
 
 **Related commit:**
 N/A
+
+
+
+
+
+
+
+## Phase 1: Audit
+Tool used: Claude (Anthropic), through the chat interface.
+
+| # | Activity | How AI was used | Result obtained | What I did with the result |
+|---|---|---|---|---|
+| 1 | Audit criteria | AI was used to help understand the nine GRASP patterns and the criteria for classifying findings. | Explanations of the patterns, examples, and criteria for distinguishing between violation, correct, and not applicable. | I compared the information with the class notes and used it as a guide for defining the audit criteria. |
+| 2 | Review of `Sale` | The class code was analyzed to understand its responsibilities and its relationship with the GRASP patterns. | Observations about receipt formatting, entity responsibilities, and possible findings to review. | I compared the observations with the project code and decided which ones were relevant to the report. |
+| 3 | Review of `SaleRepository` | The implementation was examined to identify mixed responsibilities and possible design problems. | Observations about file access, CSV conversion, and type checks. | I compared the results with other repository classes to determine whether the identified problems were consistent. |
+| 4 | Review of `SaleService` | AI was used to help analyze the sales logic and the distribution of responsibilities. | Possible issues related to type checks and stock handling. | I reviewed the relevant methods and compared the suggestions with the responsibilities of the classes involved. |
+| 5 | Review of `ConsoleUI` | The console interface code was analyzed to evaluate its responsibilities and its relationship with other layers. | Observations about object creation, decisions made by the interface, cohesion, and exception handling. | I reviewed the sections identified and selected the aspects relevant to the audit. |
+| 6 | Review of `Main` and `restoreStock` | The connections between classes and the stock restoration process were examined. | Possible findings related to object creation, dependencies between layers, and stock calculations. | I compared the findings with the classes involved and the team's distribution of responsibilities. |
+| 7 | Report organization | AI was used to help write and organize the audit findings. | A report structure containing the identified findings and their explanations. | I reviewed the content and completed the information that needed to be verified directly in the repository, such as the commit hash and exact line numbers. |
+| 8 | Guiding questions | AI was used to clarify concepts and organize the answers related to the GRASP analysis. | Drafts and explanations to help structure the answers to the guiding questions. | I rewrote answers 1, 3, and 5 in my own words, kept answers 2 and 4 technically precise, and checked that the 31 operations matched the menus. |
+
+## Verification Performed by Me
+
+- I reviewed the classes and methods identified during the audit in the IDE.
+- I compared `ProductRepository` with `SaleRepository` to examine file handling and CSV conversion.
+- I analyzed the responsibilities of `SaleService`, `ConsoleUI`, `Main`, and `ProductService`.
+- I compared the findings with the project structure and the distribution of responsibilities among team members.
+- I verified the code lines and commit hash used as evidence in the report.
+- I reviewed the menu operations to check that they matched the regression testing strategy.
+
+## Findings I Rejected or Modified
+
+The observations suggested by AI were treated as suggestions rather than final conclusions. The responsibility for `canBeReturned()` was reviewed to account for Developer 1's involvement. Possible functional defects and findings involving multiple classes were also checked against the code before being included in the report.
+
+## Notes
+
+AI was used as a support tool to understand GRASP patterns, analyze the code, and organize the documentation. The final findings were checked against the repository. Selecting the relevant observations, verifying the evidence, and making changes to the report remained my responsibility.
+
