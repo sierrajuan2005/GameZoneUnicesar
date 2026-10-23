@@ -49,4 +49,9 @@ public class Controller extends Accessory{
     public String getDescription() {
         return getTitle() + " - Connection: " + connectionType;
     }
+
+    @Override
+    public boolean belongsToCategory(String category) {
+        return "CONTROLLER".equals(category);
+    }
 }

@@ -69,4 +69,9 @@ public class Memory extends Accessory{
     public String getDescription() {
         return getTitle() + " - Capacity: " + capacity + "GB, Type: " + memoryType;
     }
+
+    @Override
+    public boolean belongsToCategory(String category) {
+        return "MEMORY".equals(category);
+    }
 }

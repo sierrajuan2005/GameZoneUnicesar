@@ -62,7 +62,7 @@ public class Cable extends Accessory {
     public void setConnectorType(String connectorType) {
         this.connectorType = connectorType;
     }
-
+    
     /*
      * Returns a description of the cable.
      *
@@ -71,5 +71,10 @@ public class Cable extends Accessory {
     @Override
     public String getDescription() {
         return getTitle() + " - Length: " + length + "m, Connector: " + connectorType;
+    }
+
+    @Override
+    public boolean belongsToCategory(String category) {
+        return "CABLE".equals(category);
     }
 }

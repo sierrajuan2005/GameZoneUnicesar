@@ -67,6 +67,8 @@ public abstract class Product{
     public void setAvailableQuantity(int availableQuantity) {
         this.availableQuantity = availableQuantity;
     }
+
+    public abstract boolean belongsToCategory(String category);
     /*
     Gets the product description.
     @return product description

@@ -52,6 +52,10 @@ public class VideoGame extends Product{
         this.ageRating=ageRating;
     }
 
+    @Override
+    public boolean belongsToCategory(String category) {
+        return "VIDEOGAME".equals(category);
+    }
     /*
     Gets the video game description.
     @return video game description

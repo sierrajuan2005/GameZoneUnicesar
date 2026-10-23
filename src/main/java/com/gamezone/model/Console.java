@@ -52,6 +52,11 @@ public class Console extends Product{
     public void setGeneration(String generation){
         this.generation=generation;
     }
+    
+    @Override
+    public boolean belongsToCategory(String category) {
+        return "CONSOLE".equals(category);
+    }
      /*
      Gets the console description.
      @return console description
